@@ -123,6 +123,222 @@ TrafficSimulator/fast:
 	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/build
 .PHONY : TrafficSimulator/fast
 
+Influence.o: Influence.cpp.o
+
+.PHONY : Influence.o
+
+# target to build an object file
+Influence.cpp.o:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Influence.cpp.o
+.PHONY : Influence.cpp.o
+
+Influence.i: Influence.cpp.i
+
+.PHONY : Influence.i
+
+# target to preprocess a source file
+Influence.cpp.i:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Influence.cpp.i
+.PHONY : Influence.cpp.i
+
+Influence.s: Influence.cpp.s
+
+.PHONY : Influence.s
+
+# target to generate assembly for a file
+Influence.cpp.s:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Influence.cpp.s
+.PHONY : Influence.cpp.s
+
+Intersection.o: Intersection.cpp.o
+
+.PHONY : Intersection.o
+
+# target to build an object file
+Intersection.cpp.o:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Intersection.cpp.o
+.PHONY : Intersection.cpp.o
+
+Intersection.i: Intersection.cpp.i
+
+.PHONY : Intersection.i
+
+# target to preprocess a source file
+Intersection.cpp.i:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Intersection.cpp.i
+.PHONY : Intersection.cpp.i
+
+Intersection.s: Intersection.cpp.s
+
+.PHONY : Intersection.s
+
+# target to generate assembly for a file
+Intersection.cpp.s:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Intersection.cpp.s
+.PHONY : Intersection.cpp.s
+
+Network.o: Network.cpp.o
+
+.PHONY : Network.o
+
+# target to build an object file
+Network.cpp.o:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Network.cpp.o
+.PHONY : Network.cpp.o
+
+Network.i: Network.cpp.i
+
+.PHONY : Network.i
+
+# target to preprocess a source file
+Network.cpp.i:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Network.cpp.i
+.PHONY : Network.cpp.i
+
+Network.s: Network.cpp.s
+
+.PHONY : Network.s
+
+# target to generate assembly for a file
+Network.cpp.s:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Network.cpp.s
+.PHONY : Network.cpp.s
+
+Simulation.o: Simulation.cpp.o
+
+.PHONY : Simulation.o
+
+# target to build an object file
+Simulation.cpp.o:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Simulation.cpp.o
+.PHONY : Simulation.cpp.o
+
+Simulation.i: Simulation.cpp.i
+
+.PHONY : Simulation.i
+
+# target to preprocess a source file
+Simulation.cpp.i:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Simulation.cpp.i
+.PHONY : Simulation.cpp.i
+
+Simulation.s: Simulation.cpp.s
+
+.PHONY : Simulation.s
+
+# target to generate assembly for a file
+Simulation.cpp.s:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Simulation.cpp.s
+.PHONY : Simulation.cpp.s
+
+SpecialVehicle.o: SpecialVehicle.cpp.o
+
+.PHONY : SpecialVehicle.o
+
+# target to build an object file
+SpecialVehicle.cpp.o:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.o
+.PHONY : SpecialVehicle.cpp.o
+
+SpecialVehicle.i: SpecialVehicle.cpp.i
+
+.PHONY : SpecialVehicle.i
+
+# target to preprocess a source file
+SpecialVehicle.cpp.i:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.i
+.PHONY : SpecialVehicle.cpp.i
+
+SpecialVehicle.s: SpecialVehicle.cpp.s
+
+.PHONY : SpecialVehicle.s
+
+# target to generate assembly for a file
+SpecialVehicle.cpp.s:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.s
+.PHONY : SpecialVehicle.cpp.s
+
+Street.o: Street.cpp.o
+
+.PHONY : Street.o
+
+# target to build an object file
+Street.cpp.o:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Street.cpp.o
+.PHONY : Street.cpp.o
+
+Street.i: Street.cpp.i
+
+.PHONY : Street.i
+
+# target to preprocess a source file
+Street.cpp.i:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Street.cpp.i
+.PHONY : Street.cpp.i
+
+Street.s: Street.cpp.s
+
+.PHONY : Street.s
+
+# target to generate assembly for a file
+Street.cpp.s:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Street.cpp.s
+.PHONY : Street.cpp.s
+
+TransportVehicle.o: TransportVehicle.cpp.o
+
+.PHONY : TransportVehicle.o
+
+# target to build an object file
+TransportVehicle.cpp.o:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.o
+.PHONY : TransportVehicle.cpp.o
+
+TransportVehicle.i: TransportVehicle.cpp.i
+
+.PHONY : TransportVehicle.i
+
+# target to preprocess a source file
+TransportVehicle.cpp.i:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.i
+.PHONY : TransportVehicle.cpp.i
+
+TransportVehicle.s: TransportVehicle.cpp.s
+
+.PHONY : TransportVehicle.s
+
+# target to generate assembly for a file
+TransportVehicle.cpp.s:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.s
+.PHONY : TransportVehicle.cpp.s
+
+Vehicle.o: Vehicle.cpp.o
+
+.PHONY : Vehicle.o
+
+# target to build an object file
+Vehicle.cpp.o:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.o
+.PHONY : Vehicle.cpp.o
+
+Vehicle.i: Vehicle.cpp.i
+
+.PHONY : Vehicle.i
+
+# target to preprocess a source file
+Vehicle.cpp.i:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.i
+.PHONY : Vehicle.cpp.i
+
+Vehicle.s: Vehicle.cpp.s
+
+.PHONY : Vehicle.s
+
+# target to generate assembly for a file
+Vehicle.cpp.s:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.s
+.PHONY : Vehicle.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -159,6 +375,30 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... TrafficSimulator"
+	@echo "... Influence.o"
+	@echo "... Influence.i"
+	@echo "... Influence.s"
+	@echo "... Intersection.o"
+	@echo "... Intersection.i"
+	@echo "... Intersection.s"
+	@echo "... Network.o"
+	@echo "... Network.i"
+	@echo "... Network.s"
+	@echo "... Simulation.o"
+	@echo "... Simulation.i"
+	@echo "... Simulation.s"
+	@echo "... SpecialVehicle.o"
+	@echo "... SpecialVehicle.i"
+	@echo "... SpecialVehicle.s"
+	@echo "... Street.o"
+	@echo "... Street.i"
+	@echo "... Street.s"
+	@echo "... TransportVehicle.o"
+	@echo "... TransportVehicle.i"
+	@echo "... TransportVehicle.s"
+	@echo "... Vehicle.o"
+	@echo "... Vehicle.i"
+	@echo "... Vehicle.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

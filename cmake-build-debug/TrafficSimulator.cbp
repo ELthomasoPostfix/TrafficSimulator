@@ -84,6 +84,54 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Influence.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Influence.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Intersection.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Intersection.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Network.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Network.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Simulation.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Simulation.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/SpecialVehicle.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/SpecialVehicle.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Street.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Street.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/TransportVehicle.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/TransportVehicle.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Vehicle.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Vehicle.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
 		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/main.cpp">
 			<Option target="TrafficSimulator"/>
 		</Unit>
