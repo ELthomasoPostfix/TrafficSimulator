@@ -1,0 +1,3 @@
+/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles/TrafficSimulator.dir

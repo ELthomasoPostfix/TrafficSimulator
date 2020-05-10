@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/TrafficSimulator.dir/main.cpp.o  -o TrafficSimulator 
