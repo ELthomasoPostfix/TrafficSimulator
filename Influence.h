@@ -7,6 +7,7 @@
 
 #include "string"
 #include <fstream>
+#include "sstream"
 #include "iostream"
 
 // the influence types represent the types of situations that may occur during transit

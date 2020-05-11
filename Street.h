@@ -8,29 +8,34 @@
 #include "TransportVehicle.h"
 #include "SpecialVehicle.h"
 
+
 class Intersection;
 
 // A : every type of normal vehicle and special vehicle will be able to take this route
 // B : a route with a specialised bus lane, meaning buses will be more likely to take these routes if they make a detour
 // T :Tram line on this street, this is the only street trams are allowed to use
-enum streetType {A, B, T};
+enum streetType {A=0, B=1, T=2};
+
 
 class Street {
+    // variables used by Intersections
     Intersection* _nextIntersection;
     Intersection* _prevIntersection;
+    bool _isTwoWay;
 
     streetType _type;
 
     // the list of all vehicles currently INSIDE the street
-    std::vector<Vehicle*> _occupants;
+    std::vector<std::vector<Vehicle*>> _lanes;
 
     // the list of all vehicles deciding whether or not to enter that particular street
     // TODO the current Street of the vehicle should be empty when they drive through an intersection/State ???
-    std::vector<Vehicle*> _entrants;
+    std::vector<std::vector<Vehicle*>> _entrants;
 
     // used to properly let Vehicles queue in streets without overlapping with each other
-    Vehicle* _frontOccupant;
-    Vehicle* _backOccupant;
+    // a two way street will have two lanes. That means there are also Z front vehicles and two back vehicles
+    Vehicle* _frontOccupant[2];
+    Vehicle* _backOccupant[2];
 
 public:
     Street(Intersection* prev, Intersection* next, streetType type);
@@ -46,17 +51,22 @@ public:
 
     streetType getType() const;
     std::string typeToName() const;
+    static streetType nameToType(const char& name);
 
-    const std::vector<Vehicle *> &getOccupants() const;
+    const std::vector<std::vector<Vehicle *>> &getLanes() const;
 
-    const std::vector<Vehicle *> &getEntrants() const;
+    const std::vector<std::vector<Vehicle *>> &getEntrants() const;
 
 
-    Vehicle *getFrontOccupant() const;
-    void setFrontOccupant(Vehicle *frontOccupant);
+    Vehicle *getFrontOccupant(int index) const;
+    void setFrontOccupant(Vehicle *frontOccupant, int index);
 
-    Vehicle *getBackOccupant() const;
-    void setBackOccupant(Vehicle *backOccupant);
+    Vehicle *getBackOccupant(int index) const;
+    void setBackOccupant(Vehicle *backOccupant, int index);
+
+    bool isTwoWay() const;
+
+    void setIsTwoWay(bool isTwoWay);
 };
 
 

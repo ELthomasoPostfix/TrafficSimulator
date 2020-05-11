@@ -132,6 +132,12 @@
 		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Vehicle.h">
 			<Option target="TrafficSimulator"/>
 		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/jsonParser.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/jsonParser.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
 		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/main.cpp">
 			<Option target="TrafficSimulator"/>
 		</Unit>

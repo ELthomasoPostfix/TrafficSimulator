@@ -21,7 +21,7 @@ void Simulation::instantiateInfluences() {
 
 const Influence *Simulation::getInfluence(influenceType IType) const {
     for (Influence* influence : allInfluences) {
-
+        if (influence->getType() == IType) return influence;
     }
     return nullptr;
 }

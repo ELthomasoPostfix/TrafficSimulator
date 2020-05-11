@@ -1,0 +1,53 @@
+{
+  "alphabet": [
+    "A",
+    "B",
+    "T"
+  ],
+  "intersections": [
+    {
+      "name": "1",
+      "trafficlights": false
+    },
+    {
+      "name": "2",
+      "trafficlights": true
+    },
+    {
+      "name": "3",
+      "trafficlights": false
+    }
+  ],
+  "streets": [
+    {
+      "twowaystreet": false,
+      "previousintersection": "1",
+      "nextintersection": "2",
+      "type": "A"
+    },
+    {
+      "twowaystreet": false,
+      "previousintersection": "1",
+      "nextintersection": "2",
+      "type": "T"
+    },
+    {
+      "twowaystreet": false,
+      "previousintersection": "2",
+      "nextintersection": "3",
+      "type": "B"
+    },
+    {
+      "twowaystreet": false,
+      "previousintersection": "2",
+      "nextintersection": "3",
+      "type": "A"
+    },
+    {
+      "twowaystreet": false,
+      "previousintersection": "3",
+      "nextintersection": "1",
+      "type": "A"
+    }
+  ]
+}

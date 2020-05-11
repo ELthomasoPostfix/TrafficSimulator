@@ -7,3 +7,7 @@
 TransportVehicle::TransportVehicle() : Vehicle(transport) {
 
 }
+
+void TransportVehicle::emitInfluence() {
+
+}

@@ -17,11 +17,14 @@ void Network::toDot(std::ofstream &ofstream) const {
         std::vector<Intersection *> allIntersections = getNetwork();
 
         for (Intersection *intersection : allIntersections) {
-            ofstream << intersection->getName() << "\n";
+            ofstream << "\"" << intersection->getName() << "\"" << "\n";
             for (Street *street : intersection->getStreets()) {
                 if (street->getPrevIntersection() == intersection) {
-                    ofstream << intersection->getName() << "->" << street->getNextIntersection()->getName()
-                            << " [label=\"" << street->typeToName() << "\"]" << "\n";
+                    std::string both;
+                    if (street->isTwoWay()) both = " dir=\"both\"";
+                    ofstream << "\"" << intersection->getName() << "\"" << "->" << "\""
+                             << street->getNextIntersection()->getName() << "\""
+                             << " [label=\"" << street->typeToName() << "\"" << both << "]" << "\n";
                 }
             }
         }
@@ -57,4 +60,19 @@ bool Network::addIntersection(Intersection* newIntersection) {
 
 Simulation *Network::getSimulation() const {
     return _simulation;
+}
+
+const std::vector<streetType> &Network::getAllowedStreetTypes() const {
+    return _allowedStreetTypes;
+}
+bool Network::typeIsAllowed(const streetType type) const {
+    for (const streetType allowedType: getAllowedStreetTypes()) {
+        if (allowedType == type) return true;
+    }
+    return false;
+}
+void Network::addAllowedStreetType(const streetType newAllowedStreetType) {
+    if (!typeIsAllowed(newAllowedStreetType)) {
+        _allowedStreetTypes.emplace_back(newAllowedStreetType);
+    }
 }

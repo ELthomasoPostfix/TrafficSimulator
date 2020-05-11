@@ -11,6 +11,8 @@ class Network {
     // the actual network consisting of intersections and streets, etc...
     std::vector<Intersection*> _network;
 
+    std::vector<streetType> _allowedStreetTypes;
+
     // the simulation class is meant to serve as a statistical analysis and data storage class
     Simulation* _simulation;
 
@@ -32,6 +34,10 @@ public:
     bool addIntersection(Intersection* newIntersection);
 
     Simulation *getSimulation() const;
+
+    const std::vector<streetType> &getAllowedStreetTypes() const;
+    bool typeIsAllowed(streetType type) const;
+    void addAllowedStreetType(streetType newAllowedStreetType);
 };
 
 

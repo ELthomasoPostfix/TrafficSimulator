@@ -12,6 +12,7 @@ set(CMAKE_DEPENDS_CHECK_CXX
   "/home/elthomaso/CLionProjects/TrafficSimulator/Street.cpp" "/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles/TrafficSimulator.dir/Street.cpp.o"
   "/home/elthomaso/CLionProjects/TrafficSimulator/TransportVehicle.cpp" "/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.o"
   "/home/elthomaso/CLionProjects/TrafficSimulator/Vehicle.cpp" "/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.o"
+  "/home/elthomaso/CLionProjects/TrafficSimulator/jsonParser.cpp" "/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o"
   "/home/elthomaso/CLionProjects/TrafficSimulator/main.cpp" "/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles/TrafficSimulator.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

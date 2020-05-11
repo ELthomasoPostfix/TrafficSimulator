@@ -13,6 +13,8 @@ class TransportVehicle : public Vehicle {
 
 public:
     TransportVehicle();
+
+    void emitInfluence() override;
 };
 
 

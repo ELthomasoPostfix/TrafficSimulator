@@ -57,6 +57,18 @@ CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.o: ../TransportVehicle.h
 CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.o: ../Vehicle.cpp
 CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.o: ../Vehicle.h
 
+CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o: ../Influence.h
+CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o: ../Intersection.h
+CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o: ../Network.h
+CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o: ../Simulation.h
+CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o: ../SpecialVehicle.h
+CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o: ../Street.h
+CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o: ../TransportVehicle.h
+CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o: ../Vehicle.h
+CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o: ../json.hpp
+CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o: ../jsonParser.cpp
+CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o: ../jsonParser.h
+
 CMakeFiles/TrafficSimulator.dir/main.cpp.o: ../Influence.h
 CMakeFiles/TrafficSimulator.dir/main.cpp.o: ../Intersection.h
 CMakeFiles/TrafficSimulator.dir/main.cpp.o: ../Network.h
@@ -65,5 +77,7 @@ CMakeFiles/TrafficSimulator.dir/main.cpp.o: ../SpecialVehicle.h
 CMakeFiles/TrafficSimulator.dir/main.cpp.o: ../Street.h
 CMakeFiles/TrafficSimulator.dir/main.cpp.o: ../TransportVehicle.h
 CMakeFiles/TrafficSimulator.dir/main.cpp.o: ../Vehicle.h
+CMakeFiles/TrafficSimulator.dir/main.cpp.o: ../json.hpp
+CMakeFiles/TrafficSimulator.dir/main.cpp.o: ../jsonParser.h
 CMakeFiles/TrafficSimulator.dir/main.cpp.o: ../main.cpp
 

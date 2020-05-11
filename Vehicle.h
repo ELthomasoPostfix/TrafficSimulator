@@ -28,19 +28,21 @@ class Vehicle {
     vehicleClass _class;
 
     // all influence related members
-    std::vector<Influence*> _incomingInfluences;
-    bool _isDelayed;
+    std::vector<const Influence*> _incomingInfluences;
+    bool _isLimited;
     bool _isStopped;
 
     // members describing the current location
     // TODO State* startState
     Intersection* _startIntersection;
     // TODO State* endState
-    Intersection* endIntersection;
+    Intersection* _endIntersection;
     Street* _currentStreet;
     bool _underway;
     int _progress;  // TODO only when a vehicle is a set amount of distance (90% complete) through the street, can they decide on a new route
     // TODO State* TargetState
+    Intersection* _prevIntersection;
+    Intersection* _nextIntersection;
 
     // when a vehicle enters a street, they will essentially enter a queue to get out at the other side
     // (1) this queue will allow easy simulation of a traffic jam, as the progress across the street and whether or not
@@ -57,9 +59,57 @@ public:
 
 
     // influences will always be emitted to the immediate surroundings
-    virtual void emitInfluence() = 0;
+    virtual void emitInfluence();
 
-    void receiveInfluence();
+    void receiveInfluence(const Influence* incomingInfluence);
+
+    void accident();
+
+    void onWrite(std::ofstream& ofstream);
+
+    // getters and setters
+
+    vehicleClass getClass() const;
+    void setClass(vehicleClass vClass);
+
+    const std::vector<const Influence *> &getIncomingInfluences() const;
+    bool addIncomingInfluence(const Influence * incomingInfluence);
+    void removeIncomingInfluence(const Influence* toDeleteInfluence);
+
+    bool isLimited() const;
+    void setIsLimited(bool isLimited);
+
+    bool isStopped() const;
+    void setIsStopped(bool isStopped);
+
+    Intersection *getStartIntersection() const;
+    void setStartIntersection(Intersection *startIntersection);
+
+    Intersection *getEndIntersection() const;
+    void setEndIntersection(Intersection *endIntersection);
+
+    Street *getCurrentStreet() const;
+    void setCurrentStreet(Street *currentStreet);
+
+    bool isUnderway() const;
+    void setUnderway(bool underway);
+
+    int getProgress() const;
+    void setProgress(int progress);
+
+    Vehicle *getNextVehicle() const;
+    void setNextVehicle(Vehicle *nextVehicle);
+
+    Vehicle *getPrevVehicle() const;
+    void setPrevVehicle(Vehicle *prevVehicle);
+
+    Intersection *getPrevIntersection() const;
+
+    void setPrevIntersection(Intersection *prevIntersection);
+
+    Intersection *getNextIntersection() const;
+
+    void setNextIntersection(Intersection *nextIntersection);
 };
 
 

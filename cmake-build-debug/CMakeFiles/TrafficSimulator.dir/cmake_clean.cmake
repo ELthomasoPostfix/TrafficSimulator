@@ -7,6 +7,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/TrafficSimulator.dir/Street.cpp.o"
   "CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.o"
   "CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.o"
+  "CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o"
   "CMakeFiles/TrafficSimulator.dir/main.cpp.o"
   "TrafficSimulator"
   "TrafficSimulator.pdb"

@@ -42,29 +42,45 @@ std::string Street::typeToName() const {
             return "T";
     }
 }
+streetType Street::nameToType(const char& name) {
+    switch (name) {
+        case 'A':
+            return A;
+        case 'B':
+            return B;
+        case 'T':
+            return T;
+    }
+}
 
-
-const std::vector<Vehicle *> &Street::getOccupants() const {
-    return _occupants;
+const std::vector<std::vector<Vehicle *>> &Street::getLanes() const {
+    return _lanes;
 }
 
 
-const std::vector<Vehicle *> &Street::getEntrants() const {
+const std::vector<std::vector<Vehicle *>> &Street::getEntrants() const {
     return _entrants;
 }
 
 
-Vehicle *Street::getFrontOccupant() const {
-    return _frontOccupant;
+Vehicle *Street::getFrontOccupant(const int index) const {
+    return _frontOccupant[index];
 }
-void Street::setFrontOccupant(Vehicle *frontOccupant) {
-    _frontOccupant = frontOccupant;
+void Street::setFrontOccupant(Vehicle *frontOccupant, int index) {
+    _frontOccupant[index] = frontOccupant;
 }
 
-Vehicle *Street::getBackOccupant() const {
-    return _backOccupant;
+Vehicle *Street::getBackOccupant(int index) const {
+    return _backOccupant[index];
 }
-void Street::setBackOccupant(Vehicle *backOccupant) {
-    _backOccupant = backOccupant;
+void Street::setBackOccupant(Vehicle *backOccupant, int index) {
+    _backOccupant[index] = backOccupant;
+}
+
+bool Street::isTwoWay() const {
+    return _isTwoWay;
+}
+void Street::setIsTwoWay(bool isTwoWay) {
+    _isTwoWay = isTwoWay;
 }
 
