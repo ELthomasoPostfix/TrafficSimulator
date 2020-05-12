@@ -7,11 +7,30 @@
 #include "Intersection.h"
 
 Vehicle::Vehicle(vehicleClass vClass) : _class(vClass) {
-
+    _isLimited = false;
+    _isStopped = false;
 }
 
 void Vehicle::emitInfluence() {
 
+}
+
+void Vehicle::enterStreet() {
+    Street* streetToEnter = getNextStreet();
+    // TODO remove vehicle from _entrants
+    // TODO move vehicle to occupants
+    // the index of the correct lane to enter in the next street
+    // next intersection, because the next intersection is the intersection it enters the new street from
+    // when leaving is about leaving the intersection, it gets the correct lane to leave INTO/WITH
+    int laneIndexToEnter = getNextIntersection()->laneIndexWhenLeaving(streetToEnter);
+    if (streetToEnter->getFrontOccupant(laneIndexToEnter) == nullptr) {
+        streetToEnter->setFrontOccupant(this, laneIndexToEnter);
+    }
+    streetToEnter->setBackOccupant(this, laneIndexToEnter);
+    // TODO change currentStreet to streetToEnter
+    // TODO change the previous and next intersections
+    // TODO request influences
+    streetToEnter->requestInfluences(this);
 }
 
 void Vehicle::receiveInfluence(const Influence* incomingInfluence) {
@@ -182,3 +201,11 @@ Intersection *Vehicle::getNextIntersection() const {
 void Vehicle::setNextIntersection(Intersection *nextIntersection) {
     _nextIntersection = nextIntersection;
 }
+
+Street *Vehicle::getNextStreet() const {
+    return _nextStreet;
+}
+void Vehicle::setNextStreet(Street *nextStreet) {
+    _nextStreet = nextStreet;
+}
+

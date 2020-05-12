@@ -5,7 +5,7 @@
 #include "Influence.h"
 
 Influence::Influence(influenceType type) : _type(type) {
-
+    _argument = 0;
 }
 
 
@@ -14,4 +14,12 @@ Influence::Influence(influenceType type) : _type(type) {
 
 influenceType Influence::getType() const {
     return _type;
+}
+
+int Influence::getArgument() const {
+    return _argument;
+}
+
+void Influence::setArgument(int argument) {
+    _argument = argument;
 }

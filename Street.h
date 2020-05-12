@@ -25,6 +25,11 @@ class Street {
 
     streetType _type;
 
+    // can contain speed limits or accidents or even a police car siren
+    std::vector<const Influence*> _influences;
+    bool _hasSpeedLimit;
+    bool _hasStopSignal;
+
     // the list of all vehicles currently INSIDE the street
     std::vector<std::vector<Vehicle*>> _lanes;
 
@@ -38,7 +43,13 @@ class Street {
     Vehicle* _backOccupant[2];
 
 public:
+
     Street(Intersection* prev, Intersection* next, streetType type);
+
+    void requestInfluences(Vehicle* requestingVehicle) const;
+
+
+
 
 
     // getters and setters
@@ -65,8 +76,17 @@ public:
     void setBackOccupant(Vehicle *backOccupant, int index);
 
     bool isTwoWay() const;
-
     void setIsTwoWay(bool isTwoWay);
+
+    const std::vector<const Influence *> &getInfluences() const;
+    bool addInfluence(const Influence* newInfluence);
+    bool removeInfluence(influenceType influenceType);
+
+    bool hasSpeedLimit() const;
+    void setHasSpeedLimit(bool hasSpeedLimit);
+
+    bool hasStopSignal() const;
+    void setHasStopSignal(bool hasStopSignal);
 };
 
 

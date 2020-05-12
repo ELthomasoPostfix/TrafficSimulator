@@ -19,6 +19,12 @@ enum influenceType {LIMIT, STOP, REROUTE};
 class Influence {
     influenceType _type;
 
+    // the argument describes extra information about the influence
+    // examples:
+    // (1) car accident : the int describes the location (progress) on the road where it happened
+    // (2) traffic light: the int describes the exact location from where on the STOP signal will take effect
+    // (3) speed limit  : the int describes the speed limit in the street
+    int _argument;
 public:
     Influence(influenceType type);
 
@@ -26,6 +32,10 @@ public:
     // getters and setters
 
     influenceType getType() const;
+
+    int getArgument() const;
+
+    void setArgument(int argument);
 };
 
 

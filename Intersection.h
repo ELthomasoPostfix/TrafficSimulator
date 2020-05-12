@@ -27,10 +27,11 @@ public:
 
     void emitTrafficLightSignal();
 
-    // emit a stop signal at the front occupants of the currentTrafficLightPai  ( get using getCurrentPair() )r
-    void stopFrontOccupants() const;
+    void requestSignal(Vehicle* requestingVehicle) const;
 
-    void unStopFrontOccupants() const;
+    // emit a stop signal at the front occupants of the currentTrafficLightPai  ( get using getCurrentPair() )
+    void stopCurrentFrontOccupants() const;
+    void unStopCurrentFrontOccupants() const;
 
     Intersection* getOtherIntersection(const Street* street) const;
     Vehicle* getIncomingFrontVehicle(const Street* street) const;

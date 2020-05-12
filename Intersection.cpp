@@ -11,6 +11,12 @@ Intersection::Intersection(std::string  name): _name(std::move(name)) {
     _trafficLightCounter = 0;
 }
 
+// function should be used by a vehicle: it receives the STOP signal
+void Intersection::requestSignal(Vehicle *requestingVehicle) const {
+    requestingVehicle->receiveInfluence(getTrafficLightInfluence());
+}
+
+
 void Intersection::emitInfluences() {
     if (getHasTrafficLights()) {
         emitTrafficLightSignal();
@@ -22,11 +28,11 @@ void Intersection::emitTrafficLightSignal() {
     // cycle the traffic lights to the next pair (green pair -> red  | next red pair -> green)
     if (tlc == 5) {
         // set the two "green streets" to "red" (emit a STOP signal to the front cars of those streets)
-        stopFrontOccupants();
+        stopCurrentFrontOccupants();
         // set currentTrafficLightPair to the next pair
         cycleTrafficLightsPair();
         // set the two "red streets" to "green" (remove a STOP signal from the front cars of those streets)
-        unStopFrontOccupants();
+        unStopCurrentFrontOccupants();
 
         setTrafficLightCounter(0);
     } else {
@@ -34,12 +40,12 @@ void Intersection::emitTrafficLightSignal() {
     }
 }
 
-void Intersection::stopFrontOccupants() const {
+void Intersection::stopCurrentFrontOccupants() const {
 
-    const std::pair<Street*, Street*>& currentGreenPair = getCurrentPair();
+    const std::pair<Street*,Street*>& currentGreenPair = getCurrentPair();
     // the index of the lane, which vehicles who will enter the intersection will use
     int enteringLaneIndex = laneIndexWhenEntering(currentGreenPair.first);
-    // emit a STOP signal to the front occupant of the first street, if it exists
+    // emit a STOP signal to the front occupant of the street, if it exists
     if (enteringLaneIndex != -1) {
         Vehicle* frontOccupant = currentGreenPair.first->getFrontOccupant(enteringLaneIndex);
         if (frontOccupant != nullptr) {
@@ -47,8 +53,8 @@ void Intersection::stopFrontOccupants() const {
         }
     }
     enteringLaneIndex = laneIndexWhenEntering(currentGreenPair.second);
-    // emit a STOP signal to the front occupant of the second street, if it exists
-    if (enteringLaneIndex != -1){
+    // emit a STOP signal to the front occupant of the street, if it exists
+    if (enteringLaneIndex != -1) {
         Vehicle* frontOccupant = currentGreenPair.second->getFrontOccupant(enteringLaneIndex);
         if (frontOccupant != nullptr) {
             frontOccupant->receiveInfluence(getTrafficLightInfluence());
@@ -56,7 +62,7 @@ void Intersection::stopFrontOccupants() const {
     }
 }
 
-void Intersection::unStopFrontOccupants() const {
+void Intersection::unStopCurrentFrontOccupants() const {
     const std::pair<Street*, Street*>& currentGreenPair = getCurrentPair();
 
     // the index of the lane, which vehicles who will enter the intersection will use

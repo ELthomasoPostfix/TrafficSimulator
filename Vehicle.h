@@ -33,16 +33,15 @@ class Vehicle {
     bool _isStopped;
 
     // members describing the current location
-    // TODO State* startState
     Intersection* _startIntersection;
-    // TODO State* endState
     Intersection* _endIntersection;
     Street* _currentStreet;
     bool _underway;
     int _progress;  // TODO only when a vehicle is a set amount of distance (90% complete) through the street, can they decide on a new route
-    // TODO State* TargetState
+
     Intersection* _prevIntersection;
     Intersection* _nextIntersection;
+    Street* _nextStreet;
 
     // when a vehicle enters a street, they will essentially enter a queue to get out at the other side
     // (1) this queue will allow easy simulation of a traffic jam, as the progress across the street and whether or not
@@ -62,6 +61,8 @@ public:
     virtual void emitInfluence();
 
     void receiveInfluence(const Influence* incomingInfluence);
+
+    void enterStreet();
 
     void accident();
 
@@ -104,12 +105,14 @@ public:
     void setPrevVehicle(Vehicle *prevVehicle);
 
     Intersection *getPrevIntersection() const;
-
     void setPrevIntersection(Intersection *prevIntersection);
 
     Intersection *getNextIntersection() const;
-
     void setNextIntersection(Intersection *nextIntersection);
+
+    Street *getNextStreet() const;
+
+    void setNextStreet(Street *nextStreet);
 };
 
 
