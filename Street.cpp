@@ -79,11 +79,17 @@ void Street::setFrontOccupant(Vehicle *frontOccupant, int index) {
     // two way street: if enter from prev Intersection, lane 0; if entering from next intersection, lane 1
 
     if (index == 0) {   // enter into lane 0, will always be from prev intersection
-        getNextIntersection()->requestSignal(frontOccupant);
-    } else if (index == 1) {
-        getPrevIntersection()->requestSignal(frontOccupant);
+        if (getNextIntersection()->getHasTrafficLights()) {
+            getNextIntersection()->requestSignal(frontOccupant);
+        }
+    } else if (index == 1) {    // entering into lane 1, will always be from next intersection
+        if (getPrevIntersection()->getHasTrafficLights()) {
+            getPrevIntersection()->requestSignal(frontOccupant);
+        }
     }
-    _frontOccupant[index] = frontOccupant;
+    if (index != -1) {      // index == -1  means an invalid attempt at entering a street
+        _frontOccupant[index] = frontOccupant;
+    }
 }
 
 Vehicle *Street::getBackOccupant(int index) const {
