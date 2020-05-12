@@ -31,6 +31,7 @@ void Vehicle::enterStreet() {
     // TODO change the previous and next intersections
     // TODO request influences
     streetToEnter->requestInfluences(this);
+    // TODO
 }
 
 void Vehicle::receiveInfluence(const Influence* incomingInfluence) {
