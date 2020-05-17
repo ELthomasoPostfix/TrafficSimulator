@@ -39,6 +39,28 @@ void Network::toPNG(const std::string &fileName) const {
     system(command);
 }
 
+void Network::doMainLoop(const int duration, std::string& ofName) {
+    Simulation* sim = _simulation;
+    std::ofstream ofstream;
+    ofstream.open(ofName);
+
+    for (int dur = 0; dur < duration; ++dur) {
+        ofstream << "---- " << dur << " ----" << std::endl;
+        // let intersections with traffic lights cycle through the traffic light pairs (of Street*s) and send out
+        // signals when cycling from one pair to the next.
+        // vehicles will request traffic light influence upon calling the setFrontOccupant() function of a street
+        for (Intersection* influencingIntersection : getInfluencingIntersections()) {
+            influencingIntersection->emitInfluences();
+        }
+        // let all vehicles drive and if they can, send out signals
+        for (Vehicle* vehicle : getVehicles()) {
+            vehicle->drive(ofstream);
+            std::cout << " drove (" << dur << ")" << std::endl;
+        }
+    }
+    ofstream.close();
+    sim->addTotalTimeSimulated(duration);
+}
 
 
 // getters and setters
@@ -75,4 +97,19 @@ void Network::addAllowedStreetType(const streetType newAllowedStreetType) {
     if (!typeIsAllowed(newAllowedStreetType)) {
         _allowedStreetTypes.emplace_back(newAllowedStreetType);
     }
+}
+
+const std::vector<Vehicle *> &Network::getVehicles() const {
+    return _vehicles;
+}
+void Network::addVehicle(Vehicle * vehicle) {
+    _vehicles.emplace_back(vehicle);
+    _simulation->incrementTotalSpawnedVehicles();
+}
+
+const std::vector<Intersection *> &Network::getInfluencingIntersections() const {
+    return _influencingIntersections;
+}
+void Network::addInfluencingIntersection(Intersection *influencingIntersection) {
+    _influencingIntersections.emplace_back(influencingIntersection);
 }

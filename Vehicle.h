@@ -26,18 +26,23 @@ enum vehicleClass {personal, transport, special};
 class Vehicle {
     // way to identify vehicle
     vehicleClass _class;
+    const std::string _licensePlate;
 
     // all influence related members
     std::vector<const Influence*> _incomingInfluences;
     bool _isLimited;
     bool _isStopped;
 
+    double _speed;
+
     // members describing the current location
     Intersection* _startIntersection;
     Intersection* _endIntersection;
     Street* _currentStreet;
     bool _underway;
-    int _progress;  // TODO only when a vehicle is a set amount of distance (90% complete) through the street, can they decide on a new route
+    double _progress;  // TODO only when a vehicle is a set amount of distance (90% complete) through the street, can they decide on a new route
+
+    std::pair<std::vector<Intersection*>, std::vector<Street*>> _path;
 
     Intersection* _prevIntersection;
     Intersection* _nextIntersection;
@@ -54,19 +59,25 @@ class Vehicle {
     Vehicle* _nextVehicle;
     Vehicle* _prevVehicle;
 public:
-    Vehicle(vehicleClass vClass);
+    Vehicle(vehicleClass vClass, std::string licensePlate);
 
+    void drive(std::ofstream& ofstream);
+    void adjustProgress(std::ofstream& ofstream);
 
     // influences will always be emitted to the immediate surroundings
     virtual void emitInfluence();
 
     void receiveInfluence(const Influence* incomingInfluence);
 
-    void enterStreet();
+    void enterStreet(std::ofstream& ofstream);
 
     void accident();
 
-    void onWrite(std::ofstream& ofstream);
+    void onWrite(std::ofstream& ofstream) const;
+
+
+
+
 
     // getters and setters
 
@@ -74,8 +85,10 @@ public:
     void setClass(vehicleClass vClass);
 
     const std::vector<const Influence *> &getIncomingInfluences() const;
+    int getArgument(influenceType influenceType) const;
     bool addIncomingInfluence(const Influence * incomingInfluence);
     void removeIncomingInfluence(const Influence* toDeleteInfluence);
+    void clearIncomingInfluences();
 
     bool isLimited() const;
     void setIsLimited(bool isLimited);
@@ -95,8 +108,9 @@ public:
     bool isUnderway() const;
     void setUnderway(bool underway);
 
-    int getProgress() const;
-    void setProgress(int progress);
+    double getProgress() const;
+    void setProgress(double progress);
+    void addProgress(double additionalProgress);
 
     Vehicle *getNextVehicle() const;
     void setNextVehicle(Vehicle *nextVehicle);
@@ -111,8 +125,13 @@ public:
     void setNextIntersection(Intersection *nextIntersection);
 
     Street *getNextStreet() const;
-
     void setNextStreet(Street *nextStreet);
+
+    double getSpeed() const;
+    void setSpeed(double speed);
+    double getMaxDriveDistance() const;
+
+    const std::string &getLicensePlate() const;
 };
 
 

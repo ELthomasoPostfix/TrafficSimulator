@@ -12,7 +12,7 @@ class TransportVehicle : public Vehicle {
     std::vector<Intersection*> _preDeterminedRoute;
 
 public:
-    TransportVehicle();
+    TransportVehicle(std::string licensePlate);
 
     void emitInfluence() override;
 };

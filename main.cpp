@@ -21,15 +21,23 @@ int main() {
     Street* s5 = new Street(i3, i1, A);
     s5->setIsTwoWay(true);
 
-    Vehicle* v1 = new Vehicle(personal);
-    Vehicle* v2 = new Vehicle(personal);
+
+    std::stringstream ss;
+    ss << city1.getSimulation()->getTotalSpawnedVehicles() << rand() % 9 + 1 << rand() % 9 + 1;
+    Vehicle* v1 = new Vehicle(personal, ss.str());
+    std::stringstream ss2;
+    ss2 << city1.getSimulation()->getTotalSpawnedVehicles() << rand() % 9 + 1 << rand() % 9 + 1;
+    Vehicle* v2 = new Vehicle(personal, ss2.str());
+
 
     v1->setCurrentStreet(s1);
     v2->setCurrentStreet(s4);
     v1->setUnderway(true);
     v2->setUnderway(true);
     v1->setProgress(90);
+    v1->setSpeed(80);
     v2->setProgress(89);
+    v2->setSpeed(95);
     v1->setPrevIntersection(i1);
     v1->setNextIntersection(i2);
     v2->setPrevIntersection(i3);
@@ -53,17 +61,23 @@ int main() {
     city1.addIntersection(i2);
     city1.addIntersection(i3);
 
+    city1.addVehicle(v1);
+    city1.addVehicle(v2);
+
+    // set up the traffic light pairs
+    std::pair<Street*, Street*> trafficLightPair2(s2,s3);
+    std::pair<Street*, Street*> trafficLightPair1(s1,s4);
+    Influence* trafficLight = new Influence(STOP);
+    trafficLight->setArgument(100+Simulation::getEffectiveSTOPdistance());
+    i2->setTrafficLights(trafficLight);
+    i2->addTrafficLightPair(trafficLightPair1);
+    i2->addTrafficLightPair(trafficLightPair2);
+    i2->setCurrentPair(trafficLightPair2);  // the pair that starts off at red
+    city1.addInfluencingIntersection(i2);
+
     // v1 and v2 are now both in front of the traffic lights
     s1->setFrontOccupant(v1, 0);
     s4->setFrontOccupant(v2, 1);
-
-    // set up the traffic light pairs
-    std::pair<Street*, Street*> trafficLightPair1(s1,s4);
-    std::pair<Street*, Street*> trafficLightPair2(s2,s3);
-    i2->setTrafficLights(city1.getSimulation()->getInfluence(STOP));
-    i2->addTrafficLightPair(trafficLightPair1);
-    i2->addTrafficLightPair(trafficLightPair2);
-    i2->setCurrentPair(trafficLightPair1);  // the pair that starts off at red
 
 
     std::string fileName = "firstTest.dot";
@@ -75,7 +89,7 @@ int main() {
 
     city1.toPNG(fileName);
 
-
+/*
     int counter = 0;
     std::ofstream ofstream1;
     ofstream1.open("traffic_lights_test.txt");
@@ -94,12 +108,14 @@ int main() {
         v1->onWrite(ofstream1);
         v2->onWrite(ofstream1);
 
-        i2->emitInfluences();   // TODO  BUG !! traffic lights only emit a STOP signal when changing current pair
+        i2->emitInfluences();
 
         ++counter;
     }
     ofstream1.close();
-
+*/
+    std::string ofName = "driveTest.txt";
+    city1.doMainLoop(25, ofName);
 
     return 0;
 }

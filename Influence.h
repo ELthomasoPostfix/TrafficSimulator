@@ -5,10 +5,9 @@
 #ifndef TRAFFICSIMULATOR_INFLUENCE_H
 #define TRAFFICSIMULATOR_INFLUENCE_H
 
-#include "string"
-#include <fstream>
-#include "sstream"
-#include "iostream"
+#include "Util.h"
+
+class Simulation;
 
 // the influence types represent the types of situations that may occur during transit
 // (1) LIMIT : the vehicle needs to limit it's speed when driving trough a street because of some influence (speed limit, traffic jam)
@@ -23,7 +22,9 @@ class Influence {
     // examples:
     // (1) car accident : the int describes the location (progress) on the road where it happened
     // (2) traffic light: the int describes the exact location from where on the STOP signal will take effect
-    // (3) speed limit  : the int describes the speed limit in the street
+    // (3) speed limit  : the int describes the speed limit in the street, speed limit is applied in the getSpeed() function
+    // of a vehicle. The progress of a vehicle is in function addProgress() (not adjustProgress())
+    // relies on the getSpeed() function
     int _argument;
 public:
     Influence(influenceType type);

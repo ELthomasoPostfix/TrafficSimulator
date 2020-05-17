@@ -48,7 +48,7 @@ public:
 
     void requestInfluences(Vehicle* requestingVehicle) const;
 
-
+    Intersection* getOtherIntersection(const Intersection* intersection) const;
 
 
 

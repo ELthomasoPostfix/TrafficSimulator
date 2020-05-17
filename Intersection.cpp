@@ -3,6 +3,7 @@
 //
 
 #include "Intersection.h"
+#include "Simulation.h"
 
 #include <utility>
 
@@ -26,7 +27,7 @@ void Intersection::emitInfluences() {
 void Intersection::emitTrafficLightSignal() {
     int tlc = getTrafficLightCounter();
     // cycle the traffic lights to the next pair (green pair -> red  | next red pair -> green)
-    if (tlc == 5) {
+    if (tlc == Simulation::getTrafficLightMaxCount()) {
         // set the two "green streets" to "red" (emit a STOP signal to the front cars of those streets)
         stopCurrentFrontOccupants();
         // set currentTrafficLightPair to the next pair

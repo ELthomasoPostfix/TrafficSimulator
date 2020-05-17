@@ -4,7 +4,7 @@
 
 #include "TransportVehicle.h"
 
-TransportVehicle::TransportVehicle() : Vehicle(transport) {
+TransportVehicle::TransportVehicle(const std::string licensePlate) : Vehicle(transport, licensePlate) {
 
 }
 

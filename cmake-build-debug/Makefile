@@ -312,6 +312,33 @@ TransportVehicle.cpp.s:
 	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.s
 .PHONY : TransportVehicle.cpp.s
 
+Util.o: Util.cpp.o
+
+.PHONY : Util.o
+
+# target to build an object file
+Util.cpp.o:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Util.cpp.o
+.PHONY : Util.cpp.o
+
+Util.i: Util.cpp.i
+
+.PHONY : Util.i
+
+# target to preprocess a source file
+Util.cpp.i:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Util.cpp.i
+.PHONY : Util.cpp.i
+
+Util.s: Util.cpp.s
+
+.PHONY : Util.s
+
+# target to generate assembly for a file
+Util.cpp.s:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Util.cpp.s
+.PHONY : Util.cpp.s
+
 Vehicle.o: Vehicle.cpp.o
 
 .PHONY : Vehicle.o
@@ -423,6 +450,9 @@ help:
 	@echo "... TransportVehicle.o"
 	@echo "... TransportVehicle.i"
 	@echo "... TransportVehicle.s"
+	@echo "... Util.o"
+	@echo "... Util.i"
+	@echo "... Util.s"
 	@echo "... Vehicle.o"
 	@echo "... Vehicle.i"
 	@echo "... Vehicle.s"

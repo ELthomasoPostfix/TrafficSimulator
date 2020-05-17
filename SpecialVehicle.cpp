@@ -4,7 +4,7 @@
 
 #include "SpecialVehicle.h"
 
-SpecialVehicle::SpecialVehicle() : Vehicle(special) {
+SpecialVehicle::SpecialVehicle(const std::string licensePlate) : Vehicle(special, licensePlate) {
     InstantiateInfluence();
 }
 

@@ -17,7 +17,7 @@ class SpecialVehicle : public Vehicle {
     std::vector<Influence*> _outgoingInfluences;
 
 public:
-    SpecialVehicle();
+    SpecialVehicle(std::string licensePlate);
 
     void InstantiateInfluence();
 

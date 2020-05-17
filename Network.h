@@ -10,8 +10,12 @@
 class Network {
     // the actual network consisting of intersections and streets, etc...
     std::vector<Intersection*> _network;
+    std::vector<Vehicle*> _vehicles;
+    std::vector<Intersection*> _influencingIntersections;
 
     std::vector<streetType> _allowedStreetTypes;
+
+public:
 
     // the simulation class is meant to serve as a statistical analysis and data storage class
     Simulation* _simulation;
@@ -22,6 +26,8 @@ public:
 
     void toDot(std::ofstream& fstream) const;
     void toPNG(const std::string& fileName) const;
+
+    void doMainLoop(int duration, std::string& ofName);
 
     // TODO add algorithms here
 
@@ -38,6 +44,12 @@ public:
     const std::vector<streetType> &getAllowedStreetTypes() const;
     bool typeIsAllowed(streetType type) const;
     void addAllowedStreetType(streetType newAllowedStreetType);
+
+    const std::vector<Vehicle *> &getVehicles() const;
+    void addVehicle(Vehicle * vehicle);
+
+    const std::vector<Intersection *> &getInfluencingIntersections() const;
+    void addInfluencingIntersection(Intersection * influencingIntersection);
 };
 
 

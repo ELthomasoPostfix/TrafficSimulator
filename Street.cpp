@@ -4,18 +4,26 @@
 
 #include "Street.h"
 #include "Intersection.h"
+#include "Simulation.h"
 
 Street::Street(Intersection* prev, Intersection* next, streetType type) : _prevIntersection(prev), _nextIntersection(next),
                                                                           _type(type) {
     _hasSpeedLimit = false;
 }
 
-
 void Street::requestInfluences(Vehicle* requestingVehicle) const {
     for (const Influence* streetInfl : getInfluences()) {
         requestingVehicle->receiveInfluence(streetInfl);
     }
 }
+
+Intersection *Street::getOtherIntersection(const Intersection *intersection) const {
+    if (getNextIntersection() == intersection) return getPrevIntersection();
+    else if (getPrevIntersection() == intersection) return getNextIntersection();
+    else return nullptr; // the passed intersection isn't part of the street (isn't prev or next)
+}
+
+
 
 
 
@@ -73,37 +81,52 @@ const std::vector<std::vector<Vehicle *>> &Street::getEntrants() const {
 Vehicle *Street::getFrontOccupant(const int index) const {
     return _frontOccupant[index];
 }
-void Street::setFrontOccupant(Vehicle *frontOccupant, int index) {
+void Street::setFrontOccupant(Vehicle *frontOccupant, int lane) {
     // index: when becoming the front occupant, obviously enter the street
     // one way street: always enter via lane 0
-    // two way street: if enter from prev Intersection, lane 0; if entering from next intersection, lane 1
+    // two way street: if entering from prev Intersection, lane 0; if entering from next intersection, lane 1
 
-    if (index == 0) {   // enter into lane 0, will always be from prev intersection
+    if (lane == 0) {   // enter into lane 0, will always be from prev intersection
         if (getNextIntersection()->getHasTrafficLights()) {
             getNextIntersection()->requestSignal(frontOccupant);
         }
-    } else if (index == 1) {    // entering into lane 1, will always be from next intersection
+    } else if (lane == 1) {    // entering into lane 1, will always be from next intersection
         if (getPrevIntersection()->getHasTrafficLights()) {
             getPrevIntersection()->requestSignal(frontOccupant);
         }
     }
-    if (index != -1) {      // index == -1  means an invalid attempt at entering a street
-        _frontOccupant[index] = frontOccupant;
+    if (lane != -1) {      // index == -1  means an invalid attempt at entering a street
+        // the previous front was a nullptr so the frontOccupant is the sole vehicle in the street, meaning prev is nullptr
+        // else it is part of a file of cars and it becomes the new front after the previous front enters a new street;
+        // then its prev must remain the same
+        if (_frontOccupant[lane] == nullptr) {
+            frontOccupant->setPrevVehicle(nullptr);
+        }
+        frontOccupant->setNextVehicle(nullptr);
+        _frontOccupant[lane] = frontOccupant;
+        // also set the back vehicle if needed
+        if (_backOccupant[lane] == nullptr) {
+            _backOccupant[lane] = frontOccupant;
+        }
     }
 }
 
 Vehicle *Street::getBackOccupant(int index) const {
     return _backOccupant[index];
 }
-void Street::setBackOccupant(Vehicle *backOccupant, int lane) {
-    // if new back occupant, connect to the previous back occupant
-    if (backOccupant != getFrontOccupant(lane)) {
-        Vehicle* currBackOcc = getBackOccupant(lane);
-
-        currBackOcc->setPrevVehicle(backOccupant);
-        backOccupant->setNextVehicle(currBackOcc);
+void Street::setBackOccupant(Vehicle *newBackOccupant, int lane) {
+    Vehicle* currBackOcc = getBackOccupant(lane);
+    // if a back occupant exists, add the new back occupant to the vehicle chain
+    if (currBackOcc != nullptr) {
+        currBackOcc->setPrevVehicle(newBackOccupant);
+        newBackOccupant->setNextVehicle(currBackOcc);
+        newBackOccupant->setPrevVehicle(nullptr);
+        _backOccupant[lane] = newBackOccupant;
+    // wrongly called setBackOccupant(), call setFrontOccupant() instead.
+    // no back vehicle exists, so the new back must also be the new front vehicle
+    } else {
+        setFrontOccupant(newBackOccupant, lane);
     }
-    _backOccupant[lane] = backOccupant;
 }
 
 bool Street::isTwoWay() const {
@@ -158,5 +181,6 @@ bool Street::hasStopSignal() const {
 void Street::setHasStopSignal(bool hasStopSignal) {
     _hasStopSignal = hasStopSignal;
 }
+
 
 

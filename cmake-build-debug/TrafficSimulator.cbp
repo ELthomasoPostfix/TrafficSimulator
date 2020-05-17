@@ -126,6 +126,12 @@
 		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/TransportVehicle.h">
 			<Option target="TrafficSimulator"/>
 		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Util.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Util.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
 		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Vehicle.cpp">
 			<Option target="TrafficSimulator"/>
 		</Unit>
