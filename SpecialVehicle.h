@@ -14,14 +14,17 @@ class SpecialVehicle : public Vehicle {
 
     // all influences caused by vehicles
     // if a normal vehicle has a traffic accident, then even they won't be able to emit Influences
-    std::vector<Influence*> _outgoingInfluences;
+    std::vector<const Influence*> _outgoingInfluences;
 
 public:
-    SpecialVehicle(std::string licensePlate);
+    SpecialVehicle(const std::string& licensePlate);
 
     void InstantiateInfluence();
 
     void emitInfluence() override;
+
+    void addOutgoingInfluence(const Influence* outgoingInfluence) override;
+
 
 };
 

@@ -64,8 +64,10 @@ public:
     void drive(std::ofstream& ofstream);
     void adjustProgress(std::ofstream& ofstream);
 
-    // influences will always be emitted to the immediate surroundings
+    // influences will always be emitted to the immediate surroundings, but should only be used by a special vehicle
     virtual void emitInfluence();
+    // special vehicle needs to be able to add an outgoing STOP influence
+    virtual void addOutgoingInfluence(const Influence* outgoingInfluence);
 
     void receiveInfluence(const Influence* incomingInfluence);
 
@@ -83,6 +85,7 @@ public:
 
     vehicleClass getClass() const;
     void setClass(vehicleClass vClass);
+    std::string classToName() const;
 
     const std::vector<const Influence *> &getIncomingInfluences() const;
     int getArgument(influenceType influenceType) const;

@@ -38,6 +38,7 @@ public:
 
     const std::vector<Intersection *> &getNetwork() const;
     bool addIntersection(Intersection* newIntersection);
+    Intersection* findIntersection(const std::string& name) const;
 
     Simulation *getSimulation() const;
 

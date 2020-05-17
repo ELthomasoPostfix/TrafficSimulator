@@ -14,10 +14,13 @@ Vehicle::Vehicle(vehicleClass vClass, const std::string licensePlate) : _class(v
 
 void Vehicle::drive(std::ofstream& ofstream) {
     if (ofstream.is_open()) {
+        const int argument = getArgument(STOP);
         // the exact location from whereon a vehicle's possessed STOP signal will take effect
-        const double effectiveSTOPLocation = getArgument(STOP) - Simulation::getEffectiveSTOPdistance();
-        // vehicle is not under influence of a STOP signal
-        if (!isStopped() or (isStopped() and getProgress() < effectiveSTOPLocation and effectiveSTOPLocation >= 0)) {
+        const double effectiveSTOPLocation = argument - Simulation::getEffectiveSTOPdistance();
+        // vehicle is not under influence of a STOP signal or it is not in range of the STOP signal
+        // if the argument is -1, then the argument affects the whole street/lane
+        if (!isStopped() or (isStopped() and getProgress() < effectiveSTOPLocation and effectiveSTOPLocation >= 0 and
+                             argument != -1)) {
             const double decisionStartPoint = effectiveSTOPLocation - Simulation::getDecisionBufferLength();
             if (getProgress() >= decisionStartPoint) {
                 // TODO vehicle may decide to adjust its path from here on out
@@ -113,6 +116,11 @@ void Vehicle::adjustProgress(std::ofstream& ofstream) {
 void Vehicle::emitInfluence() {
 
 }
+
+void Vehicle::addOutgoingInfluence(const Influence* outgoingInfluence) {
+
+}
+
 
 void Vehicle::enterStreet(std::ofstream& ofstream) {
     clearIncomingInfluences();
@@ -224,9 +232,18 @@ void Vehicle::onWrite(std::ofstream &ofstream) const {
 vehicleClass Vehicle::getClass() const {
     return _class;
 }
-
 void Vehicle::setClass(vehicleClass vClass) {
     _class = vClass;
+}
+std::string Vehicle::classToName() const {
+    switch (getClass()) {
+        case personal:
+            return "personal";
+        case transport:
+            return "transport";
+        case special:
+            return "special";
+    }
 }
 
 const std::vector<const Influence *> &Vehicle::getIncomingInfluences() const {
@@ -381,6 +398,7 @@ double Vehicle::getMaxDriveDistance() const {
 const std::string &Vehicle::getLicensePlate() const {
     return _licensePlate;
 }
+
 
 
 

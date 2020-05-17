@@ -13,10 +13,9 @@ Simulation::Simulation() {
 void Simulation::instantiateInfluences() {
 
     Influence* stop    = new Influence(STOP);
-    Influence* limit   = new Influence(LIMIT);
+    stop->setArgument(100 + getEffectiveSTOPdistance());
     Influence* reroute = new Influence(REROUTE);
     allInfluences.emplace_back(stop);
-    allInfluences.emplace_back(limit);
     allInfluences.emplace_back(reroute);
 }
 

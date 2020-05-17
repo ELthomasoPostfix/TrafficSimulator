@@ -1,4 +1,9 @@
 {
+  "simParameters": {
+    "mincardistance": 1,
+    "maxtrafficlightcount": 5,
+    "decisionbufferlength": 10
+  },
   "alphabet": [
     "A",
     "B",
@@ -23,31 +28,53 @@
       "twowaystreet": false,
       "previousintersection": "1",
       "nextintersection": "2",
-      "type": "A"
+      "type": "A",
+      "limit": 30
     },
     {
       "twowaystreet": false,
       "previousintersection": "1",
       "nextintersection": "2",
-      "type": "T"
+      "type": "T",
+      "limit": -1
     },
     {
       "twowaystreet": false,
       "previousintersection": "2",
       "nextintersection": "3",
-      "type": "B"
+      "type": "B",
+      "limit": -1
     },
     {
       "twowaystreet": false,
       "previousintersection": "2",
       "nextintersection": "3",
-      "type": "A"
+      "type": "A",
+      "limit": -1
     },
     {
       "twowaystreet": false,
       "previousintersection": "3",
       "nextintersection": "1",
-      "type": "A"
+      "type": "A",
+      "limit": -1
+    }
+  ],
+  "vehicles": [
+    {
+      "type": "personal",
+      "speed": 50,
+      "influence": false
+    },
+    {
+      "type": "special",
+      "speed": 80,
+      "influence": true
+    },
+    {
+      "type": "transport",
+      "speed": 40,
+      "influence": false
     }
   ]
 }

@@ -113,3 +113,10 @@ const std::vector<Intersection *> &Network::getInfluencingIntersections() const 
 void Network::addInfluencingIntersection(Intersection *influencingIntersection) {
     _influencingIntersections.emplace_back(influencingIntersection);
 }
+
+Intersection *Network::findIntersection(const std::string &name) const {
+    for (Intersection* intersection : _network) {
+        if (intersection->getName() == name) return intersection;
+    }
+    return nullptr;
+}
