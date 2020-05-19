@@ -12,11 +12,27 @@
   "intersections": [
     {
       "name": "1",
-      "trafficlights": false
+      "trafficlights": false,
+      "trafficLightPairs": [
+      ]
     },
     {
       "name": "2",
-      "trafficlights": true
+      "trafficlights": true,
+      "trafficLightPairs": [
+        {
+          "otherIntersection1": "1",
+          "type1": "A",
+          "otherIntersection2": "3",
+          "type2": "A"
+        },
+        {
+          "otherIntersection1": "1",
+          "type1": "T",
+          "otherIntersection2": "3",
+          "type2": "B"
+        }
+      ]
     },
     {
       "name": "3",
@@ -25,7 +41,7 @@
   ],
   "streets": [
     {
-      "twowaystreet": false,
+      "twowaystreet": true,
       "previousintersection": "1",
       "nextintersection": "2",
       "type": "A",
@@ -46,7 +62,7 @@
       "limit": -1
     },
     {
-      "twowaystreet": false,
+      "twowaystreet": true,
       "previousintersection": "2",
       "nextintersection": "3",
       "type": "A",
@@ -64,17 +80,38 @@
     {
       "type": "personal",
       "speed": 50,
-      "influence": false
+      "influence": false,
+      "startStreet": [
+        "1",
+        "2",
+        "A"
+      ],
+      "endIntersection": "3",
+      "progress": 90
     },
     {
       "type": "special",
       "speed": 80,
-      "influence": true
+      "influence": true,
+      "startStreet": [
+        "2",
+        "3",
+        "B"
+      ],
+      "endIntersection": "2",
+      "progress": 0
     },
     {
       "type": "transport",
       "speed": 40,
-      "influence": false
+      "influence": false,
+      "startStreet": [
+        "1",
+        "2",
+        "A"
+      ],
+      "endIntersection": "1",
+      "progress": 89
     }
   ]
 }

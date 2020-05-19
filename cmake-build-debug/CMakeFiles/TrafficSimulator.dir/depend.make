@@ -37,8 +37,11 @@ CMakeFiles/TrafficSimulator.dir/Simulation.cpp.o: ../Util.h
 CMakeFiles/TrafficSimulator.dir/Simulation.cpp.o: ../Vehicle.h
 
 CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.o: ../Influence.h
+CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.o: ../Intersection.h
 CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.o: ../SpecialVehicle.cpp
 CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.o: ../SpecialVehicle.h
+CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.o: ../Street.h
+CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.o: ../TransportVehicle.h
 CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.o: ../Util.h
 CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.o: ../Vehicle.h
 

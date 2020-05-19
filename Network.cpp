@@ -39,26 +39,29 @@ void Network::toPNG(const std::string &fileName) const {
     system(command);
 }
 
-void Network::doMainLoop(const int duration, std::string& ofName) {
+void Network::doMainLoop(const int duration, std::string& ofName, std::string& ofName2) {
     Simulation* sim = _simulation;
-    std::ofstream ofstream;
-    ofstream.open(ofName);
+    std::ofstream driveStream;
+    std::ofstream trafficLightStream;
+    driveStream.open(ofName);
+    trafficLightStream.open(ofName2);
 
     for (int dur = 0; dur < duration; ++dur) {
-        ofstream << "---- " << dur << " ----" << std::endl;
+        driveStream        << "---- " << dur << " ----" << std::endl;
+        trafficLightStream << "---- " << dur << " ----" << std::endl;
         // let intersections with traffic lights cycle through the traffic light pairs (of Street*s) and send out
         // signals when cycling from one pair to the next.
         // vehicles will request traffic light influence upon calling the setFrontOccupant() function of a street
         for (Intersection* influencingIntersection : getInfluencingIntersections()) {
-            influencingIntersection->emitInfluences();
+            influencingIntersection->emitInfluences(trafficLightStream);
         }
         // let all vehicles drive and if they can, send out signals
         for (Vehicle* vehicle : getVehicles()) {
-            vehicle->drive(ofstream);
+            vehicle->drive(driveStream);
             std::cout << " drove (" << dur << ")" << std::endl;
         }
     }
-    ofstream.close();
+    driveStream.close();
     sim->addTotalTimeSimulated(duration);
 }
 
@@ -67,6 +70,13 @@ void Network::doMainLoop(const int duration, std::string& ofName) {
 
 const std::vector<Intersection *> &Network::getNetwork() const {
     return _network;
+}
+bool Network::addStreetlessIntersection(Intersection *newStreetlessIntersection) {
+    if (newStreetlessIntersection != nullptr) {
+        _network.emplace_back(newStreetlessIntersection);
+        return true;
+    }
+    return false;
 }
 bool Network::addIntersection(Intersection* newIntersection) {
     if (newIntersection != nullptr and !newIntersection->getStreets().empty()) {
@@ -78,6 +88,12 @@ bool Network::addIntersection(Intersection* newIntersection) {
     } else {
         return false;
     }
+}
+Intersection *Network::findIntersection(const std::string &name) const {
+    for (Intersection* intersection : _network) {
+        if (intersection->getName() == name) return intersection;
+    }
+    return nullptr;
 }
 
 Simulation *Network::getSimulation() const {
@@ -112,11 +128,4 @@ const std::vector<Intersection *> &Network::getInfluencingIntersections() const 
 }
 void Network::addInfluencingIntersection(Intersection *influencingIntersection) {
     _influencingIntersections.emplace_back(influencingIntersection);
-}
-
-Intersection *Network::findIntersection(const std::string &name) const {
-    for (Intersection* intersection : _network) {
-        if (intersection->getName() == name) return intersection;
-    }
-    return nullptr;
 }

@@ -17,6 +17,8 @@ void SpecialVehicle::InstantiateInfluence() {
 void SpecialVehicle::emitInfluence() {
     // get the lane the vehicle is currently in
     const int enteredLane = getPrevIntersection()->laneIndexWhenLeaving(getCurrentStreet());
+    // the lane is valid/the vehicle could have entered it's current lane through the previous
+    // intersection
     if (enteredLane != -1) {
         std::vector<Vehicle *> currentLane = getCurrentStreet()->getLanes()[enteredLane];
         // send out the STOP signal to the entire lane in the street

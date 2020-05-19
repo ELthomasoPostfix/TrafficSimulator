@@ -12,54 +12,77 @@ Vehicle::Vehicle(vehicleClass vClass, const std::string licensePlate) : _class(v
     _isStopped = false;
 }
 
+Street* Vehicle::chooseRandomStreet() {
+    const std::vector<Street *> &leavingStreets = getNextIntersection()->getAllLeavingStreets();
+    Street *randomNextStreet;
+    int rand;
+    int counter = 0; // TODO @@@@@@@@@ delete ############
+    do {
+        rand = random() % leavingStreets.size();
+        randomNextStreet = leavingStreets[rand];
+        std::cout << "chose randomly (" << counter << ") (" << randomNextStreet->typeToName() << ")" << std::endl; // TODO @@@@@@@@@ delete ############
+        counter++; // TODO @@@@@@@@@ delete ############
+    } while (!Simulation::vehicleTypeCanEnterStreetType(getClass(), randomNextStreet->getType()));
+    setNextStreet(randomNextStreet);
+    return randomNextStreet;
+}
+
 void Vehicle::drive(std::ofstream& ofstream) {
     if (ofstream.is_open()) {
-        const int argument = getArgument(STOP);
+        const double argument = getArgument(STOP);
         // the exact location from whereon a vehicle's possessed STOP signal will take effect
         const double effectiveSTOPLocation = argument - Simulation::getEffectiveSTOPdistance();
         // vehicle is not under influence of a STOP signal or it is not in range of the STOP signal
         // if the argument is -1, then the argument affects the whole street/lane
-        if (!isStopped() or (isStopped() and getProgress() < effectiveSTOPLocation and effectiveSTOPLocation >= 0 and
-                             argument != -1)) {
+        if (mayDrive(effectiveSTOPLocation, argument)) {
             const double decisionStartPoint = effectiveSTOPLocation - Simulation::getDecisionBufferLength();
             if (getProgress() >= decisionStartPoint) {
                 // TODO vehicle may decide to adjust its path from here on out
-                const std::vector<Street *> &leavingStreets = getNextIntersection()->getAllLeavingStreets();
-                Street *randomNextStreet;
-                int rand;
-                int counter = 0; // TODO @@@@@@@@@@@@@@@@@@@@@@@@@@@@éé delete ##################################
-                do {;
-                rand = random() % leavingStreets.size();
-                randomNextStreet = leavingStreets[rand];
-                std::cout << "chose randomly (" << counter << ") (" << randomNextStreet->typeToName() << ")" << std::endl;
-                counter++;
-                } while (!Simulation::vehicleTypeCanEnterStreetType(getClass(), randomNextStreet->getType()));
-                setNextStreet(randomNextStreet);
+                alterPath();
             }
             // TODO replace '100'% ????
             if (getProgress() == 100) {
                 if (isUnderway()) setUnderway(false);
                 // TODO vehicle is at an intersection,
-                //  do decision making
-
-                // TODO decision making done, move into new street
+                //  decision making already done, move into new street
                 enterStreet(ofstream);
             // simply move the car, no decisions made
             } else {
                 adjustProgress(ofstream);
             }
         } else {
-            ofstream << "Vehicle " << getLicensePlate() << " from " << getPrevIntersection()->getName() << " to " << getNextIntersection()->getName()
-                     << " is " << "stopped: \"" << Util::boolToString(isStopped());
-            if (isStopped()) {
-                ofstream << "\"  (distance to effective STOP location " << effectiveSTOPLocation-getProgress() << "/"
-                         << "distance to STOP signal location " << Simulation::getEffectiveSTOPdistance() << ")";
-            }
-            ofstream << "\n";
+            addSTOPMessage(ofstream, effectiveSTOPLocation);
         }
     } else {
-        std::cerr << "file was not opened." << std::endl;
+        std::cerr << "file was not open upon calling drive. Please open the ofstream before calling drive." << std::endl;
     }
+}
+
+void Vehicle::alterPath() {
+    // this vehicle had already chosen a next street, remove this vehicle from its entrants
+    // before we change the next street of this vehicle
+    if (getNextStreet() != nullptr) {
+        const int laneIndexWhenLeaving = getNextIntersection()->laneIndexWhenLeaving(getNextStreet());
+        const std::vector<Vehicle*>& entrantLane = getNextStreet()->getEntrants()[laneIndexWhenLeaving];
+        if (!entrantLane.empty()) {
+            getNextStreet()->removeEntrant(laneIndexWhenLeaving,this);
+        }
+    }
+    // choose a new next street
+    Street* chosenStreet = chooseRandomStreet();
+    // add this vehicle to the entrants of the chosen street
+    chosenStreet->addEntrant(getNextIntersection()->laneIndexWhenLeaving(chosenStreet), this);
+    // request both the street's influences and the possible traffic light influence
+    chosenStreet->requestEntrantInfluences(this);
+}
+void Vehicle::addSTOPMessage(std::ofstream &ofstream, const double effectiveSTOPLocation) const {
+    ofstream << "Vehicle " << getLicensePlate() << " from " << getPrevIntersection()->getName() << " to " << getNextIntersection()->getName()
+             << " (" << getCurrentStreet()->typeToName() << ") is " << "stopped: \"" << Util::boolToString(isStopped());
+    if (isStopped()) {
+        ofstream << "\"  (distance to effective STOP location " << effectiveSTOPLocation-getProgress() << "/"
+                 << "distance to STOP signal location " << Simulation::getEffectiveSTOPdistance() << ")";
+    }
+    ofstream << "\n";
 }
 
 void Vehicle::adjustProgress(std::ofstream& ofstream) {
@@ -72,14 +95,16 @@ void Vehicle::adjustProgress(std::ofstream& ofstream) {
         // the room between cars is at least 2x greater then the min car distance required
         if (maxAllowedDriveDistance >= minCarDistance) {     // c1 __(2m)__ c2   ==>  c1 __(1m)__ c2
             const double maxPossibleDriveDistance = getMaxDriveDistance();  // the maximum possible drive distance in 1 time unit
+            // the vehicle cannot drive as far as it is allowed to in a single time unit
             if (maxAllowedDriveDistance >= maxPossibleDriveDistance) {
                 addProgress(maxPossibleDriveDistance);
+            // the vehicle is able to drive either exactly or further than it is allowed to in a single time unit
+            // it must drive only as far as it is allowed to
             } else {
                 addProgress(maxAllowedDriveDistance);
-                std::cerr << maxAllowedDriveDistance << std::endl;
             }
-            // the room between cars is lesser than the min car distance required
-            // ==> move as close to the next car as possible
+        // the room between cars is lesser than the min car distance required
+        // ==> move as close to the next car as possible
         } else {
             // the two cars are at less than 2x min car distance apart, but more than to 1x min car distance apart
             if (maxAllowedDriveDistance > 0) {              // c1 __(1.5m)__ c2  ==>  c1 __(1m)__ c2
@@ -107,7 +132,7 @@ void Vehicle::adjustProgress(std::ofstream& ofstream) {
         addProgress(getMaxDriveDistance());
     }
     ofstream << "Vehicle " << getLicensePlate() << " from " << getPrevIntersection()->getName() << " to " << getNextIntersection()->getName()
-             << " has travelled " << getProgress()-progress << "  (" << getProgress() << "%)" << " max distance: "
+             << " (" << getCurrentStreet()->typeToName() << ") has travelled " << getProgress()-progress << "  (" << getProgress() << "%)" << " max distance: "
              << getMaxDriveDistance() << "\n";
 }
 
@@ -131,7 +156,8 @@ void Vehicle::enterStreet(std::ofstream& ofstream) {
     bool streetBeginningOccupied = false;
     // TODO remove vehicle from _entrants
     // TODO move vehicle to occupants
-    ofstream << "Vehicle " << getLicensePlate() << " from " << getPrevIntersection()->getName() << " to " << getNextIntersection()->getName();
+    ofstream << "Vehicle " << getLicensePlate() << " from " << getPrevIntersection()->getName() << " to "
+             << getNextIntersection()->getName() << " (" << getCurrentStreet()->typeToName() << ") ";
     // the index of the correct lane to enter in the next street
     // next intersection, because the next intersection is the intersection it enters the new street from
     // when leaving is about leaving the intersection, it gets the correct lane to leave INTO/WITH
@@ -167,8 +193,8 @@ void Vehicle::enterStreet(std::ofstream& ofstream) {
 
         }
         setProgress(0);
-        ofstream << " has entered a street (" << streetToEnter->typeToName() << ")\n and is now underway from " << getPrevIntersection()->getName()
-                 << " to " << getNextIntersection()->getName() << "  (" << getProgress() << "%)\n";
+        ofstream << " has entered a street\n and is now underway from " << getPrevIntersection()->getName()
+                 << " to " << getNextIntersection()->getName() << " (" << streetToEnter->typeToName() << ")" << "  (" << getProgress() << "%)\n";
     } else {
         ofstream << " tried to enter a street (" << streetToEnter->typeToName() << ") from " << getPrevIntersection()->getName()
                  << " to " << getNextIntersection()->getName() << "\n but the entrance to the street was occupied ("
@@ -221,6 +247,13 @@ void Vehicle::onWrite(std::ofstream &ofstream) const {
 }
 
 
+// boolean functions
+
+bool Vehicle::mayDrive(const double effectiveSTOPLocation, const double argument) const {
+    return !isStopped() or (isStopped() and getProgress() < effectiveSTOPLocation and effectiveSTOPLocation >= 0 and
+                            argument != -1);
+}
+
 
 
 
@@ -249,22 +282,34 @@ std::string Vehicle::classToName() const {
 const std::vector<const Influence *> &Vehicle::getIncomingInfluences() const {
     return _incomingInfluences;
 }
-int Vehicle::getArgument(const influenceType influenceType) const {
+double Vehicle::getArgument(const influenceType influenceType) const {
     for (const Influence* influence : getIncomingInfluences()) {
         if (influence->getType() == influenceType) return influence->getArgument();
     }
     return -1;
 }
+const Influence* Vehicle::getIncomingInfluence(const influenceType& influenceType, const double argument) const {
+    for (const Influence* influence : getIncomingInfluences()) {
+        if (influence->getType() == influenceType and influence->getArgument() == argument) {
+            return influence;
+        }
+    }
+    return nullptr;
+}
 // TODO   add the reroute signal to the incoming influences when a car enters an intersections entrant list,
 //  and the intersection is unavailable
 bool Vehicle::addIncomingInfluence(const Influence * incomingInfluence) {
-    
-    if ((incomingInfluence->getType() == STOP  and !isStopped()) or
-        (incomingInfluence->getType() == LIMIT and !isLimited())) {
-        _incomingInfluences.emplace_back(incomingInfluence);
-        return true;
-    } else if (incomingInfluence->getType() == REROUTE) {
-        return true;
+    if (incomingInfluence != nullptr) {
+        // either a vehicle doesnt' possess the influence or it does, but it has a different argument from the new one
+        if ((incomingInfluence->getType() == STOP  and (!isStopped() or
+                                                        (isStopped() and getIncomingInfluence(STOP, incomingInfluence->getArgument()) == nullptr))) or
+            (incomingInfluence->getType() == LIMIT and (!isLimited() or
+                                                        isLimited() and getIncomingInfluence(LIMIT, incomingInfluence->getArgument()) == nullptr))) {
+            _incomingInfluences.emplace_back(incomingInfluence);
+            return true;
+        } else if (incomingInfluence->getType() == REROUTE) {
+            return true;
+        }
     }
     return false;
 }
@@ -288,6 +333,27 @@ void Vehicle::clearIncomingInfluences() {
     setIsLimited(false);
     setIsStopped(false);
 }
+
+const std::vector<const Influence *> &Vehicle::getEntrantInfluences() const {
+    return _entrantInfluences;
+}
+bool Vehicle::addEntrantInfluence(const Influence *entrantInfluence) {
+    if (entrantInfluence != nullptr) {
+        for (const Influence *influence : getEntrantInfluences()) {
+            if (influence->getType() == entrantInfluence->getType() and
+                influence->getArgument() == entrantInfluence->getArgument()) {
+                return false;
+            }
+        }
+        _entrantInfluences.emplace_back(entrantInfluence);
+        return true;
+    }
+    return false;
+}
+void Vehicle::clearEntrantInfluences() {
+    _entrantInfluences.clear();
+}
+
 
 bool Vehicle::isLimited() const {
     return _isLimited;
@@ -398,6 +464,29 @@ double Vehicle::getMaxDriveDistance() const {
 const std::string &Vehicle::getLicensePlate() const {
     return _licensePlate;
 }
+
+double Vehicle::getLowestRelevantArgument(influenceType influenceType) const {
+    double lowestRelevantArgument = 200;    // any argument should be lower than 200
+    for (const Influence* influence : getIncomingInfluences()) {
+        // the influence is a STOP signal, it is lower than the current lowest argument and is relevant
+        bool stop = influence->getType() == STOP and influence->getArgument() < lowestRelevantArgument and
+        influence->getArgument() > getProgress()+Simulation::getMinCarDistance();
+        // the influence is a LIMIT signal, and is lower than the current lowest argument
+        bool limit = influence->getType() == LIMIT and influence->getArgument() < lowestRelevantArgument;
+
+        if (influence->getType() == influenceType and (stop or limit)) {
+            lowestRelevantArgument = influence->getArgument();
+        }
+    }
+    if (lowestRelevantArgument != 200) {
+        return lowestRelevantArgument;
+    } else {
+        return -1;
+    }
+}
+
+
+
 
 
 

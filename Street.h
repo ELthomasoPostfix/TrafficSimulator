@@ -46,7 +46,11 @@ public:
 
     Street(Intersection* prev, Intersection* next, streetType type);
 
+    bool fillEmptyLanes();
+    bool fillEmptyEntrantLanes();
+
     void requestInfluences(Vehicle* requestingVehicle) const;
+    void requestEntrantInfluences(Vehicle* requestingVehicle) const;
 
     Intersection* getOtherIntersection(const Intersection* intersection) const;
 
@@ -67,6 +71,8 @@ public:
     const std::vector<std::vector<Vehicle *>> &getLanes() const;
 
     const std::vector<std::vector<Vehicle *>> &getEntrants() const;
+    void addEntrant(int indexWhenLeaving, Vehicle* entrant);
+    bool removeEntrant(int indexWhenLeaving, const Vehicle* entrant);
 
 
     Vehicle *getFrontOccupant(int index) const;

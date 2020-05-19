@@ -26,6 +26,9 @@ Network* jsonParser::processJSON(const std::string& fileName) {
     // add all streets/transitions to the states of the network
     jsonToStreets(json, cityobj);
 
+    // assign the traffic light pairs
+    assignTrafficLightPairs(json, cityobj);
+
     // add all vehicles to the network
     jsonToVehicles(json, cityobj);
 
@@ -52,12 +55,52 @@ void jsonParser::jsonToIntersections(nlohmann::json& json, Network* cityNetwork)
             // get the base STOP signal for traffic signals
             newIntersection->setTrafficLights(cityNetwork->getSimulation()->getInfluence(STOP));
             cityNetwork->addInfluencingIntersection(newIntersection);
-            cityNetwork->addIntersection(newIntersection);
-        } else {
-            cityNetwork->addIntersection(newIntersection);
+        }
+        cityNetwork->addStreetlessIntersection(newIntersection);
+    }
+}
+
+void jsonParser::assignTrafficLightPairs(nlohmann::json &json, Network *cityNetwork) {
+    // recheck every intersection for traffic light pairs
+    for (auto& intersection : json["intersections"]) {
+        const std::string& name = intersection["name"]; // the checked intersection
+        Intersection* intersectionPtr = cityNetwork->findIntersection(name); // its pointer
+
+        for (auto& trafficLightPair : intersection["trafficLightPairs"]) {
+            std::pair<Street*, Street*> TLPair;
+            for (Street* street : intersectionPtr->getStreets()) {
+                // if the street specified by the traffic light pair actually exists and is linked to intersection
+                if (street->getPrevIntersection() == intersectionPtr or street->getNextIntersection() == intersectionPtr) {
+                    const std::string& otherName1 = trafficLightPair["otherIntersection1"]; // street1 of the pair
+                    const std::string& otherName2 = trafficLightPair["otherIntersection2"]; // street2 of the pair
+                    const std::string type1 = trafficLightPair["type1"];
+                    const std::string type2 = trafficLightPair["type2"];
+
+                    Intersection* otherIntersec = street->getOtherIntersection(intersectionPtr);
+                    // the second intersection that Street1 refers to also exists
+                    // and is also part of the network
+                    if (otherIntersec == cityNetwork->findIntersection(otherName1) and
+                        street->getType() == Street::nameToType(*type1.c_str())) {
+                        TLPair.first = street;
+                    // the second intersection that Street2 refers to also exists
+                    // and is also part of the network
+                    } else if (otherIntersec == cityNetwork->findIntersection(otherName2) and
+                               street->getType() == Street::nameToType(*type2.c_str())) {
+                        TLPair.second = street;
+                    }
+                }
+            }
+            if (TLPair.first != nullptr and TLPair.second != nullptr) {
+                intersectionPtr->addTrafficLightPair(TLPair);
+                const std::pair<Street*,Street*>& currentPair = intersectionPtr->getCurrentPair();
+                if (currentPair.first == NULL and currentPair.second == NULL) {
+                    intersectionPtr->setCurrentPair(TLPair);
+                }
+            }
         }
     }
 }
+
 
 void jsonParser::jsonToStreets(nlohmann::json& json, Network* cityNetwork) {
 
@@ -72,7 +115,8 @@ void jsonParser::jsonToStreets(nlohmann::json& json, Network* cityNetwork) {
                                            cityNetwork->findIntersection(street["nextintersection"]),
                                            type);
             newStreet->setIsTwoWay(street["twowaystreet"]);
-
+            newStreet->fillEmptyLanes();    // add the correct amount of empty lanes to the Street
+            newStreet->fillEmptyEntrantLanes();
             // add a limit influence if needed
             const int limit = street["limit"];
             if (limit > 0) {
@@ -114,14 +158,76 @@ void jsonParser::jsonToVehicles(nlohmann::json &json, Network *cityNetwork) {
             STOPsignal->setArgument(-1);
             newVehicle->addOutgoingInfluence(STOPsignal);
         }
+        // assign variables related to the start intersection and start the Street
+        std::vector<std::string> startStreet = vehicle["startStreet"];
+
+        Intersection* startIntersection = cityNetwork->findIntersection(startStreet[0]);
+        Intersection* otherIntersection = cityNetwork->findIntersection(startStreet[1]);
+        std::string typeStr = startStreet[2];
+        streetType streetType = Street::nameToType(*typeStr.c_str());
+
+        Street* spawnStreet = startIntersection->findStreet(startIntersection, otherIntersection, streetType);
+        const int spawnLane = startIntersection->laneIndexWhenLeaving(spawnStreet);
+        // two intersections for the start street are in the wrong order,
+        // switch them
+        if (spawnLane == -1) {
+            Intersection* temp = startIntersection;
+            startIntersection = otherIntersection;
+            otherIntersection = temp;
+        }
+        // still bad result, something went wrong
+        if (spawnLane == -1) {
+            std::cerr << "Error while parsing json: The vehicle (" << newVehicle->classToName() << ") with start intersection "
+                      << newVehicle->getStartIntersection()->getName() << " and end intersection "
+                      << newVehicle->getEndIntersection()->getName() << " wanted to start in the street from "
+                      << newVehicle->getStartIntersection()->getName() << " to " << otherIntersection->getName()
+                      << " (" << spawnStreet->typeToName() << ")\nbut getting put into the lane happened from an invalid intersection."
+                      << " This is possibly because the street is a one way street and the start and other intersection are the wrong way around." << std::endl;
+            continue;
+        }
+        // assign the start and end intersections
+        newVehicle->setStartIntersection(startIntersection);
+        newVehicle->setEndIntersection(cityNetwork->findIntersection(vehicle["endIntersection"]));
+
+        // assign more members
+        newVehicle->setPrevIntersection(startIntersection);
+        newVehicle->setNextIntersection(otherIntersection);
+        newVehicle->setUnderway(true);  // TODO unnecessary member variable ?????
+        const int progress = vehicle["progress"];
+        newVehicle->setProgress(progress);
+
+        // set the start street
+        newVehicle->setCurrentStreet(spawnStreet);
+
+        // actually put the vehicle into the street (assign it to a lane and set it as the front)
+        Vehicle* prevFrontOccupant = spawnStreet->getFrontOccupant(spawnLane);
+        Vehicle* prevBackOccupant  = spawnStreet->getBackOccupant(spawnLane);
+        if (prevFrontOccupant != nullptr) {
+            // the new vehicle is the front most vehicle in its spawn street
+            if (prevFrontOccupant->getProgress() < progress) {
+                spawnStreet->setFrontOccupant(newVehicle, spawnLane);
+                newVehicle->setPrevVehicle(prevFrontOccupant);
+
+                prevFrontOccupant->setNextVehicle(newVehicle);
+                // the new vehicle is either the back most vehicle in its spawn street or in the in between.
+                // either way it needs to become the back of the queue
+                // if it is in the in between, then other cars will pass it and it will wait for its next, the previous back, to pass
+            } else {
+                spawnStreet->setBackOccupant(newVehicle, spawnLane);
+                newVehicle->setNextVehicle(prevBackOccupant);
+
+                prevBackOccupant->setPrevVehicle(newVehicle);
+            }
+        // the front and thus also the back are nullptr, assign the new front and back
+        } else {
+            spawnStreet->setFrontOccupant(newVehicle, spawnLane);
+        }
+
+        otherIntersection->requestSignal(newVehicle);
 
         // TODO assign:
         //  - starting path
-        //  - currentStreet
-        //  - prev intersection
-        //  - next intersection
-        //  - isUnderWay
-        //  - progress
+
 
         cityNetwork->addVehicle(newVehicle);
         cityNetwork->getSimulation()->incrementTotalSpawnedVehicles();
@@ -153,4 +259,3 @@ bool jsonParser::typeIsAllowed(const streetType& streetType, const Network* city
     }
     return false;
 }
-

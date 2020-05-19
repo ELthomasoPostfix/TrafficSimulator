@@ -23,22 +23,36 @@ public:
     Intersection(std::string  name);
 
     // TODO could add a return to measure how often (time units) the street contains cars
-    void emitInfluences();
+    void emitInfluences(std::ofstream& trafficLightStream);
 
-    void emitTrafficLightSignal();
+    void emitTrafficLightSignal(std::ofstream& trafficLightStream);
 
     void requestSignal(Vehicle* requestingVehicle) const;
+    void requestEntrantSignal(Vehicle* requestingVehicle) const;
 
     // emit a stop signal at the front occupants of the currentTrafficLightPai  ( get using getCurrentPair() )
     void stopCurrentFrontOccupants() const;
+    void stopSingleFrontOccupant(int enteredLaneIndex, Vehicle* frontOccupant) const;
     void unStopCurrentFrontOccupants() const;
+    void unstopSingleFrontOccupant(int enteringLaneIndex, Vehicle* frontOccupant) const;
 
-    Intersection* getOtherIntersection(const Street* street) const;
-    Vehicle* getIncomingFrontVehicle(const Street* street) const;
     // must be used on the intersection that you are leaving with the street you want to leave through
     int laneIndexWhenLeaving(const Street* street) const;
     // must be used on the intersection that you are entering with the street you are entering through
     int laneIndexWhenEntering(const Street* street) const;
+
+
+    // some message functions
+
+    void addCycleMessageFront(std::ofstream& trafficLightStream) const;
+    void addCycleMessageBack(std::ofstream& trafficLightStream) const;
+    void addTLCincrementMessage(std::ofstream& trafficLightStream) const;
+
+
+    // getters and setters
+
+    Intersection* getOtherIntersection(const Street* street) const;
+    Vehicle* getIncomingFrontVehicle(const Street* street) const;
 
     bool isEnteringStreet(const Street* street) const;
     std::vector<Street*> getAllEnteringStreets() const;
@@ -62,6 +76,7 @@ public:
 
     const std::vector<Street *> &getStreets() const;
     bool addStreet(Street* newStreet);
+    Street* findStreet(const Intersection* intersection1, const Intersection* intersection2, const streetType& streetType) const;
 
     void setTrafficLights(const Influence* trafficLights);
     const Influence* getTrafficLightInfluence() const;

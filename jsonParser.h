@@ -22,7 +22,7 @@ public:
 
     void jsonToIntersections(nlohmann::json& json, Network* cityNetwork);
 
-    void addTrafficLightPairs(nlohmann::json& json, Network* cityNetwork);
+    void assignTrafficLightPairs(nlohmann::json& json, Network* cityNetwork);
 
     void jsonToStreets(nlohmann::json& json, Network* cityNetwork);
 

@@ -47,6 +47,7 @@ class Vehicle {
     Intersection* _prevIntersection;
     Intersection* _nextIntersection;
     Street* _nextStreet;
+    std::vector<const Influence*> _entrantInfluences;
 
     // when a vehicle enters a street, they will essentially enter a queue to get out at the other side
     // (1) this queue will allow easy simulation of a traffic jam, as the progress across the street and whether or not
@@ -61,7 +62,11 @@ class Vehicle {
 public:
     Vehicle(vehicleClass vClass, std::string licensePlate);
 
+    Street* chooseRandomStreet();
+
     void drive(std::ofstream& ofstream);
+    void alterPath();
+    void addSTOPMessage(std::ofstream& ofstream, double effectiveSTOPLocation) const;
     void adjustProgress(std::ofstream& ofstream);
 
     // influences will always be emitted to the immediate surroundings, but should only be used by a special vehicle
@@ -78,6 +83,12 @@ public:
     void onWrite(std::ofstream& ofstream) const;
 
 
+    // boolean functions
+
+    bool mayDrive(double effectiveSTOPLocation, double argument) const;
+
+
+
 
 
 
@@ -88,10 +99,16 @@ public:
     std::string classToName() const;
 
     const std::vector<const Influence *> &getIncomingInfluences() const;
-    int getArgument(influenceType influenceType) const;
+    const Influence* getIncomingInfluence(const influenceType& influenceType, double argument) const;
+    double getArgument(influenceType influenceType) const;
+    double getLowestRelevantArgument(influenceType influenceType) const;
     bool addIncomingInfluence(const Influence * incomingInfluence);
     void removeIncomingInfluence(const Influence* toDeleteInfluence);
     void clearIncomingInfluences();
+
+    const std::vector<const Influence *> &getEntrantInfluences() const;
+    bool addEntrantInfluence(const Influence* entrantInfluence);
+    void clearEntrantInfluences();
 
     bool isLimited() const;
     void setIsLimited(bool isLimited);

@@ -27,7 +27,7 @@ public:
     void toDot(std::ofstream& fstream) const;
     void toPNG(const std::string& fileName) const;
 
-    void doMainLoop(int duration, std::string& ofName);
+    void doMainLoop(int duration, std::string& ofName, std::string& ofName2);
 
     // TODO add algorithms here
 
@@ -38,6 +38,7 @@ public:
 
     const std::vector<Intersection *> &getNetwork() const;
     bool addIntersection(Intersection* newIntersection);
+    bool addStreetlessIntersection(Intersection* newStreetlessIntersection);
     Intersection* findIntersection(const std::string& name) const;
 
     Simulation *getSimulation() const;

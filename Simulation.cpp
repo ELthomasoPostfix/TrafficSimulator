@@ -73,16 +73,11 @@ const int Simulation::getDecisionBufferLength() {
 }
 
 const bool Simulation::vehicleTypeCanEnterStreetType(const vehicleClass &vehicleClass, const streetType &streetType) {
-    if (vehicleClass == personal and streetType == B) { // TODO delete !!!
-        return true;
-    }
-    /*
      if (streetType == A or streetType == B) {
         return true;
     } else if (streetType == T and (vehicleClass == transport)) {
         return true;
     }
-     */
     return false;
 }
 
