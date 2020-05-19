@@ -66,11 +66,13 @@ public:
 
     void drive(std::ofstream& ofstream);
     void alterPath();
+    void leaveEntrantsList() const;
     void addSTOPMessage(std::ofstream& ofstream, double effectiveSTOPLocation) const;
     void adjustProgress(std::ofstream& ofstream);
 
     // influences will always be emitted to the immediate surroundings, but should only be used by a special vehicle
     virtual void emitInfluence();
+
     // special vehicle needs to be able to add an outgoing STOP influence
     virtual void addOutgoingInfluence(const Influence* outgoingInfluence);
 
@@ -87,7 +89,7 @@ public:
 
     bool mayDrive(double effectiveSTOPLocation, double argument) const;
 
-
+    bool vehicleCanLeaveIntersection(const std::vector<Street*>& leavingStreets) const;
 
 
 

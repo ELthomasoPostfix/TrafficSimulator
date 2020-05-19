@@ -65,6 +65,11 @@ Intersection *Street::getOtherIntersection(const Intersection *intersection) con
     else return nullptr; // the passed intersection isn't part of the street (isn't prev or next)
 }
 
+// Utils type functions
+
+std::string Street::getTwoWayString() const {
+    return Util::isTwoWayToString(isTwoWay());
+}
 
 
 
@@ -115,6 +120,17 @@ streetType Street::nameToType(const char& name) {
 
 const std::vector<std::vector<Vehicle *>> &Street::getLanes() const {
     return _lanes;
+}
+bool Street::removeFromLane(Vehicle *toRemoveVehicle, int lane) {
+    std::vector<Vehicle*>& streetLane = _lanes[lane];
+    std::vector<Vehicle*>::iterator vehicleIt;
+    for (vehicleIt = streetLane.begin(); vehicleIt != streetLane.end(); ++vehicleIt) {
+        if (toRemoveVehicle == *vehicleIt) {
+            streetLane.erase(vehicleIt);
+            return true;
+        }
+    }
+    return false;
 }
 
 
@@ -171,6 +187,7 @@ void Street::setFrontOccupant(Vehicle *frontOccupant, int lane) {
             _backOccupant[lane] = frontOccupant;
         }
     }
+    _lanes[lane].emplace_back(frontOccupant);
 }
 
 Vehicle *Street::getBackOccupant(int index) const {
@@ -180,10 +197,13 @@ void Street::setBackOccupant(Vehicle *newBackOccupant, int lane) {
     Vehicle* currBackOcc = getBackOccupant(lane);
     // if a back occupant exists, add the new back occupant to the vehicle chain
     if (currBackOcc != nullptr) {
-        currBackOcc->setPrevVehicle(newBackOccupant);
-        newBackOccupant->setNextVehicle(currBackOcc);
+        if (currBackOcc != newBackOccupant) {
+            currBackOcc->setPrevVehicle(newBackOccupant);
+            newBackOccupant->setNextVehicle(currBackOcc);
+        }
         newBackOccupant->setPrevVehicle(nullptr);
         _backOccupant[lane] = newBackOccupant;
+        _lanes[lane].emplace_back(newBackOccupant);
     // wrongly called setBackOccupant(), call setFrontOccupant() instead.
     // no back vehicle exists, so the new back must also be the new front vehicle
     } else {
@@ -243,6 +263,8 @@ bool Street::hasStopSignal() const {
 void Street::setHasStopSignal(bool hasStopSignal) {
     _hasStopSignal = hasStopSignal;
 }
+
+
 
 
 

@@ -55,6 +55,12 @@ public:
     Intersection* getOtherIntersection(const Intersection* intersection) const;
 
 
+    // utils type functions
+
+    std::string getTwoWayString() const;
+
+
+
 
     // getters and setters
 
@@ -69,6 +75,7 @@ public:
     static streetType nameToType(const char& name);
 
     const std::vector<std::vector<Vehicle *>> &getLanes() const;
+    bool removeFromLane(Vehicle* toRemoveVehicle, int lane);
 
     const std::vector<std::vector<Vehicle *>> &getEntrants() const;
     void addEntrant(int indexWhenLeaving, Vehicle* entrant);

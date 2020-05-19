@@ -14,6 +14,8 @@
     class Util {
     public:
         static std::string boolToString(bool b);
+
+        static std::string isTwoWayToString(bool twoWay);
     };
 
 

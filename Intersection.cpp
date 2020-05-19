@@ -173,6 +173,9 @@ int Intersection::laneIndexWhenEntering(const Street *street) const {
 
 
 bool Intersection::isEnteringStreet(const Street *street) const {
+    // an entering street is a street that allows you to enter "this" intersection
+    // you cannot reach an intersection through a one way street if you start at the next intersection or, in other words,
+    // if the intersection you want to reach is the previous intersection
     return !(!street->isTwoWay() and street->getPrevIntersection() == this);
 }
 std::vector<Street *> Intersection::getAllEnteringStreets() const {
@@ -205,25 +208,30 @@ std::vector<Street *> Intersection::getAllLeavingStreets() const {
 void Intersection::addCycleMessageFront(std::ofstream &trafficLightStream) const {
     trafficLightStream << "Traffic light at intersection " << getName() << " with current pair:\n{"
                        << getCurrentPair().first->getOtherIntersection(this)->getName() << "->"
-                       << getName() << " (" << getCurrentPair().first->typeToName() << "), "
+                       << getName() << " (" << getCurrentPair().first->typeToName() << ", "
+                       << getCurrentPair().first->getTwoWayString() << "), "
                        << getCurrentPair().second->getOtherIntersection(this)->getName()
                        << "->" << getName() << " (" << getCurrentPair().second->typeToName()
-                       << ")} has reached the traffic light counter max value ("
+                       << ", " << getCurrentPair().second->getTwoWayString() << ")} has reached the traffic light counter max value ("
                        << getTrafficLightCounter() << ")\n and cycles its pair to:\n{";
 }
 void Intersection::addCycleMessageBack(std::ofstream &trafficLightStream) const {
     trafficLightStream << getCurrentPair().first->getOtherIntersection(this)->getName() << "->"
                        << getName() << " (" << getCurrentPair().first->typeToName()
-                       << "), " << getCurrentPair().second->getOtherIntersection(this)->getName()
-                       << "->" << getName() << " (" << getCurrentPair().second->typeToName() << ")"
+                       << ", " << getCurrentPair().first->getTwoWayString() << "), "
+                       << getCurrentPair().second->getOtherIntersection(this)->getName()
+                       << "->" << getName() << " (" << getCurrentPair().second->typeToName() << ", "
+                       << getCurrentPair().second->getTwoWayString() << ")"
                        << "} with new TLC counter value being (" << getTrafficLightCounter() << ")\n";
 }
 void Intersection::addTLCincrementMessage(std::ofstream &trafficLightStream) const {
     trafficLightStream << "Traffic light at intersection " << getName() << " with current pair:\n{"
                        << getCurrentPair().first->getOtherIntersection(this)->getName() << "->"
-                       << getName() << " (" << getCurrentPair().first->typeToName()
-                       << "), " << getCurrentPair().second->getOtherIntersection(this)->getName()
+                       << getName() << " (" << getCurrentPair().first->typeToName() << ", "
+                       << getCurrentPair().first->getTwoWayString() << "), "
+                       << getCurrentPair().second->getOtherIntersection(this)->getName()
                        << "->" << getName() << " (" << getCurrentPair().second->typeToName()
+                       << ", " << getCurrentPair().second->getTwoWayString()
                        << ")} increased their counter to (" << getTrafficLightCounter() << ")\n";
 }
 
@@ -259,11 +267,11 @@ bool Intersection::addStreet(Street *newStreet) {
     return false;
 }
 Street *Intersection::findStreet(const Intersection *intersection1, const Intersection *intersection2,
-                                 const streetType& streetType) const {
+                                 const streetType& streetType, bool twoWay) const {
     for (Street* street : getStreets()) {
         if ((street->getPrevIntersection() == intersection1 or street->getPrevIntersection() == intersection2) and
             (street->getNextIntersection() == intersection1 or street->getNextIntersection() == intersection2) and
-             street->getType() == streetType) {
+             street->getType() == streetType and street->isTwoWay() == twoWay) {
             return street;
         }
     }

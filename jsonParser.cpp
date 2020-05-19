@@ -145,7 +145,7 @@ void jsonParser::jsonToVehicles(nlohmann::json &json, Network *cityNetwork) {
             endIndex = random() % cityNetwork->getNetwork().size();
         } while (startIndex == endIndex);
 
-        newVehicle->setStartIntersection(cityNetwork->getNetwork()[startIndex]);
+        // TODO: (**)    newVehicle->setStartIntersection(cityNetwork->getNetwork()[startIndex]);
         newVehicle->setEndIntersection(cityNetwork->getNetwork()[endIndex]);
 
         newVehicle->setSpeed(vehicle["speed"]);
@@ -153,36 +153,48 @@ void jsonParser::jsonToVehicles(nlohmann::json &json, Network *cityNetwork) {
         // add a STOP influence if needed
         if (type == "special" and vehicle["influence"]) {
             Influence* STOPsignal = new Influence(STOP);
-            // -1 as an argument for a STOP signal will represent that the signal affects the entire street the vehicle
+            // -2 as an argument for a STOP signal will represent that the signal affects the entire street the vehicle
             // is currently in
-            STOPsignal->setArgument(-1);
+            STOPsignal->setArgument(-2);
             newVehicle->addOutgoingInfluence(STOPsignal);
         }
         // assign variables related to the start intersection and start the Street
         std::vector<std::string> startStreet = vehicle["startStreet"];
-
+        const bool twoWay = vehicle["startStreetTwoWay"];
+        // TODO: (**)    Intersection* startIntersection = newVehicle->getStartIntersection();
         Intersection* startIntersection = cityNetwork->findIntersection(startStreet[0]);
+        newVehicle->setStartIntersection(startIntersection); // TODO: (**)
         Intersection* otherIntersection = cityNetwork->findIntersection(startStreet[1]);
         std::string typeStr = startStreet[2];
         streetType streetType = Street::nameToType(*typeStr.c_str());
 
-        Street* spawnStreet = startIntersection->findStreet(startIntersection, otherIntersection, streetType);
-        const int spawnLane = startIntersection->laneIndexWhenLeaving(spawnStreet);
+        Street* spawnStreet = startIntersection->findStreet(startIntersection, otherIntersection, streetType, twoWay);
+        int spawnLane = startIntersection->laneIndexWhenLeaving(spawnStreet);
         // two intersections for the start street are in the wrong order,
-        // switch them
+        // the spawn street is a one way street, and start intersection, the one to set as a previous intersection,
+        // is the next intersection of the street instead
+        // ==> switch them
         if (spawnLane == -1) {
             Intersection* temp = startIntersection;
             startIntersection = otherIntersection;
             otherIntersection = temp;
+            spawnLane = startIntersection->laneIndexWhenLeaving(spawnStreet);
         }
         // still bad result, something went wrong
         if (spawnLane == -1) {
             std::cerr << "Error while parsing json: The vehicle (" << newVehicle->classToName() << ") with start intersection "
                       << newVehicle->getStartIntersection()->getName() << " and end intersection "
                       << newVehicle->getEndIntersection()->getName() << " wanted to start in the street from "
-                      << newVehicle->getStartIntersection()->getName() << " to " << otherIntersection->getName()
-                      << " (" << spawnStreet->typeToName() << ")\nbut getting put into the lane happened from an invalid intersection."
-                      << " This is possibly because the street is a one way street and the start and other intersection are the wrong way around." << std::endl;
+                      << newVehicle->getStartIntersection()->getName() << " to " << otherIntersection->getName();
+            if (spawnStreet != nullptr) {
+                std::cerr
+                        << " (" << spawnStreet->typeToName()
+                        << ")\nbut getting put into the lane happened from an invalid intersection."
+                        << " This is possibly because the street is a one way street and the start and other intersection are the wrong way around."
+                        << std::endl;
+            } else {
+                std::cerr << " but the spawn street was not found within the network." << std::endl;
+            }
             continue;
         }
         // assign the start and end intersections
@@ -224,6 +236,7 @@ void jsonParser::jsonToVehicles(nlohmann::json &json, Network *cityNetwork) {
         }
 
         otherIntersection->requestSignal(newVehicle);
+
 
         // TODO assign:
         //  - starting path

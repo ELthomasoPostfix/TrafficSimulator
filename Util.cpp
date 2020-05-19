@@ -12,3 +12,11 @@ std::string Util::boolToString(const bool b) {
         return "false";
     }
 }
+
+std::string Util::isTwoWayToString(bool twoWay) {
+    if (twoWay) {
+        return "twoWay";
+    } else {
+        return "oneWay";
+    }
+}

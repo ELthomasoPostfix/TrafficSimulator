@@ -24,12 +24,6 @@
           "otherIntersection1": "1",
           "type1": "A",
           "otherIntersection2": "3",
-          "type2": "A"
-        },
-        {
-          "otherIntersection1": "1",
-          "type1": "T",
-          "otherIntersection2": "3",
           "type2": "B"
         }
       ]
@@ -42,38 +36,24 @@
   "streets": [
     {
       "twowaystreet": false,
-      "previousintersection": "2",
-      "nextintersection": "1",
+      "previousintersection": "1",
+      "nextintersection": "2",
       "type": "A",
       "limit": 30
     },
     {
       "twowaystreet": true,
-      "previousintersection": "1",
-      "nextintersection": "2",
-      "type": "T",
-      "limit": -1
-    },
-    {
-      "twowaystreet": false,
       "previousintersection": "2",
       "nextintersection": "3",
       "type": "B",
-      "limit": -1
-    },
-    {
-      "twowaystreet": true,
-      "previousintersection": "2",
-      "nextintersection": "3",
-      "type": "A",
-      "limit": -1
+      "limit": 0
     },
     {
       "twowaystreet": false,
       "previousintersection": "3",
       "nextintersection": "1",
       "type": "A",
-      "limit": -1
+      "limit": 20
     }
   ],
   "vehicles": [

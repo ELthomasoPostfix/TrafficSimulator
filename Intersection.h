@@ -76,7 +76,8 @@ public:
 
     const std::vector<Street *> &getStreets() const;
     bool addStreet(Street* newStreet);
-    Street* findStreet(const Intersection* intersection1, const Intersection* intersection2, const streetType& streetType) const;
+    Street* findStreet(const Intersection* intersection1, const Intersection* intersection2, const streetType& streetType,
+                       bool twoWay) const;
 
     void setTrafficLights(const Influence* trafficLights);
     const Influence* getTrafficLightInfluence() const;
