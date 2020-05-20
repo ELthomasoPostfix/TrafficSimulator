@@ -83,10 +83,12 @@ public:
 
 
     Vehicle *getFrontOccupant(int index) const;
-    void setFrontOccupant(Vehicle *frontOccupant, int index);
+    void setFrontOccupant(Vehicle *frontOccupant, int lane);
+    void setFrontNull(int lane);
 
     Vehicle *getBackOccupant(int index) const;
-    void setBackOccupant(Vehicle *backOccupant, int index);
+    void setBackOccupant(Vehicle *backOccupant, int lane);
+    void setBackNull(int lane);
 
     bool isTwoWay() const;
     void setIsTwoWay(bool isTwoWay);
