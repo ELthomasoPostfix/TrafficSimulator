@@ -6,10 +6,12 @@
 int main() {
 
     jsonParser parser;
-    Network* city2 = parser.processJSON("../example2.json");
-    std::string ofName1 = "jsonDriveTestVehicles.txt";
-    std::string ofName2 = "jsonDriveTestTrafficLights.txt";
-    city2->doMainLoop(100, ofName1, ofName2);
+    Network* city2 = parser.processJSON("../test_files/example2.json");
+    std::string vehiclesOUTPUT = "jsonDriveTestVehicles.txt";
+    std::string trafficLightsOUTPUT = "jsonDriveTestTrafficLights.txt";
+    std::string vehicleChainOUTPUT = "vehicleChains.txt";
+
+    city2->doMainLoop(100, vehiclesOUTPUT, trafficLightsOUTPUT, vehicleChainOUTPUT);
 
     return 0;
 }

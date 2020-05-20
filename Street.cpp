@@ -187,7 +187,15 @@ void Street::setFrontOccupant(Vehicle *frontOccupant, int lane) {
             _backOccupant[lane] = frontOccupant;
         }
     }
-    _lanes[lane].emplace_back(frontOccupant);
+    // if situation    this->other->trafficLight    and the other vehicle enters a new street, this vehicle
+    // needs to become the new frontOccupant, but doesn't need to be added tp the lane again
+    // OR   the lane is empty
+    if ((!_lanes[lane].empty() and _lanes[lane][0] != frontOccupant) or _lanes[lane].empty()) {
+        _lanes[lane].emplace_back(frontOccupant);
+    }
+}
+void Street::setFrontNull(int lane) {
+    _frontOccupant[lane] = nullptr;
 }
 
 Vehicle *Street::getBackOccupant(int index) const {
@@ -209,6 +217,9 @@ void Street::setBackOccupant(Vehicle *newBackOccupant, int lane) {
     } else {
         setFrontOccupant(newBackOccupant, lane);
     }
+}
+void Street::setBackNull(int lane) {
+    _backOccupant[lane] = nullptr;
 }
 
 bool Street::isTwoWay() const {

@@ -81,6 +81,10 @@ const bool Simulation::vehicleTypeCanEnterStreetType(const vehicleClass &vehicle
     return false;
 }
 
+const int Simulation::getStreetLength() {
+    return _streetLength;
+}
+
 
 int Simulation::getTotalSpawnedVehicles() const {
     return _totalSpawnedVehicles;
@@ -88,5 +92,6 @@ int Simulation::getTotalSpawnedVehicles() const {
 void Simulation::incrementTotalSpawnedVehicles() {
     _totalSpawnedVehicles++;
 }
+
 
 

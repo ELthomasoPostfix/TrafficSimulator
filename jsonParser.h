@@ -27,6 +27,13 @@ public:
     void jsonToStreets(nlohmann::json& json, Network* cityNetwork);
 
     void jsonToVehicles(nlohmann::json& json, Network* cityNetwork);
+    void addOugoingInfluences(Network *cityNetwork, Vehicle *newVehicle, const std::string& type, bool hasInfluence);
+    void setStartAndEnd(Network *cityNetwork, Vehicle *newVehicle, Intersection* startIntersection,
+                        const std::string& endIntersectionName);
+    void setMembers(Intersection* startIntersection, Intersection* otherIntersection, Street* spawnStreet,
+                    Vehicle* newVehicle);
+    bool addToStreet(Vehicle* newVehicle, Intersection* otherIntersection, Street* spawnStreet, double progress, int spawnLane);
+    void printLaneError(Vehicle* newVehicle, Street* spawnStreet, Intersection* otherIntersection);
 
     Vehicle* createVehicle(const std::string & vehicleClass, const Simulation& sim);
 

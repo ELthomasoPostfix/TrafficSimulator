@@ -138,26 +138,11 @@ void jsonParser::jsonToVehicles(nlohmann::json &json, Network *cityNetwork) {
 
         // create the vehicle
         Vehicle* newVehicle = createVehicle(type, *cityNetwork->getSimulation());
-        // add a start and end intersection
-        int startIndex, endIndex;
-        do {
-            startIndex = random() % cityNetwork->getNetwork().size();
-            endIndex = random() % cityNetwork->getNetwork().size();
-        } while (startIndex == endIndex);
-
-        // TODO: (**)    newVehicle->setStartIntersection(cityNetwork->getNetwork()[startIndex]);
-        newVehicle->setEndIntersection(cityNetwork->getNetwork()[endIndex]);
 
         newVehicle->setSpeed(vehicle["speed"]);
 
-        // add a STOP influence if needed
-        if (type == "special" and vehicle["influence"]) {
-            Influence* STOPsignal = new Influence(STOP);
-            // -2 as an argument for a STOP signal will represent that the signal affects the entire street the vehicle
-            // is currently in
-            STOPsignal->setArgument(-2);
-            newVehicle->addOutgoingInfluence(STOPsignal);
-        }
+        addOugoingInfluences(cityNetwork, newVehicle, type, vehicle["influence"])    ;
+
         // assign variables related to the start intersection and start the Street
         std::vector<std::string> startStreet = vehicle["startStreet"];
         const bool twoWay = vehicle["startStreetTwoWay"];
@@ -180,63 +165,23 @@ void jsonParser::jsonToVehicles(nlohmann::json &json, Network *cityNetwork) {
             otherIntersection = temp;
             spawnLane = startIntersection->laneIndexWhenLeaving(spawnStreet);
         }
+
+        setStartAndEnd(cityNetwork, newVehicle, startIntersection, vehicle["endIntersection"]);
+
         // still bad result, something went wrong
         if (spawnLane == -1) {
-            std::cerr << "Error while parsing json: The vehicle (" << newVehicle->classToName() << ") with start intersection "
-                      << newVehicle->getStartIntersection()->getName() << " and end intersection "
-                      << newVehicle->getEndIntersection()->getName() << " wanted to start in the street from "
-                      << newVehicle->getStartIntersection()->getName() << " to " << otherIntersection->getName();
-            if (spawnStreet != nullptr) {
-                std::cerr
-                        << " (" << spawnStreet->typeToName()
-                        << ")\nbut getting put into the lane happened from an invalid intersection."
-                        << " This is possibly because the street is a one way street and the start and other intersection are the wrong way around."
-                        << std::endl;
-            } else {
-                std::cerr << " but the spawn street was not found within the network." << std::endl;
-            }
+            printLaneError(newVehicle, spawnStreet, otherIntersection);
+            delete newVehicle;
             continue;
         }
-        // assign the start and end intersections
-        newVehicle->setStartIntersection(startIntersection);
-        newVehicle->setEndIntersection(cityNetwork->findIntersection(vehicle["endIntersection"]));
 
-        // assign more members
-        newVehicle->setPrevIntersection(startIntersection);
-        newVehicle->setNextIntersection(otherIntersection);
-        newVehicle->setUnderway(true);  // TODO unnecessary member variable ?????
-        const int progress = vehicle["progress"];
-        newVehicle->setProgress(progress);
+        setMembers(startIntersection, otherIntersection, spawnStreet, newVehicle);
 
-        // set the start street
-        newVehicle->setCurrentStreet(spawnStreet);
-
+        const double progress = vehicle["progress"];
         // actually put the vehicle into the street (assign it to a lane and set it as the front)
-        Vehicle* prevFrontOccupant = spawnStreet->getFrontOccupant(spawnLane);
-        Vehicle* prevBackOccupant  = spawnStreet->getBackOccupant(spawnLane);
-        if (prevFrontOccupant != nullptr) {
-            // the new vehicle is the front most vehicle in its spawn street
-            if (prevFrontOccupant->getProgress() < progress) {
-                spawnStreet->setFrontOccupant(newVehicle, spawnLane);
-                newVehicle->setPrevVehicle(prevFrontOccupant);
-
-                prevFrontOccupant->setNextVehicle(newVehicle);
-                // the new vehicle is either the back most vehicle in its spawn street or in the in between.
-                // either way it needs to become the back of the queue
-                // if it is in the in between, then other cars will pass it and it will wait for its next, the previous back, to pass
-            } else {
-                spawnStreet->setBackOccupant(newVehicle, spawnLane);
-                newVehicle->setNextVehicle(prevBackOccupant);
-
-                prevBackOccupant->setPrevVehicle(newVehicle);
-            }
-        // the front and thus also the back are nullptr, assign the new front and back
-        } else {
-            spawnStreet->setFrontOccupant(newVehicle, spawnLane);
+        if (!addToStreet(newVehicle, otherIntersection, spawnStreet, progress, spawnLane)) {
+            delete newVehicle;
         }
-
-        otherIntersection->requestSignal(newVehicle);
-
 
         // TODO assign:
         //  - starting path
@@ -247,6 +192,102 @@ void jsonParser::jsonToVehicles(nlohmann::json &json, Network *cityNetwork) {
     }
 
 }
+void jsonParser::addOugoingInfluences(Network *cityNetwork, Vehicle *newVehicle, const std::string& type, bool hasInfluence) {
+    // add a STOP influence if needed
+    if (type == "special" and hasInfluence) {
+        Influence* STOPsignal = new Influence(STOP);
+        // -2 as an argument for a STOP signal will represent that the signal affects the entire street the vehicle
+        // is currently in
+        STOPsignal->setArgument(-2);
+        newVehicle->addOutgoingInfluence(STOPsignal);
+    }
+}
+void jsonParser::setStartAndEnd(Network *cityNetwork, Vehicle *newVehicle, Intersection* startIntersection,
+                                const std::string& endIntersectionName) {
+    // assign the start and end intersections
+    newVehicle->setStartIntersection(startIntersection);
+    newVehicle->setEndIntersection(cityNetwork->findIntersection(endIntersectionName));
+
+}
+void jsonParser::setMembers(Intersection *startIntersection, Intersection *otherIntersection, Street* spawnStreet,
+                            Vehicle* newVehicle) {
+    // assign more members
+    newVehicle->setPrevIntersection(startIntersection);
+    newVehicle->setNextIntersection(otherIntersection);
+    newVehicle->setUnderway(true);  // TODO unnecessary member variable ?????
+
+    // set the start street
+    newVehicle->setCurrentStreet(spawnStreet);
+
+}
+bool jsonParser::addToStreet(Vehicle *newVehicle, Intersection *otherIntersection, Street* spawnStreet, double progress,
+                             int spawnLane) {
+    Vehicle* prevFrontOccupant = spawnStreet->getFrontOccupant(spawnLane);
+    Vehicle* prevBackOccupant  = spawnStreet->getBackOccupant(spawnLane);
+    // TODO what if frontOccupant == BackOccupant
+    if (prevFrontOccupant != nullptr) {
+        // the new vehicle is the front most vehicle in its spawn street
+        // the new vehicle is not initiated directly in front of the traffic lights
+        if (prevFrontOccupant->getProgress() < progress and progress < Simulation::getStreetLength()) {
+            spawnStreet->setFrontOccupant(newVehicle, spawnLane);
+
+            newVehicle->setPrevVehicle(prevFrontOccupant);
+            prevFrontOccupant->setNextVehicle(newVehicle);
+            // vehicle is all the way in front, progress is valid
+
+
+        // the new vehicle is either the back most vehicle in its spawn street or in the in between.
+        // either way it needs to become the back of the queue
+        // if it is in the in between, then other cars will pass it and it will wait for its next, the previous back, to pass
+        } else if (progress >= 0) {
+            spawnStreet->setBackOccupant(newVehicle, spawnLane);
+            newVehicle->setNextVehicle(prevBackOccupant);
+
+            prevBackOccupant->setPrevVehicle(newVehicle);
+
+            // vehicle is always attached to the back. if it was initiated "in the middle of a file", then treat the vehicle
+            // as being parked on the side of the road. If its next has a lower progress, then the vehicle should be
+            // attempting to drive backwards until its progress is lower than its next. Its own previous should then,
+            // upon reaching newVehicle, wait until the newVehicle begins driving
+        } else {
+            if (progress < 0) {
+                std::cerr << "The vehicle " << newVehicle->getLicensePlate() << " was to be instantiated with a progress of "
+                          << newVehicle->getProgress() << ", which is not allowed. Vehicle will not be instantiated." << std::endl;
+            } else {
+                std::cerr << "Something went wrong when adding the vehicle " << newVehicle->getLicensePlate() << " to the street from "
+                          << prevBackOccupant->getPrevIntersection()->getName() << " to " << prevBackOccupant->getPrevIntersection()->getName()
+                          << "(" << prevBackOccupant->getCurrentStreet()->typeToName() << ", "
+                          << prevBackOccupant->getCurrentStreet()->getTwoWayString() << "). Vehicle will not be instantiated";
+            }
+            return false;
+        }
+    // the front and thus also the back are nullptr, assign the new front and back
+    } else {
+        spawnStreet->setFrontOccupant(newVehicle, spawnLane);
+    }
+    newVehicle->setProgress(progress);
+    spawnStreet->requestInfluences(newVehicle); // TODO just added
+    otherIntersection->requestSignal(newVehicle);
+    return true;
+}
+void jsonParser::printLaneError(Vehicle *newVehicle, Street *spawnStreet, Intersection *otherIntersection) {
+    std::cerr << "Error while parsing json: The vehicle (" << newVehicle->classToName() << ") with start intersection "
+              << newVehicle->getStartIntersection()->getName() << " and end intersection "
+              << newVehicle->getEndIntersection()->getName() << " wanted to start in the street from "
+              << newVehicle->getStartIntersection()->getName() << " to " << otherIntersection->getName();
+    if (spawnStreet != nullptr) {
+        std::cerr
+                << " (" << spawnStreet->typeToName()
+                << ")\nbut getting put into the lane happened from an invalid intersection."
+                << " This is possibly because the street is a one way street and the start and other intersection are the wrong way around."
+                << std::endl;
+    } else {
+        std::cerr << " but the spawn street was not found within the network." << std::endl;
+    }
+}
+
+
+
 
 
 Vehicle *jsonParser::createVehicle(const std::string &vehicleClass, const Simulation& sim) {
@@ -272,3 +313,8 @@ bool jsonParser::typeIsAllowed(const streetType& streetType, const Network* city
     }
     return false;
 }
+
+
+
+
+

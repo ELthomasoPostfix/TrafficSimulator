@@ -88,6 +88,8 @@ public:
 
     const std::vector<std::pair<Street *, Street *>> &getTrafficLightPairs() const;
     void addTrafficLightPair(std::pair<Street*, Street*> newPair);
+    std::vector<Street*> getUnpairedStreets() const;
+    bool streetInTrafficLightPairs(const Street* street) const;
     bool haveIntersection(const std::pair<Street*, Street*>& pair1, const std::pair<Street*, Street*>& pair2);
 
     const std::pair<Street *, Street *> &getCurrentPair() const;

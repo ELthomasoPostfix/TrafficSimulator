@@ -126,37 +126,68 @@ void Vehicle::adjustProgress(std::ofstream& ofstream) {
             }
         // the room between cars is lesser than the min car distance required
         // ==> move as close to the next car as possible
+        // OR the next car is BEHIND this car:
+        // this can happen if a car is instantiated with a progress higher than the backOccupant, but lower than
+        // the frontOccupant
         } else {
             // the two cars are at less than 2x min car distance apart, but more than to 1x min car distance apart
             if (maxAllowedDriveDistance > 0) {              // c1 __(1.5m)__ c2  ==>  c1 __(1m)__ c2
                 addProgress(maxAllowedDriveDistance);
             // the two cars are less than 1x min car distance apart
+            // OR this vehicle is behind its next vehicle
             } else {
                 // if there is a previous car, make sure it's not in the way of backing up
                 if (getPrevVehicle() != nullptr) {
+                    // make all vars neg
+                    const double distanceToPreviousVehicle = getPrevVehicle()->getProgress() - progress;
+                    const double maxAllowedDriveDistanceBack = distanceToPreviousVehicle + minCarDistance;
+                    // maxAllowedDriveDistance is negative: this vehicle is closer to the car than is allowed, drive backwards
+                    if (maxAllowedDriveDistanceBack <= maxAllowedDriveDistance) {
+                        // there is enough space between this vehicle and previous vehicle
+                        // to drive the required amount back
 
-                    const double distanceToPreviousCar = progress - getPrevVehicle()->getProgress();
-                    // maxAllowedDriveDistance is negative: you are closer to the car than is allowed, drive backwards
-                    const double distanceToDriveBackwards = minCarDistance - maxAllowedDriveDistance;
-                    const double freeZone = distanceToPreviousCar - minCarDistance;
-                    if (freeZone >= distanceToDriveBackwards) {
-                        // maxCarDist is negative, so drive backwards
-                        addProgress(maxAllowedDriveDistance);
+                        // only if the distance to the next car is less than the minCarDistance,,
+                        // drive backwards
+                        if (maxAllowedDriveDistance > -minCarDistance) {
+                            addProgress(maxAllowedDriveDistance);
+                        }
+                    } else {
+                        // there is not enough distance between this vehicle and previous vehicle
+                        // to drive the required amount back. Drive back as far as allowed
+                        addProgress(maxAllowedDriveDistanceBack);
                     }
                 // no previous car in the way, always back up
                 } else {
-                    addProgress(maxAllowedDriveDistance);
+                    // the vehicle wants to back up less than its maximum possible dive distance
+                    // in a single time unit, so let it
+                    if (maxAllowedDriveDistance > -getMaxDriveDistance()) {
+                        addProgress(maxAllowedDriveDistance);
+                    // the vehicle wants to back up more than its maximum possible drive distance
+                    // in a single time unit, limit it to its maximum posiible drive distance
+                    } else {
+                        addProgress(getMaxDriveDistance());
+                    }
                 }
             }
         }
     } else {
         addProgress(getMaxDriveDistance());
     }
+    addProgressMessage(ofstream, progress);
+}
+void Vehicle::addProgressMessage(std::ofstream &ofstream, const double progress) const {
     ofstream << "Vehicle " << getLicensePlate() << " from " << getPrevIntersection()->getName() << " to " << getNextIntersection()->getName()
              << " (" << getCurrentStreet()->typeToName() << ", " << getCurrentStreet()->getTwoWayString()
              << ") has travelled " << getProgress()-progress << "  (" << getProgress() << "%)" << " max distance: "
-             << getMaxDriveDistance() << "\n";
+             << getMaxDriveDistance() << "  (LIMIT: ";
+    if (isLimited()) {
+        ofstream << getArgument(LIMIT);
+    } else {
+        ofstream << "None";
+    }
+    ofstream << ")\n";
 }
+
 
 
 
@@ -210,15 +241,18 @@ void Vehicle::enterStreet(std::ofstream& ofstream) {
         setPrevIntersection(currentIntersection);
         setNextIntersection(streetToEnter->getOtherIntersection(currentIntersection));
 
+        // the index of the lane with which the vehicle arrived in the intersection
+        int laneIndexWhenEntered = currentIntersection->laneIndexWhenEntering(currentStreet);
+
         // resolve the vehicle that used to be the prev vehicle of the vehicle that just entered a Street
         if (prevVehicle != nullptr) {
-
-            // the index of the lane the vehicle arrived in the intersection through
-            int laneIndexWhenEntered = currentIntersection->laneIndexWhenEntering(currentStreet);
 
             currentStreet->setFrontOccupant(prevVehicle, laneIndexWhenEntered);
             prevVehicle->setNextVehicle(nullptr);
 
+        } else {    // TODO changed this
+            currentStreet->setFrontNull(laneIndexWhenEntered);
+            currentStreet->setBackNull(laneIndexWhenEntered);
         }
         setProgress(0);
         ofstream << " has entered a street\n and is now underway from " << getPrevIntersection()->getName()
@@ -292,6 +326,9 @@ bool Vehicle::vehicleCanLeaveIntersection(const std::vector<Street*>& leavingStr
     return false;
 }
 
+bool Vehicle::isFront() const {
+    return this == getCurrentStreet()->getFrontOccupant(getNextIntersection()->laneIndexWhenEntering(getCurrentStreet()));;
+}
 
 
 
@@ -505,7 +542,12 @@ void Vehicle::setNextStreet(Street *nextStreet) {
 
 double Vehicle::getSpeed() const {
     if (isLimited()) {
-        return getArgument(LIMIT);  // return the speed limit
+        double limit = getArgument(LIMIT);  // return the speed limit
+        if (limit < _speed) {
+            return limit;
+        } else {
+            return _speed;
+        }
     } else {
         return _speed;
     }

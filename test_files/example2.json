@@ -79,7 +79,7 @@
         "3",
         "B"
       ],
-      "startStreetTwoWay" : false,
+      "startStreetTwoWay" : true,
       "endIntersection": "2",
       "progress": 0
     },

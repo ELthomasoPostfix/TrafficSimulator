@@ -9,6 +9,42 @@ Network::Network() {
 }
 
 
+void Network::doMainLoop(const int duration, std::string& ofName, std::string& ofName2, std::string& ofName3) {
+    Simulation* sim = _simulation;
+    std::ofstream driveStream;
+    std::ofstream trafficLightStream;
+    std::ofstream vehicleChainStream;
+    driveStream.open(ofName);
+    trafficLightStream.open(ofName2);
+    vehicleChainStream.open(ofName3);
+
+    for (int dur = 0; dur < duration; ++dur) {
+        driveStream        << "---- " << dur << " ----" << std::endl;
+        trafficLightStream << "---- " << dur << " ----" << std::endl;
+        vehicleChainStream << "\n---- " << dur-1 << " ----\n" << std::endl;
+        // let intersections with traffic lights cycle through the traffic light pairs (of Street*s) and send out
+        // signals when cycling from one pair to the next.
+        // vehicles will request traffic light influence upon calling the setFrontOccupant() function of a street
+        for (Intersection* influencingIntersection : getInfluencingIntersections()) {
+            influencingIntersection->emitInfluences(trafficLightStream);
+        }
+        writeAllVehicleChains(vehicleChainStream);
+        // let all vehicles drive and if they can, send out signals
+        for (Vehicle* vehicle : getVehicles()) {
+            vehicle->drive(driveStream);
+            std::cout << " drove (" << dur << ")" << std::endl;
+        }
+    }
+    vehicleChainStream << "\n---- " << duration-1 << " ----" << std::endl;
+    writeAllVehicleChains(vehicleChainStream);
+
+    driveStream.close();
+    trafficLightStream.close();
+    vehicleChainStream.close();
+    sim->addTotalTimeSimulated(duration);
+}
+
+
 void Network::toDot(std::ofstream &ofstream) const {
 
     if (ofstream.is_open()) {
@@ -39,31 +75,68 @@ void Network::toPNG(const std::string &fileName) const {
     system(command);
 }
 
-void Network::doMainLoop(const int duration, std::string& ofName, std::string& ofName2) {
-    Simulation* sim = _simulation;
-    std::ofstream driveStream;
-    std::ofstream trafficLightStream;
-    driveStream.open(ofName);
-    trafficLightStream.open(ofName2);
 
-    for (int dur = 0; dur < duration; ++dur) {
-        driveStream        << "---- " << dur << " ----" << std::endl;
-        trafficLightStream << "---- " << dur << " ----" << std::endl;
-        // let intersections with traffic lights cycle through the traffic light pairs (of Street*s) and send out
-        // signals when cycling from one pair to the next.
-        // vehicles will request traffic light influence upon calling the setFrontOccupant() function of a street
-        for (Intersection* influencingIntersection : getInfluencingIntersections()) {
-            influencingIntersection->emitInfluences(trafficLightStream);
-        }
-        // let all vehicles drive and if they can, send out signals
-        for (Vehicle* vehicle : getVehicles()) {
-            vehicle->drive(driveStream);
-            std::cout << " drove (" << dur << ")" << std::endl;
+void Network::writeAllVehicleChains(std::ofstream &vehicleChainStream) const {
+    // front vehicles of their own current street
+    std::vector<const Vehicle*> frontVehicles;
+    // whether or not the chain of the front vehicle has been written to the file already
+    std::vector<bool> chainWasWritten;
+
+    findFrontVehicles(frontVehicles, chainWasWritten);
+
+    writeChain(vehicleChainStream, frontVehicles, chainWasWritten, nullptr, 0);
+}
+void Network::findFrontVehicles(std::vector<const Vehicle *> &frontVehicles, std::vector<bool>& chainWasWritten) const {
+    for (const Vehicle* vehicle : getVehicles()) {
+        if (vehicle->isFront()) {
+            frontVehicles.emplace_back(vehicle);
+            chainWasWritten.emplace_back(false);
         }
     }
-    driveStream.close();
-    sim->addTotalTimeSimulated(duration);
 }
+void Network::writeChain(std::ofstream &vehicleChainStream, std::vector<const Vehicle *> &frontVehicles,
+                         std::vector<bool> &chainWasWritten, const Street* currentStreet, unsigned int startIndex) const {
+
+    for (unsigned int index = startIndex; index < frontVehicles.size(); ++index) {
+        const Vehicle* currChainVehicle = frontVehicles[index];
+        // currentStreet only exists if recursion is used to find the second lane of a two way street
+        if ((!chainWasWritten[index] and currentStreet == nullptr) or
+            (!chainWasWritten[index] and currentStreet != nullptr and currentStreet == currChainVehicle->getCurrentStreet())) {
+
+            writeChainString(vehicleChainStream, currChainVehicle);
+
+            chainWasWritten[index] = true;
+
+            // currentStreet only exists if recursion is used to find the second lane of a two way street
+            if (currChainVehicle->getCurrentStreet()->isTwoWay() and currentStreet == nullptr) {
+                writeChain(vehicleChainStream, frontVehicles, chainWasWritten, currChainVehicle->getCurrentStreet(), index+1);
+            // second lane found, no further search needed
+            } else if (currentStreet != nullptr) {
+                break;
+            }
+        }
+    }
+}
+void Network::writeChainString(std::ofstream& vehicleChainStream, const Vehicle *&currChainVehicle) const {
+    std::string chain;
+
+    Intersection* prevIntersection = currChainVehicle->getPrevIntersection();
+    Intersection* nextIntersection = currChainVehicle->getNextIntersection();
+
+    vehicleChainStream << prevIntersection->getName() << " ==> ";
+    chain += currChainVehicle->getLicensePlate();
+    while (currChainVehicle->getPrevVehicle() != nullptr) {
+        chain = currChainVehicle->getPrevVehicle()->getLicensePlate() + " -> " + chain;
+        currChainVehicle = currChainVehicle->getPrevVehicle();
+    }
+    Street* currStreet = currChainVehicle->getCurrentStreet();
+    vehicleChainStream << chain  << " ==> " << nextIntersection->getName() << "  (" << currStreet->typeToName() << ", "
+                       << Util::isTwoWayToString(currStreet->isTwoWay()) << ")" << "\n";
+}
+
+
+
+
 
 
 // getters and setters

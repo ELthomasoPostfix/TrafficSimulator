@@ -306,6 +306,7 @@ void Intersection::addTrafficLightPair(std::pair<Street *, Street *> newPair) {
     Street* first  = newPair.first;
     Street* second = newPair.second;
     // if any street of the pair is a single way street, its next must be 'this'
+    // at least one of the streets in the traffic light pair must exist, so single state pairs are acceptable
     if ((first != nullptr and !isEnteringStreet(first)) or (second != nullptr and !isEnteringStreet(second))) return;
     // each street, part of a traffic light pair, is exclusively part of a single pair.
     // No Street can be part of multiple traffic light pairs
@@ -314,6 +315,29 @@ void Intersection::addTrafficLightPair(std::pair<Street *, Street *> newPair) {
         if (haveIntersection(pair, newPair)) return;
     }
     _trafficLightPairs.emplace_back(newPair);
+}
+std::vector<Street *> Intersection::getUnpairedStreets() const {
+    std::vector<Street*> unpairedStreets;
+    // for any street
+    for (Street* street : getStreets()) {
+        // if no pair contains this street, add it to the list
+        if (!streetInTrafficLightPairs(street))
+        {
+            unpairedStreets.emplace_back(street);
+        }
+    }
+    return unpairedStreets;
+}
+bool Intersection::streetInTrafficLightPairs(const Street *street) const {
+    // for any pair
+    for (std::pair<Street *, Street *> trafficLightPair : getTrafficLightPairs()) {
+        // if the pair contains the street, return true
+        if (trafficLightPair.first == street or trafficLightPair.second == street) {
+            return true;
+        }
+    }
+    // no pair contained the street
+    return false;
 }
 bool Intersection::haveIntersection(const std::pair<Street *, Street *> &pair1, const std::pair<Street *, Street *> &pair2) {
     // the two traffic light pairs may have no streets in common, nor may they be the same pair
@@ -350,8 +374,3 @@ void Intersection::cycleTrafficLightsPair() {
         }
     }
 }
-
-
-
-
-

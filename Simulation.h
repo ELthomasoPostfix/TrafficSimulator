@@ -24,6 +24,8 @@ class Simulation {
     // the distance from a STOP signal at which the STOP signal will take effect on the vehicle
     static const int _effectiveSTOPdistance = _minCarDistance;
 
+    static const int _streetLength = 100;
+
 
     int _totalSpawnedVehicles = 0;
 
@@ -54,6 +56,8 @@ public:
     static const int getDecisionBufferLength();
 
     static const bool vehicleTypeCanEnterStreetType(const vehicleClass& vehicleClass, const streetType& streetType);
+
+    static const int getStreetLength();
 
     int getTotalSpawnedVehicles() const;
     void incrementTotalSpawnedVehicles();

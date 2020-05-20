@@ -24,10 +24,19 @@ public:
 
     Network();
 
+    void doMainLoop(int duration, std::string& ofName, std::string& ofName2, std::string& ofName3);
+
+
     void toDot(std::ofstream& fstream) const;
     void toPNG(const std::string& fileName) const;
 
-    void doMainLoop(int duration, std::string& ofName, std::string& ofName2);
+private:
+    void writeAllVehicleChains(std::ofstream& vehicleChainStream) const;
+    void findFrontVehicles(std::vector<const Vehicle*>& frontVehicles, std::vector<bool>& chainWasWritten) const;
+    void writeChain(std::ofstream& vehicleChainStream, std::vector<const Vehicle*>& frontVehicles,
+                    std::vector<bool>& chainWasWritten, const Street* currentStreet, unsigned int startIndex) const;
+    void writeChainString(std::ofstream& vehicleChainStream, const Vehicle*& currChainVehicle) const;
+public:
 
     // TODO add algorithms here
 

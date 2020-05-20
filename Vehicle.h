@@ -69,6 +69,7 @@ public:
     void leaveEntrantsList() const;
     void addSTOPMessage(std::ofstream& ofstream, double effectiveSTOPLocation) const;
     void adjustProgress(std::ofstream& ofstream);
+    void addProgressMessage(std::ofstream& ofstream, double progress) const;
 
     // influences will always be emitted to the immediate surroundings, but should only be used by a special vehicle
     virtual void emitInfluence();
@@ -91,7 +92,7 @@ public:
 
     bool vehicleCanLeaveIntersection(const std::vector<Street*>& leavingStreets) const;
 
-
+    bool isFront() const;
 
 
     // getters and setters
