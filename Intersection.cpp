@@ -12,19 +12,6 @@ Intersection::Intersection(std::string  name): _name(std::move(name)) {
     _trafficLightCounter = 0;
 }
 
-// function should be used by a vehicle: it receives the STOP signal
-void Intersection::requestSignal(Vehicle *requestingVehicle) const {
-    if (requestingVehicle != nullptr) {
-        requestingVehicle->receiveInfluence(getTrafficLightInfluence());
-    }
-}
-void Intersection::requestEntrantSignal(Vehicle *requestingVehicle) const {
-    if (requestingVehicle != nullptr) {
-        requestingVehicle->addEntrantInfluence(getTrafficLightInfluence());
-    }
-}
-
-
 void Intersection::emitInfluences(std::ofstream& trafficLightStream) {
     if (getHasTrafficLights()) {
         emitTrafficLightSignal(trafficLightStream);
@@ -51,6 +38,80 @@ void Intersection::emitTrafficLightSignal(std::ofstream& trafficLightStream) {
         addTLCincrementMessage(trafficLightStream);
     }
 }
+
+// function should be used by a vehicle: it receives the STOP signal
+void Intersection::requestSignal(Vehicle *requestingVehicle) const {
+    if (requestingVehicle != nullptr) {
+        requestingVehicle->receiveInfluence(getTrafficLightInfluence());
+    }
+}
+void Intersection::requestEntrantSignal(Vehicle *requestingVehicle) const {
+    if (requestingVehicle != nullptr) {
+        requestingVehicle->addEntrantInfluence(getTrafficLightInfluence());
+    }
+}
+
+
+void Intersection::calculateTrafficScore() {
+    int outgoingScore = 0, incomingScore = 0;
+    int* score = &outgoingScore;
+
+    for (Street* street : getStreets()) {
+        bool isLeaving = isLeavingStreet(street);
+        // differentiate between the score calculated from leaving streets and incoming streets
+        if (isLeaving) score = &outgoingScore;
+        else score = &incomingScore;
+
+        // TODO can be made more dynamic, check func
+        //  - checking for special STOP signal should happen lane based ?
+        addInfluenceScores(score, street->getInfluences());
+
+        // leaving lane
+        const int indexWhenLeaving = laneIndexWhenLeaving(street);
+        *score += hasTLtoScore(getHasTrafficLights());
+        *score += vehicleAmountToScore(street->getLanes()[indexWhenLeaving].size());
+
+
+        // two lanes to take into account
+        if (street->isTwoWay()) {
+            // switch the score ptr, other lane of the same street runs in opposite direction
+            if (isLeaving) score = &incomingScore;
+            else score = &outgoingScore;
+
+            // entering lane
+            int indexWhenEntering = 1;
+            if (indexWhenLeaving == 1) indexWhenEntering = 0;
+            *score += hasTLtoScore(getOtherIntersection(street)->getHasTrafficLights());  // already used other intersection
+            *score += vehicleAmountToScore(street->getLanes()[indexWhenEntering].size());
+        }
+    }
+    // give the incoming and outgoing scores a different weight
+    setTrafficScore((outgoingScore*1) + (incomingScore*1));
+}
+
+
+// helper functions to calculate individual scores
+
+int Intersection::hasTLtoScore(const bool hasTL) const {
+    if (hasTL) {
+        return 2;
+    }
+    return 0;
+}
+int Intersection::vehicleAmountToScore(int amount) const {
+    if (amount != 0) {
+        return sqrt(amount);
+    }
+    return 0;
+}
+void Intersection::addInfluenceScores(int* score, const std::vector<const Influence *> &influences) const {
+    for (const Influence* influence : influences) {
+        *score += influence->toScore();
+    }
+}
+
+
+
 
 void Intersection::stopCurrentFrontOccupants() const {
 
@@ -374,3 +435,4 @@ void Intersection::cycleTrafficLightsPair() {
         }
     }
 }
+

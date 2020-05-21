@@ -28,6 +28,11 @@ void Network::doMainLoop(const int duration, std::string& ofName, std::string& o
         for (Intersection* influencingIntersection : getInfluencingIntersections()) {
             influencingIntersection->emitInfluences(trafficLightStream);
         }
+
+        for (Intersection* intersection : getNetwork()) {
+            intersection->calculateTrafficScore();
+        }
+
         writeAllVehicleChains(vehicleChainStream);
         // let all vehicles drive and if they can, send out signals
         for (Vehicle* vehicle : getVehicles()) {

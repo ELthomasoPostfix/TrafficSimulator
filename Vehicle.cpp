@@ -313,7 +313,10 @@ void Vehicle::onWrite(std::ofstream &ofstream) const {
 // boolean functions
 
 bool Vehicle::mayDrive(const double effectiveSTOPLocation, const double argument) const {
-    return  !isStopped() or (isStopped() and getProgress() < effectiveSTOPLocation and effectiveSTOPLocation >= 0 and argument != -1);
+    // argument == -1, invalid or non existing influence
+    // argument == -2, a STOP signal that directly affects the whole street/lane
+    return  !isStopped() or (isStopped() and getProgress() < effectiveSTOPLocation and effectiveSTOPLocation >= 0 and
+    (argument != -1 and argument != -2));
 }
 
 bool Vehicle::vehicleCanLeaveIntersection(const std::vector<Street*>& leavingStreets) const {
@@ -366,6 +369,7 @@ double Vehicle::getLowestRelevantArgument(influenceType influenceType) const {
     double lowestRelevantArgument = 200;    // any argument should be lower than 200
     for (const Influence* influence : getIncomingInfluences()) {
         // the influence is a STOP signal, it is lower than the current lowest argument and is relevant
+        // ==> even negative arguments can be returned, as is the case for special vehicle's STOP signal
         bool stop = influence->getType() == STOP and influence->getArgument() < lowestRelevantArgument and
                     influence->getArgument() >= getProgress()+Simulation::getMinCarDistance();
         // the influence is a LIMIT signal, and is lower than the current lowest argument

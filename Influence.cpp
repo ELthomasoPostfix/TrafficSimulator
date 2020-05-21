@@ -23,3 +23,26 @@ int Influence::getArgument() const {
 void Influence::setArgument(int argument) {
     _argument = argument;
 }
+
+int Influence::toScore() const {
+    const influenceType& type = getType();
+    const double& arg = getArgument();
+    // TODO can make more dynamic by adding a list that holds values to consider for a specific type
+    //  so the user can add more custom values
+    if (type == STOP) {
+        // the STOP signal is of a special vehicle that stops an entire street
+        if (arg == -2) {
+            return 20;
+        // traffic lights, ...
+        } else {
+            return 5;
+        }
+    // influence depends on speed limit
+    } else if (type == LIMIT) {
+        return arg*0.1;
+    // the return value of ths essentially decides whether or not vehicles want to avoid construction of streets
+    // if one of the streets on their path is blocked, it can avoid that route prematurely
+    } else if (type == REROUTE) {
+        return 0;
+    }
+}

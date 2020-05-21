@@ -30,7 +30,17 @@ public:
     void requestSignal(Vehicle* requestingVehicle) const;
     void requestEntrantSignal(Vehicle* requestingVehicle) const;
 
-    // emit a stop signal at the front occupants of the currentTrafficLightPai  ( get using getCurrentPair() )
+
+    void calculateTrafficScore();
+
+    // helper functions to calculate individual scores
+
+    int hasTLtoScore(bool hasTL) const;
+    int vehicleAmountToScore(int amount) const;
+    void addInfluenceScores(int* score, const std::vector<const Influence*>& influences) const;
+
+
+    // emit a stop signal at the front occupants of the currentTrafficLightPair  ( get using getCurrentPair() )
     void stopCurrentFrontOccupants() const;
     void stopSingleFrontOccupant(int enteredLaneIndex, Vehicle* frontOccupant) const;
     void unStopCurrentFrontOccupants() const;

@@ -37,7 +37,9 @@ public:
     int getArgument() const;
 
     void setArgument(int argument);
-};
+
+    int toScore() const;
+    };
 
 
 #endif //TRAFFICSIMULATOR_INFLUENCE_H
