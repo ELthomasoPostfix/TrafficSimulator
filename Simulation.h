@@ -7,6 +7,18 @@
 
 #include "Intersection.h"
 
+// the amount of distance subsequent vehicles MUST keep between each other
+extern int minCarDistance;
+// the amount of time it takes for traffic lights to instantly cycle to a new pair of streets
+extern int trafficLightMaxCount;
+
+extern int decisionBufferLength;
+// the distance from a STOP signal at which the STOP signal will take effect on the vehicle
+extern int effectiveSTOPdistance;
+
+extern int streetLength;
+
+
 class Simulation {
 
     // only keep a single instance of each type of influence, each use refers to the same object
@@ -15,16 +27,7 @@ class Simulation {
     int _totalTimeSimulated;
 
     // TODO add some statistics functions here
-    // the amount of distance subsequent vehicles MUST keep between each other
-    static const int _minCarDistance = 1;
-    // the amount of time it takes for traffic lights to instantly cycle to a new pair of streets
-    static const int _trafficLightMaxCount = 5;
 
-    static const int _decisionBufferLength = 10;
-    // the distance from a STOP signal at which the STOP signal will take effect on the vehicle
-    static const int _effectiveSTOPdistance = _minCarDistance;
-
-    static const int _streetLength = 100;
 
 
     int _totalSpawnedVehicles = 0;
@@ -48,16 +51,23 @@ public:
     void addTotalTimeSimulated(int additionalTime);
 
     static const int getMinCarDistance();
+    static void setMinCarDistance(int distance);
 
     static const int getTrafficLightMaxCount();
+    static void setTrafficLightMaxCount(int count);
 
     static const int getEffectiveSTOPdistance();
+    static void setEffectiveSTOPdistance(int distance);
 
     static const int getDecisionBufferLength();
+    static void setDecisionBufferLength(int length);
 
     static const bool vehicleTypeCanEnterStreetType(const vehicleClass& vehicleClass, const streetType& streetType);
 
     static const int getStreetLength();
+    static void setStreetLength(int length);
+
+    static void printSimVariables();
 
     int getTotalSpawnedVehicles() const;
     void incrementTotalSpawnedVehicles();

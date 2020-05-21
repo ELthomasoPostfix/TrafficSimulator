@@ -4,6 +4,20 @@
 
 #include "jsonParser.h"
 
+// base definitions of extern variables in Simulation
+
+// the amount of distance subsequent vehicles MUST keep between each other
+int minCarDistance = 1;
+// the amount of time it takes for traffic lights to instantly cycle to a new pair of streets
+int trafficLightMaxCount = 5;
+
+int decisionBufferLength = 10;
+// the distance from a STOP signal at which the STOP signal will take effect on the vehicle
+int effectiveSTOPdistance = minCarDistance;
+
+int streetLength = 100;
+
+
 
 Network* jsonParser::processJSON(const std::string& fileName) {
     std::fstream inputFile(fileName);
@@ -37,9 +51,14 @@ Network* jsonParser::processJSON(const std::string& fileName) {
 
 
 Network *jsonParser::jsonToSimulationParameters(nlohmann::json &json) {
-    const double minCarDistance = json["simParameters"]["mincardistance"];
-    const double maxTrafficLightCount = json["simParameters"]["maxtrafficlightcount"];
-    const double decisionBufferLen = json["simParameters"]["decisionbufferlength"];
+    auto& simParams = json["simParameters"];
+    if (simParams["redefine"]) {
+        auto &simVars = simParams["simVars"];
+        Simulation::setMinCarDistance(simVars["mincardistance"]);
+        Simulation::setTrafficLightMaxCount(simVars["maxtrafficlightcount"]);
+        Simulation::setDecisionBufferLength(simVars["decisionbufferlength"]);
+        Simulation::setStreetLength(simVars["streetlength"]);
+    }
     return new Network();
 }
 
@@ -188,9 +207,7 @@ void jsonParser::jsonToVehicles(nlohmann::json &json, Network *cityNetwork) {
 
 
         cityNetwork->addVehicle(newVehicle);
-        cityNetwork->getSimulation()->incrementTotalSpawnedVehicles();
     }
-
 }
 void jsonParser::addOugoingInfluences(Network *cityNetwork, Vehicle *newVehicle, const std::string& type, bool hasInfluence) {
     // add a STOP influence if needed

@@ -51,8 +51,11 @@ void Vehicle::drive(std::ofstream& ofstream) {
                 // TODO vehicle may decide to adjust its path from here on out
                 alterPath();
             }
-            // TODO replace '100'% ????
-            if (getProgress() == 100) {
+            // the base STOP argument, which is the same as the argument of all traffic lights,
+            // is  streetLength + minCarDistance
+            // ==> a vehicle will always stop minCarDistance away from the stop signal
+            // ==> the vehicle will always stop at streetLength
+            if (getProgress() == Simulation::getStreetLength()) {
                 if (isUnderway()) setUnderway(false);
                 // TODO vehicle is at an intersection,
                 //  decision making already done, move into new street
@@ -178,8 +181,8 @@ void Vehicle::adjustProgress(std::ofstream& ofstream) {
 void Vehicle::addProgressMessage(std::ofstream &ofstream, const double progress) const {
     ofstream << "Vehicle " << getLicensePlate() << " from " << getPrevIntersection()->getName() << " to " << getNextIntersection()->getName()
              << " (" << getCurrentStreet()->typeToName() << ", " << getCurrentStreet()->getTwoWayString()
-             << ") has travelled " << getProgress()-progress << "  (" << getProgress() << "%)" << " max distance: "
-             << getMaxDriveDistance() << "  (LIMIT: ";
+             << ") has travelled " << getProgress()-progress << "  (" << getProgress()/Simulation::getStreetLength()*100
+             << "%)" << " max distance: " << getMaxDriveDistance() << "  (LIMIT: ";
     if (isLimited()) {
         ofstream << getArgument(LIMIT);
     } else {
@@ -257,11 +260,11 @@ void Vehicle::enterStreet(std::ofstream& ofstream) {
         setProgress(0);
         ofstream << " has entered a street\n and is now underway from " << getPrevIntersection()->getName()
                  << " to " << getNextIntersection()->getName() << " (" << streetToEnter->typeToName() << ", "
-                 << streetToEnter->getTwoWayString() << ")" << "  (" << getProgress() << "%)\n";
+                 << streetToEnter->getTwoWayString() << ")" << "  (" << getProgress()/Simulation::getStreetLength()*100 << "%)\n";
     } else {
         ofstream << " tried to enter a street (" << streetToEnter->typeToName() << ", " << streetToEnter->getTwoWayString()
                  << ") from " << getPrevIntersection()->getName() << " to " << getNextIntersection()->getName()
-                 << "\n but the entrance to the street was occupied (" << getProgress() << "%)\n";
+                 << "\n but the entrance to the street was occupied (" << getProgress()/Simulation::getStreetLength()*100 << "%)\n";
     }
 
 }
@@ -501,9 +504,9 @@ void Vehicle::setProgress(double progress) {
     _progress = progress;
 }
 void Vehicle::addProgress(double additionalProgress) {
-    // limit the mex progress of vehicles to 100
-    if (additionalProgress > (100-_progress)) {
-        _progress = 100;
+    // limit the mex progress of vehicles to the streetLength
+    if (additionalProgress > (Simulation::getStreetLength()-_progress)) {
+        _progress = Simulation::getStreetLength();
     } else {
         _progress += additionalProgress;
     }

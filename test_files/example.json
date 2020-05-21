@@ -1,8 +1,12 @@
 {
   "simParameters": {
-    "mincardistance": 1,
-    "maxtrafficlightcount": 5,
-    "decisionbufferlength": 10
+    "redefine": true,
+    "simVars": {
+      "mincardistance": 1,
+      "maxtrafficlightcount": 5,
+      "decisionbufferlength": 10,
+      "streetlength": 100
+    }
   },
   "alphabet": [
     "A",

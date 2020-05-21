@@ -13,7 +13,7 @@ Simulation::Simulation() {
 void Simulation::instantiateInfluences() {
 
     Influence* stop    = new Influence(STOP);
-    stop->setArgument(100 + getEffectiveSTOPdistance());
+    stop->setArgument(Simulation::getStreetLength() + getEffectiveSTOPdistance());
     Influence* reroute = new Influence(REROUTE);
     allInfluences.emplace_back(stop);
     allInfluences.emplace_back(reroute);
@@ -57,19 +57,32 @@ void Simulation::addTotalTimeSimulated(int additionalTime) {
 }
 
 const int Simulation::getMinCarDistance() {
-    return _minCarDistance;
+    return minCarDistance;
+}
+void Simulation::setMinCarDistance(int distance) {
+    minCarDistance = distance;
+    Simulation::setEffectiveSTOPdistance(distance);
 }
 
 const int Simulation::getTrafficLightMaxCount() {
-    return _trafficLightMaxCount;
+    return trafficLightMaxCount;
+}
+void Simulation::setTrafficLightMaxCount(int count) {
+    trafficLightMaxCount = count;
 }
 
 const int Simulation::getEffectiveSTOPdistance() {
-    return _effectiveSTOPdistance;
+    return effectiveSTOPdistance;
+}
+void Simulation::setEffectiveSTOPdistance(int distance) {
+    effectiveSTOPdistance = distance;
 }
 
 const int Simulation::getDecisionBufferLength() {
-    return _decisionBufferLength;
+    return decisionBufferLength;
+}
+void Simulation::setDecisionBufferLength(int length) {
+    decisionBufferLength = length;
 }
 
 const bool Simulation::vehicleTypeCanEnterStreetType(const vehicleClass &vehicleClass, const streetType &streetType) {
@@ -82,8 +95,22 @@ const bool Simulation::vehicleTypeCanEnterStreetType(const vehicleClass &vehicle
 }
 
 const int Simulation::getStreetLength() {
-    return _streetLength;
+    return streetLength;
 }
+void Simulation::setStreetLength(int length) {
+    streetLength = length;
+}
+
+void Simulation::printSimVariables() {
+    std::cout << "\n------------ Sim Variables ------------" << std::endl
+              << "minCarDistance:        " << minCarDistance << std::endl
+              << "trafficLightMaxCount:  " << trafficLightMaxCount << std::endl
+              << "effectiveSTOPdistance: " << effectiveSTOPdistance << std::endl
+              << "decisionBufferLength:  " << decisionBufferLength << std::endl
+              << "streetLength:          " << streetLength << std::endl
+              << "---------------------------------------\n";
+}
+
 
 
 int Simulation::getTotalSpawnedVehicles() const {
@@ -92,6 +119,10 @@ int Simulation::getTotalSpawnedVehicles() const {
 void Simulation::incrementTotalSpawnedVehicles() {
     _totalSpawnedVehicles++;
 }
+
+
+
+
 
 
 
