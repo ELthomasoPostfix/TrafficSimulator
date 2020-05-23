@@ -11,6 +11,14 @@ Street::Street(Intersection* prev, Intersection* next, streetType type) : _prevI
     _hasSpeedLimit = false;
 }
 
+
+Street::~Street() {
+
+}
+
+
+
+
 bool Street::fillEmptyLanes() {
     const int lanesSize = getLanes().size();
     if (lanesSize == 2) return false;
@@ -273,6 +281,30 @@ bool Street::hasStopSignal() const {
 }
 void Street::setHasStopSignal(bool hasStopSignal) {
     _hasStopSignal = hasStopSignal;
+}
+
+bool Street::isEStreet() {
+    return false;
+}
+
+std::string Street::getEStreetName() const {
+    return typeToName();
+}
+
+
+const std::vector<const Intersection *>* Street::getIntersections() const {
+    return nullptr;
+}
+void Street::addIntersection(const Intersection *newIntersection) {}
+
+const std::vector<const Street *>* Street::getStreets() const {
+    std::vector<const Street*> empty;
+    return nullptr;
+}
+void Street::addStreet(const Street *newStreet) {}
+
+const std::vector<const Street *>* Street::getLoops() const {
+    return nullptr;
 }
 
 

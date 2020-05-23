@@ -46,6 +46,8 @@ public:
 
     Street(Intersection* prev, Intersection* next, streetType type);
 
+    virtual ~Street();
+
     bool fillEmptyLanes();
     bool fillEmptyEntrantLanes();
 
@@ -102,6 +104,17 @@ public:
 
     bool hasStopSignal() const;
     void setHasStopSignal(bool hasStopSignal);
+
+    virtual bool isEStreet();
+    virtual std::string getEStreetName() const;
+
+    virtual const std::vector<const Street *>* getStreets() const;
+    virtual void addStreet(const Street* newStreet);
+
+    virtual const std::vector<const Intersection *>* getIntersections() const;
+    virtual void addIntersection(const Intersection* newIntersection);
+
+    virtual const std::vector<const Street *>* getLoops() const;
 };
 
 

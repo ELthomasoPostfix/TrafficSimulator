@@ -48,10 +48,10 @@ RM = /snap/clion/112/bin/cmake/linux/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/elthomaso/CLionProjects/TrafficSimulator
+CMAKE_SOURCE_DIR = /home/elthomaso/CLionProjects/TrafficSimulator_StateElim
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug
+CMAKE_BINARY_DIR = /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles /home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -122,6 +122,33 @@ TrafficSimulator: cmake_check_build_system
 TrafficSimulator/fast:
 	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/build
 .PHONY : TrafficSimulator/fast
+
+ElimStreet.o: ElimStreet.cpp.o
+
+.PHONY : ElimStreet.o
+
+# target to build an object file
+ElimStreet.cpp.o:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/ElimStreet.cpp.o
+.PHONY : ElimStreet.cpp.o
+
+ElimStreet.i: ElimStreet.cpp.i
+
+.PHONY : ElimStreet.i
+
+# target to preprocess a source file
+ElimStreet.cpp.i:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/ElimStreet.cpp.i
+.PHONY : ElimStreet.cpp.i
+
+ElimStreet.s: ElimStreet.cpp.s
+
+.PHONY : ElimStreet.s
+
+# target to generate assembly for a file
+ElimStreet.cpp.s:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/ElimStreet.cpp.s
+.PHONY : ElimStreet.cpp.s
 
 Influence.o: Influence.cpp.o
 
@@ -257,6 +284,33 @@ SpecialVehicle.s: SpecialVehicle.cpp.s
 SpecialVehicle.cpp.s:
 	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.s
 .PHONY : SpecialVehicle.cpp.s
+
+StateElimination.o: StateElimination.cpp.o
+
+.PHONY : StateElimination.o
+
+# target to build an object file
+StateElimination.cpp.o:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/StateElimination.cpp.o
+.PHONY : StateElimination.cpp.o
+
+StateElimination.i: StateElimination.cpp.i
+
+.PHONY : StateElimination.i
+
+# target to preprocess a source file
+StateElimination.cpp.i:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/StateElimination.cpp.i
+.PHONY : StateElimination.cpp.i
+
+StateElimination.s: StateElimination.cpp.s
+
+.PHONY : StateElimination.s
+
+# target to generate assembly for a file
+StateElimination.cpp.s:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/StateElimination.cpp.s
+.PHONY : StateElimination.cpp.s
 
 Street.o: Street.cpp.o
 
@@ -429,6 +483,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... TrafficSimulator"
+	@echo "... ElimStreet.o"
+	@echo "... ElimStreet.i"
+	@echo "... ElimStreet.s"
 	@echo "... Influence.o"
 	@echo "... Influence.i"
 	@echo "... Influence.s"
@@ -444,6 +501,9 @@ help:
 	@echo "... SpecialVehicle.o"
 	@echo "... SpecialVehicle.i"
 	@echo "... SpecialVehicle.s"
+	@echo "... StateElimination.o"
+	@echo "... StateElimination.i"
+	@echo "... StateElimination.s"
 	@echo "... Street.o"
 	@echo "... Street.i"
 	@echo "... Street.s"

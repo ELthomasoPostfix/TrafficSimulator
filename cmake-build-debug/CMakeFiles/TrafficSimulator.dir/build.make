@@ -43,10 +43,10 @@ RM = /snap/clion/112/bin/cmake/linux/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/elthomaso/CLionProjects/TrafficSimulator
+CMAKE_SOURCE_DIR = /home/elthomaso/CLionProjects/TrafficSimulator_StateElim
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug
+CMAKE_BINARY_DIR = /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/TrafficSimulator.dir/depend.make
@@ -59,146 +59,172 @@ include CMakeFiles/TrafficSimulator.dir/flags.make
 
 CMakeFiles/TrafficSimulator.dir/main.cpp.o: CMakeFiles/TrafficSimulator.dir/flags.make
 CMakeFiles/TrafficSimulator.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/TrafficSimulator.dir/main.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/main.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/TrafficSimulator.dir/main.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/main.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/main.cpp
 
 CMakeFiles/TrafficSimulator.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TrafficSimulator.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator/main.cpp > CMakeFiles/TrafficSimulator.dir/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/main.cpp > CMakeFiles/TrafficSimulator.dir/main.cpp.i
 
 CMakeFiles/TrafficSimulator.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TrafficSimulator.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator/main.cpp -o CMakeFiles/TrafficSimulator.dir/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/main.cpp -o CMakeFiles/TrafficSimulator.dir/main.cpp.s
 
 CMakeFiles/TrafficSimulator.dir/Street.cpp.o: CMakeFiles/TrafficSimulator.dir/flags.make
 CMakeFiles/TrafficSimulator.dir/Street.cpp.o: ../Street.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/TrafficSimulator.dir/Street.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/Street.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator/Street.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/TrafficSimulator.dir/Street.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/Street.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Street.cpp
 
 CMakeFiles/TrafficSimulator.dir/Street.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TrafficSimulator.dir/Street.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator/Street.cpp > CMakeFiles/TrafficSimulator.dir/Street.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Street.cpp > CMakeFiles/TrafficSimulator.dir/Street.cpp.i
 
 CMakeFiles/TrafficSimulator.dir/Street.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TrafficSimulator.dir/Street.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator/Street.cpp -o CMakeFiles/TrafficSimulator.dir/Street.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Street.cpp -o CMakeFiles/TrafficSimulator.dir/Street.cpp.s
 
 CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.o: CMakeFiles/TrafficSimulator.dir/flags.make
 CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.o: ../Vehicle.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator/Vehicle.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Vehicle.cpp
 
 CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator/Vehicle.cpp > CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Vehicle.cpp > CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.i
 
 CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator/Vehicle.cpp -o CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Vehicle.cpp -o CMakeFiles/TrafficSimulator.dir/Vehicle.cpp.s
 
 CMakeFiles/TrafficSimulator.dir/Influence.cpp.o: CMakeFiles/TrafficSimulator.dir/flags.make
 CMakeFiles/TrafficSimulator.dir/Influence.cpp.o: ../Influence.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/TrafficSimulator.dir/Influence.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/Influence.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator/Influence.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/TrafficSimulator.dir/Influence.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/Influence.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Influence.cpp
 
 CMakeFiles/TrafficSimulator.dir/Influence.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TrafficSimulator.dir/Influence.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator/Influence.cpp > CMakeFiles/TrafficSimulator.dir/Influence.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Influence.cpp > CMakeFiles/TrafficSimulator.dir/Influence.cpp.i
 
 CMakeFiles/TrafficSimulator.dir/Influence.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TrafficSimulator.dir/Influence.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator/Influence.cpp -o CMakeFiles/TrafficSimulator.dir/Influence.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Influence.cpp -o CMakeFiles/TrafficSimulator.dir/Influence.cpp.s
 
 CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.o: CMakeFiles/TrafficSimulator.dir/flags.make
 CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.o: ../TransportVehicle.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator/TransportVehicle.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/TransportVehicle.cpp
 
 CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator/TransportVehicle.cpp > CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/TransportVehicle.cpp > CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.i
 
 CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator/TransportVehicle.cpp -o CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/TransportVehicle.cpp -o CMakeFiles/TrafficSimulator.dir/TransportVehicle.cpp.s
 
 CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.o: CMakeFiles/TrafficSimulator.dir/flags.make
 CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.o: ../SpecialVehicle.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator/SpecialVehicle.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/SpecialVehicle.cpp
 
 CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator/SpecialVehicle.cpp > CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/SpecialVehicle.cpp > CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.i
 
 CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator/SpecialVehicle.cpp -o CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/SpecialVehicle.cpp -o CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.s
 
 CMakeFiles/TrafficSimulator.dir/Network.cpp.o: CMakeFiles/TrafficSimulator.dir/flags.make
 CMakeFiles/TrafficSimulator.dir/Network.cpp.o: ../Network.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/TrafficSimulator.dir/Network.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/Network.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator/Network.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/TrafficSimulator.dir/Network.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/Network.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Network.cpp
 
 CMakeFiles/TrafficSimulator.dir/Network.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TrafficSimulator.dir/Network.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator/Network.cpp > CMakeFiles/TrafficSimulator.dir/Network.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Network.cpp > CMakeFiles/TrafficSimulator.dir/Network.cpp.i
 
 CMakeFiles/TrafficSimulator.dir/Network.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TrafficSimulator.dir/Network.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator/Network.cpp -o CMakeFiles/TrafficSimulator.dir/Network.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Network.cpp -o CMakeFiles/TrafficSimulator.dir/Network.cpp.s
 
 CMakeFiles/TrafficSimulator.dir/Intersection.cpp.o: CMakeFiles/TrafficSimulator.dir/flags.make
 CMakeFiles/TrafficSimulator.dir/Intersection.cpp.o: ../Intersection.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/TrafficSimulator.dir/Intersection.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/Intersection.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator/Intersection.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/TrafficSimulator.dir/Intersection.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/Intersection.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Intersection.cpp
 
 CMakeFiles/TrafficSimulator.dir/Intersection.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TrafficSimulator.dir/Intersection.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator/Intersection.cpp > CMakeFiles/TrafficSimulator.dir/Intersection.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Intersection.cpp > CMakeFiles/TrafficSimulator.dir/Intersection.cpp.i
 
 CMakeFiles/TrafficSimulator.dir/Intersection.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TrafficSimulator.dir/Intersection.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator/Intersection.cpp -o CMakeFiles/TrafficSimulator.dir/Intersection.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Intersection.cpp -o CMakeFiles/TrafficSimulator.dir/Intersection.cpp.s
 
 CMakeFiles/TrafficSimulator.dir/Simulation.cpp.o: CMakeFiles/TrafficSimulator.dir/flags.make
 CMakeFiles/TrafficSimulator.dir/Simulation.cpp.o: ../Simulation.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/TrafficSimulator.dir/Simulation.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/Simulation.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator/Simulation.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/TrafficSimulator.dir/Simulation.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/Simulation.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Simulation.cpp
 
 CMakeFiles/TrafficSimulator.dir/Simulation.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TrafficSimulator.dir/Simulation.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator/Simulation.cpp > CMakeFiles/TrafficSimulator.dir/Simulation.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Simulation.cpp > CMakeFiles/TrafficSimulator.dir/Simulation.cpp.i
 
 CMakeFiles/TrafficSimulator.dir/Simulation.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TrafficSimulator.dir/Simulation.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator/Simulation.cpp -o CMakeFiles/TrafficSimulator.dir/Simulation.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Simulation.cpp -o CMakeFiles/TrafficSimulator.dir/Simulation.cpp.s
 
 CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o: CMakeFiles/TrafficSimulator.dir/flags.make
 CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o: ../jsonParser.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator/jsonParser.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/jsonParser.cpp
 
 CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator/jsonParser.cpp > CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/jsonParser.cpp > CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.i
 
 CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator/jsonParser.cpp -o CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/jsonParser.cpp -o CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.s
 
 CMakeFiles/TrafficSimulator.dir/Util.cpp.o: CMakeFiles/TrafficSimulator.dir/flags.make
 CMakeFiles/TrafficSimulator.dir/Util.cpp.o: ../Util.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/TrafficSimulator.dir/Util.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/Util.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator/Util.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/TrafficSimulator.dir/Util.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/Util.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Util.cpp
 
 CMakeFiles/TrafficSimulator.dir/Util.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TrafficSimulator.dir/Util.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator/Util.cpp > CMakeFiles/TrafficSimulator.dir/Util.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Util.cpp > CMakeFiles/TrafficSimulator.dir/Util.cpp.i
 
 CMakeFiles/TrafficSimulator.dir/Util.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TrafficSimulator.dir/Util.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator/Util.cpp -o CMakeFiles/TrafficSimulator.dir/Util.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Util.cpp -o CMakeFiles/TrafficSimulator.dir/Util.cpp.s
+
+CMakeFiles/TrafficSimulator.dir/StateElimination.cpp.o: CMakeFiles/TrafficSimulator.dir/flags.make
+CMakeFiles/TrafficSimulator.dir/StateElimination.cpp.o: ../StateElimination.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/TrafficSimulator.dir/StateElimination.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/StateElimination.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/StateElimination.cpp
+
+CMakeFiles/TrafficSimulator.dir/StateElimination.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TrafficSimulator.dir/StateElimination.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/StateElimination.cpp > CMakeFiles/TrafficSimulator.dir/StateElimination.cpp.i
+
+CMakeFiles/TrafficSimulator.dir/StateElimination.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TrafficSimulator.dir/StateElimination.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/StateElimination.cpp -o CMakeFiles/TrafficSimulator.dir/StateElimination.cpp.s
+
+CMakeFiles/TrafficSimulator.dir/ElimStreet.cpp.o: CMakeFiles/TrafficSimulator.dir/flags.make
+CMakeFiles/TrafficSimulator.dir/ElimStreet.cpp.o: ../ElimStreet.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/TrafficSimulator.dir/ElimStreet.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/TrafficSimulator.dir/ElimStreet.cpp.o -c /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/ElimStreet.cpp
+
+CMakeFiles/TrafficSimulator.dir/ElimStreet.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/TrafficSimulator.dir/ElimStreet.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/ElimStreet.cpp > CMakeFiles/TrafficSimulator.dir/ElimStreet.cpp.i
+
+CMakeFiles/TrafficSimulator.dir/ElimStreet.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/TrafficSimulator.dir/ElimStreet.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/ElimStreet.cpp -o CMakeFiles/TrafficSimulator.dir/ElimStreet.cpp.s
 
 # Object files for target TrafficSimulator
 TrafficSimulator_OBJECTS = \
@@ -212,7 +238,9 @@ TrafficSimulator_OBJECTS = \
 "CMakeFiles/TrafficSimulator.dir/Intersection.cpp.o" \
 "CMakeFiles/TrafficSimulator.dir/Simulation.cpp.o" \
 "CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o" \
-"CMakeFiles/TrafficSimulator.dir/Util.cpp.o"
+"CMakeFiles/TrafficSimulator.dir/Util.cpp.o" \
+"CMakeFiles/TrafficSimulator.dir/StateElimination.cpp.o" \
+"CMakeFiles/TrafficSimulator.dir/ElimStreet.cpp.o"
 
 # External object files for target TrafficSimulator
 TrafficSimulator_EXTERNAL_OBJECTS =
@@ -228,9 +256,11 @@ TrafficSimulator: CMakeFiles/TrafficSimulator.dir/Intersection.cpp.o
 TrafficSimulator: CMakeFiles/TrafficSimulator.dir/Simulation.cpp.o
 TrafficSimulator: CMakeFiles/TrafficSimulator.dir/jsonParser.cpp.o
 TrafficSimulator: CMakeFiles/TrafficSimulator.dir/Util.cpp.o
+TrafficSimulator: CMakeFiles/TrafficSimulator.dir/StateElimination.cpp.o
+TrafficSimulator: CMakeFiles/TrafficSimulator.dir/ElimStreet.cpp.o
 TrafficSimulator: CMakeFiles/TrafficSimulator.dir/build.make
 TrafficSimulator: CMakeFiles/TrafficSimulator.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Linking CXX executable TrafficSimulator"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX executable TrafficSimulator"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/TrafficSimulator.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -243,6 +273,6 @@ CMakeFiles/TrafficSimulator.dir/clean:
 .PHONY : CMakeFiles/TrafficSimulator.dir/clean
 
 CMakeFiles/TrafficSimulator.dir/depend:
-	cd /home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/elthomaso/CLionProjects/TrafficSimulator /home/elthomaso/CLionProjects/TrafficSimulator /home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug /home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug /home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/CMakeFiles/TrafficSimulator.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/elthomaso/CLionProjects/TrafficSimulator_StateElim /home/elthomaso/CLionProjects/TrafficSimulator_StateElim /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug /home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/CMakeFiles/TrafficSimulator.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/TrafficSimulator.dir/depend
 

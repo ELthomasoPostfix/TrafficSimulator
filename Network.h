@@ -27,8 +27,9 @@ public:
     void doMainLoop(int duration, std::string& ofName, std::string& ofName2, std::string& ofName3);
 
 
-    void toDot(std::ofstream& fstream) const;
-    void toPNG(const std::string& fileName) const;
+    void toDot(std::ofstream& outputFile) const;
+    void toDotElim(std::ofstream& outputFile) const;
+    void toPNG(const std::string& dotFileName) const;
 
 private:
     void writeAllVehicleChains(std::ofstream& vehicleChainStream) const;

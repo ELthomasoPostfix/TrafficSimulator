@@ -250,6 +250,9 @@ std::vector<Street *> Intersection::getAllEnteringStreets() const {
     return enteringStreets;
 }
 bool Intersection::isLeavingStreet(const Street *street) const {
+    // two streets that are not leaving:
+    // ==> one way street that starts in (prev ==) another intersection and ends in (next ==) this intersection
+    // ==> one way street that starts in (prev ==) this intersection and ends in (next ==) this intersection
     return !(!street->isTwoWay() and street->getNextIntersection() == this);
 }
 std::vector<Street *> Intersection::getAllLeavingStreets() const {
@@ -338,7 +341,26 @@ Street *Intersection::findStreet(const Intersection *intersection1, const Inters
     }
     return nullptr;
 }
-
+bool Intersection::removeStreet(Street *toRemove) {
+    std::vector<Street*>::iterator streetIt;
+    for (streetIt = _streets.begin(); streetIt != _streets.end(); ++streetIt) {
+        if (*streetIt == toRemove) {
+            _streets.erase(streetIt);
+            return true;
+        }
+    }
+    return false;
+}
+bool Intersection::removeStreet(const Street *toRemove) {
+    std::vector<Street*>::iterator streetIt;
+    for (streetIt = _streets.begin(); streetIt != _streets.end(); ++streetIt) {
+        if (*streetIt == toRemove) {
+            _streets.erase(streetIt);
+            return true;
+        }
+    }
+    return false;
+}
 
 
 void Intersection::setTrafficLights(const Influence *trafficLights) {
@@ -435,4 +457,5 @@ void Intersection::cycleTrafficLightsPair() {
         }
     }
 }
+
 

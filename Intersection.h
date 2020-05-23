@@ -88,6 +88,8 @@ public:
     bool addStreet(Street* newStreet);
     Street* findStreet(const Intersection* intersection1, const Intersection* intersection2, const streetType& streetType,
                        bool twoWay) const;
+    bool removeStreet(Street* toRemove);
+    bool removeStreet(const Street* toRemove);
 
     void setTrafficLights(const Influence* trafficLights);
     const Influence* getTrafficLightInfluence() const;

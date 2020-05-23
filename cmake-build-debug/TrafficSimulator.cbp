@@ -8,38 +8,38 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug"/>
+				<Option working_dir="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug"/>
+				<Option working_dir="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug"/>
+				<Option working_dir="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="TrafficSimulator">
-				<Option output="/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/TrafficSimulator" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug"/>
+				<Option output="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/TrafficSimulator" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -54,15 +54,15 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 TrafficSimulator"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 TrafficSimulator"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="TrafficSimulator/fast">
-				<Option output="/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/TrafficSimulator" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug"/>
+				<Option output="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/TrafficSimulator" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -77,77 +77,89 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 TrafficSimulator/fast"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 TrafficSimulator/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Influence.cpp">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/ElimStreet.cpp">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Influence.h">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/ElimStreet.h">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Intersection.cpp">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Influence.cpp">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Intersection.h">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Influence.h">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Network.cpp">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Intersection.cpp">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Network.h">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Intersection.h">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Simulation.cpp">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Network.cpp">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Simulation.h">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Network.h">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/SpecialVehicle.cpp">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Simulation.cpp">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/SpecialVehicle.h">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Simulation.h">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Street.cpp">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/SpecialVehicle.cpp">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Street.h">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/SpecialVehicle.h">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/TransportVehicle.cpp">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/StateElimination.cpp">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/TransportVehicle.h">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/StateElimination.h">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Util.cpp">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Street.cpp">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Util.h">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Street.h">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Vehicle.cpp">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/TransportVehicle.cpp">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/Vehicle.h">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/TransportVehicle.h">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/jsonParser.cpp">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Util.cpp">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/jsonParser.h">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Util.h">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/main.cpp">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Vehicle.cpp">
 			<Option target="TrafficSimulator"/>
 		</Unit>
-		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator/CMakeLists.txt">
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Vehicle.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/jsonParser.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/jsonParser.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/main.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

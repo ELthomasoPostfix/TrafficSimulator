@@ -50,32 +50,62 @@ void Network::doMainLoop(const int duration, std::string& ofName, std::string& o
 }
 
 
-void Network::toDot(std::ofstream &ofstream) const {
+void Network::toDot(std::ofstream &outputFile) const {
 
-    if (ofstream.is_open()) {
-        ofstream << "digraph {\nrankdir=LR\n";
+    if (outputFile.is_open()) {
+        outputFile << "digraph {\nrankdir=LR\n";
 
         std::vector<Intersection *> allIntersections = getNetwork();
 
         for (Intersection *intersection : allIntersections) {
-            ofstream << "\"" << intersection->getName() << "\"" << "\n";
+            outputFile << "\"" << intersection->getName() << "\"" << "\n";
             for (Street *street : intersection->getStreets()) {
+                // a single street only has one previous intersection pointer, so even if two intersections
+                // share a street, it will only be added to the file once
                 if (street->getPrevIntersection() == intersection) {
                     std::string both;
                     if (street->isTwoWay()) both = " dir=\"both\"";
-                    ofstream << "\"" << intersection->getName() << "\"" << "->" << "\""
+                    outputFile << "\"" << intersection->getName() << "\"" << "->" << "\""
                              << street->getNextIntersection()->getName() << "\""
                              << " [label=\"" << street->typeToName() << "\"" << both << "]" << "\n";
                 }
             }
         }
-        ofstream << "}";
+        outputFile << "}";
     } else {
         std::cerr << "You cannot write to a closed ofstream." << std::endl;
     }
 }
-void Network::toPNG(const std::string &fileName) const {
-    std::string commandStr = "dot -Tpng -O " + fileName;
+void Network::toDotElim(std::ofstream &outputFile) const {
+
+    if (outputFile.is_open()) {
+        outputFile << "digraph {\nrankdir=LR\n";
+
+        std::vector<Intersection *> allIntersections = getNetwork();
+
+        for (Intersection *intersection : allIntersections) {
+            outputFile << "\"" << intersection->getName() << "\"" << "\n";
+            for (Street *street : intersection->getStreets()) {
+                if (street != nullptr) {
+                    // a single street only has one previous intersection pointer, so even if two intersections
+                    // share a street, it will only be added to the file once
+                    if (street->getPrevIntersection() == intersection) {
+                        std::string both;
+                        if (street->isTwoWay()) both = " dir=\"both\"";
+                        outputFile << "\"" << intersection->getName() << "\"" << "->" << "\""
+                                   << street->getNextIntersection()->getName() << "\""
+                                   << " [label=\"" << street->getEStreetName() << "\"" << both << "]" << "\n";
+                    }
+                }
+            }
+        }
+        outputFile << "}";
+    } else {
+        std::cerr << "You cannot write to a closed ofstream." << std::endl;
+    }
+}
+void Network::toPNG(const std::string &dotFileName) const {
+    std::string commandStr = "dot -Tpng -O " + dotFileName;
     const char *command = commandStr.c_str();
     system(command);
 }
