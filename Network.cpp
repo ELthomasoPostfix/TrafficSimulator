@@ -131,7 +131,10 @@ void Network::onWrite(std::ofstream &networkOUTPUT) {
 
 
 
-Network *Network::getSubNetwork(Intersection *startIntersection, Intersection *endIntersection) {
+Network *Network::getSubNetwork(Intersection *startIntersection, Intersection *endIntersection, const float extraStepModifier) {
+    int streetsToEnd = 0;
+    int extraSteps = 1;
+    bool found = false;
     Network *subNetwork = new Network();
     std::vector<Intersection *> currentIntersections;
     // a list of <copiedIntersection, otherIntersection> Intersection pairs
@@ -144,7 +147,7 @@ Network *Network::getSubNetwork(Intersection *startIntersection, Intersection *e
         // add copied start intersection
         Intersection* newStartIntersection = new Intersection(startIntersection->getName());
         *newStartIntersection = *startIntersection;
-        startIntersection->setMultipurposeMark(true);
+        startIntersection->setMultipurposeMarker(true);
         subNetwork->addIntersection(newStartIntersection);
 
         newStartIntersection->clearStreets();
@@ -155,9 +158,11 @@ Network *Network::getSubNetwork(Intersection *startIntersection, Intersection *e
         currentIntersections.emplace_back(startIntersection);
         copiedIntersections.emplace_back(newStartIntersection);
 
-        // keep adding to the sub network until the end intersection has been reached
-        while (!isIn(endIntersection, currentIntersections)) {
+        found = isIn(endIntersection, currentIntersections);
 
+        // keep adding to the sub network until the end intersection has been reached
+        while (!found or streetsToEnd < extraSteps) {
+            std::cout << "--------" << streetsToEnd <<  "--------" << std::endl;
             std::vector<Intersection *> nextIntersections;
             // take every leaving transition/street in order to find the end intersection.
             // But never add the same transitions twice.
@@ -168,9 +173,8 @@ Network *Network::getSubNetwork(Intersection *startIntersection, Intersection *e
                     // only handle leaving streets
                     if (currIntersec->isLeavingStreet(street)) {
                         Intersection *otherIntersec = street->getOtherIntersection(currIntersec);
-                        std::cout << " and other intersec " << otherIntersec->getName() << " is leaving" << std::endl; // TODO delete
                         // other intersection exists and has not yet been visited/added to the network
-                        if (otherIntersec != nullptr and !otherIntersec->isMultipurposeMark()) {
+                        if (otherIntersec != nullptr and !otherIntersec->isMultipurposeMarker()) {
                     // TODO      currIntersec -----street-----> otherIntersec
                     //     currCopiedIntersec --copiedStreet--> copiedIntersec
 
@@ -179,6 +183,7 @@ Network *Network::getSubNetwork(Intersection *startIntersection, Intersection *e
                             *copiedIntersection = *otherIntersec;
                             Street* copiedStreet = new Street(nullptr, nullptr, A);
                             *copiedStreet = *street;  // still has vehicle pointers, etc ...
+                            street->setMultipurposeMarker(true);
 
                             // the new current intersections
                             nextIntersections.emplace_back(otherIntersec);
@@ -202,14 +207,14 @@ Network *Network::getSubNetwork(Intersection *startIntersection, Intersection *e
                                 copiedStreet->setPrevIntersection(copiedIntersection);
                                 copiedStreet->setNextIntersection(currCopiedIntersec);
                             }
-                            otherIntersec->setMultipurposeMark(true);
+                            otherIntersec->setMultipurposeMarker(true);
                             subNetwork->addIntersection(copiedIntersection);
 
                         // the current intersec has already been copied and so has the street's other intersec
                         // ==> only copy a new street for both intersections
-                        // ==> don't do this if the street is a twWay street and current intersec is the next of the street
-                        } else if (otherIntersec != nullptr and otherIntersec->isMultipurposeMark() and !(street->isTwoWay()
-                            and street->getNextIntersection() == currIntersec)) {
+                        // ==> don't do this if the street has already been copied
+                        } else if (otherIntersec != nullptr and otherIntersec->isMultipurposeMarker() and
+                                   !street->isMultipurposeMarker()) {
                     // TODO     currCopiedIntersec  --copiedStreet-->  otherCopiedIntersec
 
                             Intersection* otherCopiedIntersec;
@@ -224,6 +229,7 @@ Network *Network::getSubNetwork(Intersection *startIntersection, Intersection *e
                             Street cpdStreet = *street;
                             Street* copiedStreet = new Street(nullptr, nullptr, A);
                             *copiedStreet = cpdStreet;
+                            street->setMultipurposeMarker(true);
 
                             currCopiedIntersec->addStreet(copiedStreet);
                             otherCopiedIntersec->addStreet(copiedStreet);
@@ -237,17 +243,38 @@ Network *Network::getSubNetwork(Intersection *startIntersection, Intersection *e
                                 copiedStreet->setPrevIntersection(otherCopiedIntersec);
                             }
                         }
-                    } else {    // TODO delete
-                        std::cout << "is not leaving" << std::endl;
                     }
                 }
                 ++currIntersecCounter;
             }
             currentIntersections = nextIntersections;
+            // if no more reachable intersections exist, stop.
+            if (nextIntersections.empty()) {
+                break;
+            }
             copiedIntersections = nextCopiedIntersections;
             nextIntersections.clear();
             nextCopiedIntersections.clear();
+            if (!found) {
+                found = isIn(endIntersection, currentIntersections);
+                ++streetsToEnd;
+                ++extraSteps;
+                // if the modifier is 1 or less, no additional steps can ever be taken,
+                // if modifier is high enough to let extraSteps exceed the 1 step difference,
+                // more additional steps will executed
+                if (found) {
+                    extraSteps =  streetsToEnd * extraStepModifier;
+                }
+            } else {
+                ++streetsToEnd;
+            }
         }
+    }
+    for (Intersection* intersection : getNetwork()) {
+        for (Street* street : intersection->getStreets()) {
+            street->setMultipurposeMarker(false);
+        }
+        intersection->setMultipurposeMarker(false);
     }
     // if nullptr, then the start intersection and tne end intersection are already the same
     return subNetwork;

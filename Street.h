@@ -42,6 +42,8 @@ class Street {
     Vehicle* _frontOccupant[2];
     Vehicle* _backOccupant[2];
 
+    bool _multipurposeMarker;
+
 public:
 
     Street(Intersection* prev, Intersection* next, streetType type);
@@ -118,6 +120,9 @@ public:
     virtual void addIntersection(const Intersection* newIntersection);
 
     virtual const std::vector<const Street *>* getLoops() const;
+
+    bool isMultipurposeMarker() const;
+    void setMultipurposeMarker(bool multipurposeMarker);
 };
 
 

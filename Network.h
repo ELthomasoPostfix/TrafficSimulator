@@ -33,7 +33,7 @@ public:
 
     void onWrite(std::ofstream& networkOUTPUT);
 
-    Network* getSubNetwork(Intersection* startIntersection, Intersection* endIntersection);
+    Network* getSubNetwork(Intersection* startIntersection, Intersection* endIntersection, float extraStepMoodifier);
 
     bool isIn(const Intersection* intersection, const std::vector<Intersection*>& intersections);
 private:

@@ -5,7 +5,7 @@
 
 int main() {
 
-    std::string fileNm = "STELlarger";
+    std::string fileNm = "STEL";
 
     jsonParser parser;
     Network* city2 = parser.processJSON("../test_files/" + fileNm + ".json");
@@ -29,7 +29,7 @@ int main() {
     const std::vector<Intersection*>& network = city2->getNetwork();
 
     // ########## sub network ###########
-    Network* city3 = city2->getSubNetwork(network[0], network[2]);
+    Network* city3 = city2->getSubNetwork(network[0], network[3], 1);
     std::string subNetworkOUTPUT = "subNet";
 
     STELstream.open(subNetworkOUTPUT + ".dot");

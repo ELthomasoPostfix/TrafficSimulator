@@ -20,7 +20,7 @@ class Intersection {
 
     std::vector<Street*> _streets;
 
-    bool _multipurposeMark;
+    bool _multipurposeMarker;
 public:
     Intersection(std::string  name);
 
@@ -114,8 +114,8 @@ public:
     void setCurrentPair(const std::pair<Street *, Street *> &currentPair);
     void cycleTrafficLightsPair();
 
-    bool isMultipurposeMark() const;
-    void setMultipurposeMark(bool multipurposeMark);
+    bool isMultipurposeMarker() const;
+    void setMultipurposeMarker(bool multipurposeMark);
 };
 
 

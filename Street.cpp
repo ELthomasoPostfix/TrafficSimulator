@@ -9,6 +9,7 @@
 Street::Street(Intersection* prev, Intersection* next, streetType type) : _prevIntersection(prev), _nextIntersection(next),
                                                                           _type(type) {
     _hasSpeedLimit = false;
+    _multipurposeMarker = false;
 }
 
 
@@ -333,6 +334,13 @@ void Street::addStreet(const Street *newStreet) {}
 
 const std::vector<const Street *>* Street::getLoops() const {
     return nullptr;
+}
+
+bool Street::isMultipurposeMarker() const {
+    return _multipurposeMarker;
+}
+void Street::setMultipurposeMarker(bool multipurposeMarker) {
+    _multipurposeMarker = multipurposeMarker;
 }
 
 
