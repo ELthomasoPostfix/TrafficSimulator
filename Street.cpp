@@ -163,6 +163,11 @@ bool Street::removeFromLane(Vehicle *toRemoveVehicle, int lane) {
     }
     return false;
 }
+void Street::clearLanes() {
+    for (std::vector<Vehicle*>& lane : _lanes) {
+        lane.clear();
+    }
+}
 
 
 const std::vector<std::vector<Vehicle *>> &Street::getEntrants() const {

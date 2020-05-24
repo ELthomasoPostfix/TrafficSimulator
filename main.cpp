@@ -26,8 +26,19 @@ int main() {
     STELstream.close();
 
 
-    StateElimination stateElimination;
     const std::vector<Intersection*>& network = city2->getNetwork();
+
+    // ########## sub network ###########
+    Network* city3 = city2->getSubNetwork(network[0], network[2]);
+    std::string subNetworkOUTPUT = "subNet";
+
+    STELstream.open(subNetworkOUTPUT + ".dot");
+    city3->toDot(STELstream);
+    STELstream.close();
+    // ##################################
+
+
+    StateElimination stateElimination;
     stateElimination.eliminate(city2, network[0], network[network.size()-1]);
     std::cout << "start: " << network[0]->getName() << "   end: " << network[network.size()-1]->getName() << std::endl;
 

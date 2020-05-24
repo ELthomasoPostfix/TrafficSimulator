@@ -19,6 +19,8 @@ class Intersection {
     int _trafficLightCounter;
 
     std::vector<Street*> _streets;
+
+    bool _multipurposeMark;
 public:
     Intersection(std::string  name);
 
@@ -93,6 +95,7 @@ public:
                        bool twoWay) const;
     bool removeStreet(Street* toRemove);
     bool removeStreet(const Street* toRemove);
+    void clearStreets();
 
     void setTrafficLights(const Influence* trafficLights);
     const Influence* getTrafficLightInfluence() const;
@@ -110,6 +113,9 @@ public:
     const std::pair<Street *, Street *> &getCurrentPair() const;
     void setCurrentPair(const std::pair<Street *, Street *> &currentPair);
     void cycleTrafficLightsPair();
+
+    bool isMultipurposeMark() const;
+    void setMultipurposeMark(bool multipurposeMark);
 };
 
 

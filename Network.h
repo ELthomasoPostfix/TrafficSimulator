@@ -33,6 +33,9 @@ public:
 
     void onWrite(std::ofstream& networkOUTPUT);
 
+    Network* getSubNetwork(Intersection* startIntersection, Intersection* endIntersection);
+
+    bool isIn(const Intersection* intersection, const std::vector<Intersection*>& intersections);
 private:
     void writeAllVehicleChains(std::ofstream& vehicleChainStream) const;
     void findFrontVehicles(std::vector<const Vehicle*>& frontVehicles, std::vector<bool>& chainWasWritten) const;

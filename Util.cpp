@@ -13,6 +13,13 @@ std::string Util::boolToString(const bool b) {
     }
 }
 
+std::string Util::boolToArrowString(const bool isTwoWay, const bool LR) {
+    std::string arrow = "<--";
+    if (isTwoWay) arrow = "<-->";
+    else if (LR) arrow = "-->";
+    return arrow;
+}
+
 std::string Util::isTwoWayToString(bool twoWay) {
     if (twoWay) {
         return "twoWay";

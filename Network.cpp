@@ -65,9 +65,12 @@ void Network::toDot(std::ofstream &outputFile) const {
                 if (street->getPrevIntersection() == intersection) {
                     std::string both;
                     if (street->isTwoWay()) both = " dir=\"both\"";
+                    std::string extraLabel = street->getPrevIntersection()->getName() +
+                                             Util::boolToArrowString(street->isTwoWay(), true) +
+                                             street->getNextIntersection()->getName();
                     outputFile << "\"" << intersection->getName() << "\"" << "->" << "\""
                              << street->getNextIntersection()->getName() << "\""
-                             << " [label=\"" << street->typeToName() << "\"" << both << "]" << "\n";
+                             << " [label=\"" << street->typeToName() << " " << extraLabel << " \"" << both << "]" << "\n";
                 }
             }
         }
@@ -119,6 +122,144 @@ void Network::onWrite(std::ofstream &networkOUTPUT) {
         intersection->onWrite(networkOUTPUT, "   ");
         networkOUTPUT << "---------\n";
     }
+    networkOUTPUT << "Vehicles:\n";
+    for (Vehicle* vehicle : getVehicles()) {
+        vehicle->onWrite(networkOUTPUT);
+        networkOUTPUT << "---------\n";
+    }
+}
+
+
+
+Network *Network::getSubNetwork(Intersection *startIntersection, Intersection *endIntersection) {
+    Network *subNetwork = new Network();
+    std::vector<Intersection *> currentIntersections;
+    // a list of <copiedIntersection, otherIntersection> Intersection pairs
+    std::vector<std::pair<Intersection*, Intersection*>> existingCopies;
+    // copied version of current Intersections
+    std::vector<Intersection *> copiedIntersections;
+    // the new list of copied intersections, replaces copiedIntersections at the end of a curr Intersec loop iteration
+    std::vector<Intersection *> nextCopiedIntersections;
+    if (startIntersection != endIntersection) {
+        // add copied start intersection
+        Intersection* newStartIntersection = new Intersection(startIntersection->getName());
+        *newStartIntersection = *startIntersection;
+        startIntersection->setMultipurposeMark(true);
+        subNetwork->addIntersection(newStartIntersection);
+
+        newStartIntersection->clearStreets();
+
+        std::pair<Intersection*, Intersection*> pair(newStartIntersection, startIntersection);
+
+        existingCopies.emplace_back(pair);
+        currentIntersections.emplace_back(startIntersection);
+        copiedIntersections.emplace_back(newStartIntersection);
+
+        // keep adding to the sub network until the end intersection has been reached
+        while (!isIn(endIntersection, currentIntersections)) {
+
+            std::vector<Intersection *> nextIntersections;
+            // take every leaving transition/street in order to find the end intersection.
+            // But never add the same transitions twice.
+            int currIntersecCounter = 0;
+            for (Intersection *currIntersec : currentIntersections) {
+                Intersection* currCopiedIntersec = copiedIntersections[currIntersecCounter];
+                for (Street *street : currIntersec->getStreets()) {
+                    // only handle leaving streets
+                    if (currIntersec->isLeavingStreet(street)) {
+                        Intersection *otherIntersec = street->getOtherIntersection(currIntersec);
+                        std::cout << " and other intersec " << otherIntersec->getName() << " is leaving" << std::endl; // TODO delete
+                        // other intersection exists and has not yet been visited/added to the network
+                        if (otherIntersec != nullptr and !otherIntersec->isMultipurposeMark()) {
+                    // TODO      currIntersec -----street-----> otherIntersec
+                    //     currCopiedIntersec --copiedStreet--> copiedIntersec
+
+                            // copy existing components
+                            Intersection* copiedIntersection = new Intersection(otherIntersec->getName());
+                            *copiedIntersection = *otherIntersec;
+                            Street* copiedStreet = new Street(nullptr, nullptr, A);
+                            *copiedStreet = *street;  // still has vehicle pointers, etc ...
+
+                            // the new current intersections
+                            nextIntersections.emplace_back(otherIntersec);
+                            // the copies that will act as prev or next for the following copies
+                            nextCopiedIntersections.emplace_back(copiedIntersection);
+
+                            std::pair<Intersection*, Intersection*> pair2(copiedIntersection, otherIntersec);
+                            existingCopies.emplace_back(pair2);
+
+                            // only gradually add
+                            copiedIntersection->clearStreets();
+                            copiedIntersection->addStreet(copiedStreet);
+
+                            currCopiedIntersec->addStreet(copiedStreet);
+
+                            // change the old prev and next pointers to new ones
+                            if (otherIntersec == copiedStreet->getNextIntersection()) {
+                                copiedStreet->setPrevIntersection(currCopiedIntersec);
+                                copiedStreet->setNextIntersection(copiedIntersection);
+                             } else {
+                                copiedStreet->setPrevIntersection(copiedIntersection);
+                                copiedStreet->setNextIntersection(currCopiedIntersec);
+                            }
+                            otherIntersec->setMultipurposeMark(true);
+                            subNetwork->addIntersection(copiedIntersection);
+
+                        // the current intersec has already been copied and so has the street's other intersec
+                        // ==> only copy a new street for both intersections
+                        // ==> don't do this if the street is a twWay street and current intersec is the next of the street
+                        } else if (otherIntersec != nullptr and otherIntersec->isMultipurposeMark() and !(street->isTwoWay()
+                            and street->getNextIntersection() == currIntersec)) {
+                    // TODO     currCopiedIntersec  --copiedStreet-->  otherCopiedIntersec
+
+                            Intersection* otherCopiedIntersec;
+                            for (const std::pair<Intersection*, Intersection*>& copyPair : existingCopies) {
+                                if (copyPair.second == otherIntersec) {
+                                    otherCopiedIntersec = copyPair.first;
+                                    break;
+                                }
+                            }
+
+                            // only add new street????
+                            Street cpdStreet = *street;
+                            Street* copiedStreet = new Street(nullptr, nullptr, A);
+                            *copiedStreet = cpdStreet;
+
+                            currCopiedIntersec->addStreet(copiedStreet);
+                            otherCopiedIntersec->addStreet(copiedStreet);
+
+
+                            if (street->getPrevIntersection() == currIntersec) {
+                                copiedStreet->setPrevIntersection(currCopiedIntersec);
+                                copiedStreet->setNextIntersection(otherCopiedIntersec);
+                            } else {
+                                copiedStreet->setNextIntersection(currCopiedIntersec);
+                                copiedStreet->setPrevIntersection(otherCopiedIntersec);
+                            }
+                        }
+                    } else {    // TODO delete
+                        std::cout << "is not leaving" << std::endl;
+                    }
+                }
+                ++currIntersecCounter;
+            }
+            currentIntersections = nextIntersections;
+            copiedIntersections = nextCopiedIntersections;
+            nextIntersections.clear();
+            nextCopiedIntersections.clear();
+        }
+    }
+    // if nullptr, then the start intersection and tne end intersection are already the same
+    return subNetwork;
+}
+
+bool Network::isIn(const Intersection *intersection, const std::vector<Intersection *> &intersections) {
+    for (Intersection* intersec : intersections) {
+        if (intersec == intersection) {
+            return true;
+        }
+    }
+    return false;
 }
 
 

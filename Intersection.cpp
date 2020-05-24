@@ -10,6 +10,7 @@
 Intersection::Intersection(std::string  name): _name(std::move(name)) {
     _trafficScore = 0;
     _trafficLightCounter = 0;
+    _multipurposeMark = false;
 }
 
 void Intersection::emitInfluences(std::ofstream& trafficLightStream) {
@@ -407,6 +408,9 @@ bool Intersection::removeStreet(const Street *toRemove) {
     }
     return false;
 }
+void Intersection::clearStreets() {
+    _streets.clear();
+}
 
 
 void Intersection::setTrafficLights(const Influence *trafficLights) {
@@ -502,6 +506,13 @@ void Intersection::cycleTrafficLightsPair() {
             break;
         }
     }
+}
+
+bool Intersection::isMultipurposeMark() const {
+    return _multipurposeMark;
+}
+void Intersection::setMultipurposeMark(bool multipurposeMark) {
+    _multipurposeMark = multipurposeMark;
 }
 
 

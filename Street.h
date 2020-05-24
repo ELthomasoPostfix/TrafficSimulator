@@ -80,6 +80,7 @@ public:
 
     const std::vector<std::vector<Vehicle *>> &getLanes() const;
     bool removeFromLane(Vehicle* toRemoveVehicle, int lane);
+    void clearLanes();
 
     const std::vector<std::vector<Vehicle *>> &getEntrants() const;
     void addEntrant(int indexWhenLeaving, Vehicle* entrant);

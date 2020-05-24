@@ -15,6 +15,8 @@
     public:
         static std::string boolToString(bool b);
 
+        static std::string boolToArrowString(bool isTwoWay, bool LR);
+
         static std::string isTwoWayToString(bool twoWay);
     };
 
