@@ -31,6 +31,8 @@ public:
     void toDotElim(std::ofstream& outputFile) const;
     void toPNG(const std::string& dotFileName) const;
 
+    void onWrite(std::ofstream& networkOUTPUT);
+
 private:
     void writeAllVehicleChains(std::ofstream& vehicleChainStream) const;
     void findFrontVehicles(std::vector<const Vehicle*>& frontVehicles, std::vector<bool>& chainWasWritten) const;

@@ -164,8 +164,8 @@ void StateElimination::connectZeroElimState(Street *leavingStreet, Street *enter
     ElimStreet* newElimStreet = new ElimStreet(prevIntersection, nextIntersection, A);
     // both streets need to be added, as well as the to eliminate intersection
     newElimStreet->addStreet(enteringStreet);
-    newElimStreet->addStreet(leavingStreet);
     newElimStreet->addIntersection(intersection);
+    newElimStreet->addStreet(leavingStreet);
 
     // add possible loops to the newElimStreet
     newElimStreet->setLoops(loopStreets);
@@ -180,6 +180,7 @@ void StateElimination::connectZeroElimState(Street *leavingStreet, Street *enter
     if (prevIntersection != nextIntersection) {
         nextIntersection->addStreet(newElimStreet);
     }
+    std::cout << "s: " << intersection->getName() << "   ";
     newElimStreet->print();
 }
 
@@ -190,25 +191,35 @@ void StateElimination::connectOneElimState(Street *elimStreet, Street *toConnect
     // if intersection has multiple leaving states
     ElimStreet* newElimStreet = new ElimStreet(elimStreet->getPrevIntersection(),
                                                elimStreet->getNextIntersection(), A);
+
+
     // enforce addition in correct order
     // if next street is the ElimStreet, first add the previous street to newElimStreet, then copy the path of the EimStreet
+    //  p  --non-ElimStreet-->  s  --ElimStreet-->  q
     if (setPrev) {
         // add the new components to the ElimStreet
         newElimStreet->addStreet(toConnectStreet);
+
+        // loops attached to intersection (s)
+        // add these loops to newElim's loop list
+        newElimStreet->setLoops(loopStreets);
+
+        newElimStreet->addIntersection(intersection);
+
         // copy the existing path
         newElimStreet->copyPath(elimStreet);
     // if prev street is the ElimStreet, first copy the path of the ElimStreet, then add the next street
+    //  p  --ElimStreet-->  s  --non-ElimStreet-->  q
     } else {
         // copy the existing path
         newElimStreet->copyPath(elimStreet);
+        // then do the loops before the intersection
+        newElimStreet->addLoops(loopStreets);
+
+        newElimStreet->addIntersection(intersection);
         // add the new components to the ElimStreet
         newElimStreet->addStreet(toConnectStreet);
     }
-    newElimStreet->addIntersection(intersection);
-
-    // add possible loops to the newElimStreet
-    newElimStreet->setLoops(loopStreets);
-
     // connect the ElimStreet to the next of the to eliminate intersection
     // == connect the p and q states
     if (setPrev) {
@@ -229,6 +240,7 @@ void StateElimination::connectOneElimState(Street *elimStreet, Street *toConnect
         otherIntersection->addStreet(newElimStreet);
     }
 
+    std::cout << "s: " << intersection->getName() << "   ";
     newElimStreet->print();
 }
 
@@ -238,15 +250,16 @@ void StateElimination::connectTwoElimState(Street *leavingStreet, Street *enteri
     ElimStreet* newElimStreet = new ElimStreet(enteringStreet->getPrevIntersection(),
                                                enteringStreet->getNextIntersection(), A);
 
-    // copy existing paths
+    // copy existing path
     newElimStreet->copyPath(enteringStreet);
+    // add new components
+    newElimStreet->addIntersection(intersection);
+    // copy existing path
     newElimStreet->copyPath(leavingStreet);
 
     // add possible loops to the newElimStreet
     newElimStreet->setLoops(loopStreets);
 
-    // add new components
-    newElimStreet->addIntersection(intersection);
 
     // connect the newElimState to the previous and next Intersections
     Intersection* prevIntersection = enteringStreet->getPrevIntersection();
@@ -262,6 +275,7 @@ void StateElimination::connectTwoElimState(Street *leavingStreet, Street *enteri
     if (prevIntersection != nextIntersection) {
         nextIntersection->addStreet(newElimStreet);
     }
+    std::cout << "s: " << intersection->getName() << "   ";
     newElimStreet->print();
 }
 

@@ -110,6 +110,18 @@ void Network::toPNG(const std::string &dotFileName) const {
     system(command);
 }
 
+void Network::onWrite(std::ofstream &networkOUTPUT) {
+    networkOUTPUT << "------- network -------\n"
+                  << "\ndictionary:" << "   TL = trafficLights" << "\n\n";
+
+    networkOUTPUT << "Intersections:\n";
+    for (Intersection* intersection : getNetwork()) {
+        intersection->onWrite(networkOUTPUT, "   ");
+        networkOUTPUT << "---------\n";
+    }
+}
+
+
 
 void Network::writeAllVehicleChains(std::ofstream &vehicleChainStream) const {
     // front vehicles of their own current street

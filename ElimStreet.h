@@ -28,7 +28,8 @@ public:
     void copyPath(Street* toCopyElimState);
 
     std::string getEStreetName() const override;
-    void addLoopString(std::string& streetName, int loopIndex) const;
+    void addLoopString(std::string &temp, std::string &streetName, int &loopIndex, int &loopCount,
+                       const std::vector<const Street *> &loops) const;
 
     void print();
 
@@ -44,6 +45,7 @@ public:
     const std::vector<const Street *>* getLoops() const override;
     void setLoops(std::vector<const Street *> &loops);
     void addLoop(const Street* loop);
+    void addLoops(const std::vector<const Street*>& loops);
 };
 
 

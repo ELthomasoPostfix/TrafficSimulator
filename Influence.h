@@ -39,6 +39,10 @@ public:
     void setArgument(int argument);
 
     int toScore() const;
+
+    std::string typeToName() const;
+
+    void onWrite(std::ofstream& outputFile, const std::string& indent) const;
     };
 
 

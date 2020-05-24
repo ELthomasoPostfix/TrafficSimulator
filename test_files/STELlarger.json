@@ -37,6 +37,18 @@
       "trafficlights": false,
       "trafficLightPairs": [
       ]
+    },
+    {
+      "name": "5",
+      "trafficlights": false,
+      "trafficLightPairs": [
+      ]
+    },
+    {
+      "name": "6",
+      "trafficlights": false,
+      "trafficLightPairs": [
+      ]
     }
   ],
   "streets": [
@@ -48,30 +60,51 @@
       "limit": 12
     },
     {
-      "twowaystreet": false,
-      "previousintersection": "1",
-      "nextintersection": "3",
+      "twowaystreet": true,
+      "previousintersection": "2",
+      "nextintersection": "4",
       "type": "A",
       "limit": 12
     },
     {
       "twowaystreet": false,
-      "previousintersection": "2",
-      "nextintersection": "3",
+      "previousintersection": "1",
+      "nextintersection": "4",
       "type": "A",
       "limit": 12
     },
     {
       "twowaystreet": false,
       "previousintersection": "3",
-      "nextintersection": "2",
+      "nextintersection": "1",
+      "type": "A",
+      "limit": 12
+    },
+    {
+      "twowaystreet": false,
+      "previousintersection": "4",
+      "nextintersection": "6",
       "type": "A",
       "limit": 12
     },
     {
       "twowaystreet": true,
       "previousintersection": "3",
-      "nextintersection": "4",
+      "nextintersection": "6",
+      "type": "A",
+      "limit": 12
+    },
+    {
+      "twowaystreet": false,
+      "previousintersection": "3",
+      "nextintersection": "5",
+      "type": "A",
+      "limit": 12
+    },
+    {
+      "twowaystreet": true,
+      "previousintersection": "5",
+      "nextintersection": "6",
       "type": "A",
       "limit": 12
     }

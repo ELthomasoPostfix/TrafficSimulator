@@ -73,6 +73,29 @@ Intersection *Street::getOtherIntersection(const Intersection *intersection) con
     else return nullptr; // the passed intersection isn't part of the street (isn't prev or next)
 }
 
+void Street::onWrite(std::ofstream &outputFile, const std::string& indent) const {
+    std::string arrow = " --> ";
+    std::string indents = indent + indent + indent;
+    if (isTwoWay()) arrow = " <--> ";
+    outputFile << indents << "type: " << typeToName() << "\n"
+               << indents << "twoWay: " << Util::boolToString(isTwoWay()) << "\n"
+               << indents << getPrevIntersection()->getName() << arrow << getNextIntersection()->getName() << "\n"
+               << indents << getEStreetName() << "\n";
+
+    outputFile << indents << "influences:\n";
+    if (!getInfluences().empty()) {
+        for (const Influence *influence : getInfluences()) {
+            influence->onWrite(outputFile, indent);
+            outputFile << indents << indent << "---------\n";
+        }
+    } else {
+        outputFile << indents << indent << indent << "None\n";
+    }
+
+}
+
+
+
 // Utils type functions
 
 std::string Street::getTwoWayString() const {

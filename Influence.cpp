@@ -46,3 +46,22 @@ int Influence::toScore() const {
         return 0;
     }
 }
+
+std::string Influence::typeToName() const {
+    switch (getType()) {
+        case LIMIT:
+            return "LIMIT";
+        case STOP:
+            return "STOP";
+        case REROUTE:
+            return "REROUTE";
+        default:
+            return "";
+    }
+}
+
+void Influence::onWrite(std::ofstream &outputFile, const std::string &indent) const {
+    std::string indents = indent + indent + indent + indent;
+    outputFile << indents << indent << "type:  " << typeToName() << "\n"
+               << indents << indent << "arg:   " << getArgument() << "\n";
+}

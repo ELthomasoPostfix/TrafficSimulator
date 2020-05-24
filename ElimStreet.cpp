@@ -27,54 +27,82 @@ void ElimStreet::copyPath(Street *toCopyElimState) {
     for (const Intersection* intersection : *toCopyElimState->getIntersections()) {
         _intersections.emplace_back(intersection);
     }
+    for (const Street* loop : *toCopyElimState->getLoops()) {
+        _loops.emplace_back(loop);
+    }
 }
 
 std::string ElimStreet::getEStreetName() const {
     std::string streetName;
     int loopIndex = 0;
+    int loopCount = 0;
+    std::string temp;
     const std::vector<const Street*>& loops = *getLoops();
 
+    int intersecCounter = 0;
+
+    // for each of the eliminated intersections
     for (const Intersection* intersection : *getIntersections()) {
-/*
-        const Street* loop = loops[loopIndex];
-        // if the loop is connected to intersection
-        if (loop->getPrevIntersection() == intersection) {
-            if (loop->getIntersections()->size() > 1) {
-                streetName += "(";
-            }
 
-            //addLoopString(streetName, loopIndex);
+        // while the current loop is connected to the current intersection
+        while (loopIndex < loops.size() and loops[loopIndex]->getPrevIntersection() == intersection) {
 
+            addLoopString(temp, streetName, loopIndex, loopCount, loops);
         }
-*/
-        streetName += intersection->getName();
-        if (intersection != getIntersections()->back()) {
+        // add the loop name to the full name before potentially losing the brackets
+        streetName += temp;
+        // close the brackets if there were more than one loop after each other
+        // the loops being part of a final ElimStreet, so a loop part of the minimised street
+        if (loopCount > 1) {
+            streetName += ")*";
+        }
+        if (loopCount > 0) {
             streetName += ", ";
         }
+        // reset vars
+        loopCount = 0;
+        temp = "";
+
+        streetName += intersection->getName();
+        // add a comma after each intersection name except the last one
+        if (intersecCounter < getIntersections()->size()-1) {
+            streetName += ", ";
+        }
+        ++intersecCounter;
     }
     return streetName;
 }
-void ElimStreet::addLoopString(std::string &streetName, const int loopIndex) const {
 
-    const std::vector<const Street*>& loops = *getLoops();
-    const Street* loop = loops[loopIndex];
-    const std::vector<const Street*>& deepLoops = *loop->getLoops();
-
-    std::string temp = loop->getEStreetName();
-    const bool needsBrackets = temp.size() > 1;
-
-    if (needsBrackets and loop == loops.front()) {
+void ElimStreet::addLoopString(std::string &temp, std::string &streetName, int &loopIndex, int &loopCount,
+                               const std::vector<const Street *> &loops) const {
+    // brackets for if there are more than one loop after ech other
+    if (loopCount > 0) {
         streetName += "(";
     }
-    streetName += temp;
-    if (loop != loops.back()) {
-        streetName += " + ";
-    } else if (needsBrackets) {
-        streetName += ")";
+
+
+    // plus for if there are more than one loop after each other
+    if (loopCount > 0) {
+        temp += " + ";
     }
-    streetName += "*";
-    streetName += ", ";
+
+    // if the loop has more than one intersection, it needs brackets
+    bool needsBrackets = loops[loopIndex]->getIntersections()->size() > 1;
+    if (needsBrackets) {
+        temp += "(";
+    }
+    // the intersection names of the loop itself
+    temp += loops[loopIndex]->getEStreetName();
+    if (needsBrackets) {
+        temp += ")";
+    }
+    // always add a * to a loop name
+    temp += "*";
+
+    ++loopCount;
+    ++loopIndex;
 }
+
 
 void ElimStreet::print() {
     std::cout << "streetName:  " << getEStreetName() << "   with prev " << getPrevIntersection()->getName()
@@ -112,7 +140,11 @@ void ElimStreet::setLoops(std::vector<const Street *> &loops) {
 void ElimStreet::addLoop(const Street *loop) {
     _loops.emplace_back(loop);
 }
-
+void ElimStreet::addLoops(const std::vector<const Street *> &loops) {
+    for (const Street* loop : loops) {
+        addLoop(loop);
+    }
+}
 
 
 

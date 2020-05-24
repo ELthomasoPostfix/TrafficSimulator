@@ -56,6 +56,8 @@ public:
 
     Intersection* getOtherIntersection(const Intersection* intersection) const;
 
+    void onWrite(std::ofstream& outputFile, const std::string& indent) const;
+
 
     // utils type functions
 

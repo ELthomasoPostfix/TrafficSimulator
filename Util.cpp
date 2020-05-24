@@ -1,5 +1,5 @@
 //
-// Created by elthomaso on 17.05.20.
+// Created by Thomas Gueutal on 17.05.20.
 //
 
 #include "Util.h"

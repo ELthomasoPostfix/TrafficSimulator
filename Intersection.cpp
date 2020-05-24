@@ -89,6 +89,52 @@ void Intersection::calculateTrafficScore() {
     setTrafficScore((outgoingScore*1) + (incomingScore*1));
 }
 
+void Intersection::onWrite(std::ofstream &outputFile, const std::string &indent) {
+    outputFile << indent << "name: \"" << getName() << "\"\n"
+               << indent << indent   << "TL: " << Util::boolToString(getHasTrafficLights());
+    // add traffic light pairs to the file
+    for (const std::pair<Street*,Street*>& tlPair : getTrafficLightPairs()) {
+        Intersection* commonIntersection = getCommonIntersection(tlPair);
+        if (commonIntersection != nullptr and commonIntersection == this) {
+            outputFile << indent << indent << indent << tlPair.first->getOtherIntersection(commonIntersection)->getName()
+                       << " -> " << commonIntersection->getName() << " -> "
+                       << tlPair.second->getOtherIntersection(commonIntersection)->getName() << "\n";
+        } else {
+            outputFile << indent << indent << indent << tlPair.first->getPrevIntersection()->getName() << " -> "
+                       << tlPair.first->getNextIntersection()->getName() << "  and  " << tlPair.second->getPrevIntersection()->getName()
+                       << " -> " << tlPair.second->getNextIntersection()->getName() << "   (incorrect pair)\n";
+        }
+    }
+    outputFile << "\n" << indent << indent << "Streets:\n";
+    if (!getStreets().empty()) {
+        for (Street *street : getStreets()) {
+            const Intersection *otherIntersection = street->getOtherIntersection(this);
+            if (otherIntersection != nullptr) {
+                street->onWrite(outputFile, indent);
+                outputFile << indent << indent << indent << "---------\n";
+            }
+        }
+    } else {
+        outputFile << indent << indent << indent << "None\n";
+    }
+}
+Intersection* Intersection::getCommonIntersection(const std::pair<Street *, Street *> &TLpair) {
+    Street* first = TLpair.first;
+    Street* second = TLpair.second;
+    // find the intersection that the two streets have in common
+    if (first->getPrevIntersection() == second->getPrevIntersection()) {
+        return first->getPrevIntersection();
+    } else if (first->getNextIntersection() == second->getPrevIntersection()) {
+        return first->getNextIntersection();
+    // both first's streets have been compared
+    // the first street cannot have any intersections in common with the second street anymore
+    } else {
+        return nullptr;
+    }
+}
+
+
+
 
 // helper functions to calculate individual scores
 

@@ -33,6 +33,9 @@ public:
 
     void calculateTrafficScore();
 
+    void onWrite(std::ofstream& outputFile, const std::string& indent);
+    Intersection* getCommonIntersection(const std::pair<Street*, Street*>& TLpair);
+
     // helper functions to calculate individual scores
 
     int hasTLtoScore(bool hasTL) const;
