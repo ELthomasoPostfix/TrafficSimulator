@@ -35,7 +35,6 @@ class Street {
     std::vector<std::vector<Vehicle*>> _lanes;
 
     // the list of all vehicles deciding whether or not to enter that particular street
-    // TODO the current Street of the vehicle should be empty when they drive through an intersection/State ???
     std::vector<std::vector<Vehicle*>> _entrants;
 
     // used to properly let Vehicles queue in streets without overlapping with each other

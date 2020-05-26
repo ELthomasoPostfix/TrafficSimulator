@@ -8,12 +8,31 @@
 #include "Simulation.h"
 
 Vehicle::Vehicle(vehicleClass vClass, const std::string licensePlate) : _class(vClass), _licensePlate(licensePlate) {
+    _underway = false;
     _isLimited = false;
     _isStopped = false;
+    _pathIndex = 0;
+
+    _currentStreet = nullptr;
+    _nextStreet = nullptr;
+    _progress = 0;
+
+    _prevVehicle = nullptr;
+    _nextVehicle = nullptr;
 }
 
 
 Vehicle::~Vehicle() {
+    _incomingInfluences.clear();
+
+    _nextStreet = nullptr;
+    _nextVehicle = nullptr;
+    _nextIntersection = nullptr;
+
+    _prevVehicle = nullptr;
+    _prevIntersection = nullptr;
+
+    _path.clear();
 }
 
 
@@ -42,15 +61,22 @@ Street* Vehicle::chooseRandomStreet() {
     }
 }
 
-void Vehicle::drive(std::ofstream& ofstream) {
+bool Vehicle::drive(std::ofstream& ofstream) {
     if (ofstream.is_open()) {
         const double argument = getLowestRelevantArgument(STOP);
         // the exact location from whereon a vehicle's possessed STOP signal will take effect
         const double effectiveSTOPLocation = argument - Simulation::getEffectiveSTOPdistance();
+        // the vehicle's next intersection is their end intersection,
+        // they are in the last street of their path and
+        // they have a progress of >= 50
+        if (shouldDespawn()) {
+            prepareDespawn();
+            return false;
         // vehicle is not under influence of a STOP signal or it is not in range of the STOP signal
         // if the argument is -2, then the argument affects the whole street/lane
-        if (mayDrive(effectiveSTOPLocation, argument)) {
+        } else if (mayDrive(effectiveSTOPLocation, argument)) {
             const double decisionStartPoint = effectiveSTOPLocation - Simulation::getDecisionBufferLength();
+            // TODO   and getPath().empty   ????  OR  check if path change necessary:   next street is wwwaaaayy shittier than other streets or some such
             if (getProgress() >= decisionStartPoint) {
                 // TODO vehicle may decide to adjust its path from here on out
                 alterPath();
@@ -74,8 +100,9 @@ void Vehicle::drive(std::ofstream& ofstream) {
     } else {
         std::cerr << "file was not open upon calling drive. Please open the ofstream before calling drive." << std::endl;
     }
+    // vehicle shouldn't de-spawn/be deleted
+    return true;
 }
-
 void Vehicle::alterPath() {
     // this vehicle had already chosen a next street, remove this vehicle from its entrants
     // before we change the next street of this vehicle
@@ -196,7 +223,57 @@ void Vehicle::addProgressMessage(std::ofstream &ofstream, const double progress)
 }
 
 
+void Vehicle::prepareDespawn() {
+    const int currentLane = getPrevIntersection()->laneIndexWhenLeaving(getCurrentStreet());
+    if (currentLane != -1) {
+        clearIncomingInfluences();
+        clearEntrantInfluences();
 
+        Vehicle* frontVehicle = getCurrentStreet()->getFrontOccupant(currentLane);
+        Vehicle* backVehicle = getCurrentStreet()->getBackOccupant(currentLane);
+        // this vehicle is either only front vehicle or both front and back vehicles
+        if (this == frontVehicle) {
+            frontDespawnPreparations(currentLane);
+        // this vehicle is only back vehicle, never front. Because it can never be the front vehicle,
+        // there must always be a next vehicle that is the front vehicle
+        } else if (this == backVehicle) {
+            backDespawnPreparations(currentLane);
+        // the vehicle is neither front nor back, but somewhere in the middle
+        } else {
+            middleDespawnPreparations(currentLane);
+        }
+    } else {
+        std::cerr << "Warning in prepareDespawn: the current street couldn't have been entered by " << getLicensePlate()
+                  << " from the previous Intersection " << getPrevIntersection()->getName() << " to "
+                  << getNextIntersection()->getName() << std::endl;
+    }
+}
+void Vehicle::frontDespawnPreparations(const int currentLane) const {
+    Vehicle* prevVehicle = getPrevVehicle();
+    // replace this vehicle by the prev vehicle as the front occupant
+    if (prevVehicle != nullptr) {
+        prevVehicle->setNextVehicle(nullptr);
+        // no set backOccupant, if it is already the back, then there is no need, and even if it isn't yet the back
+        // its of previous is not touched in this operation
+        getCurrentStreet()->setFrontOccupant(prevVehicle, currentLane);
+    // no front occupant, set front vehicle to nullptr
+    } else {
+        getCurrentStreet()->setFrontNull(currentLane);
+    }
+}
+void Vehicle::backDespawnPreparations(int currentLane) const {
+    Vehicle* nextVehicle = getNextVehicle();
+
+    nextVehicle->setPrevVehicle(nullptr);
+    getCurrentStreet()->setBackOccupant(nextVehicle, currentLane);
+}
+void Vehicle::middleDespawnPreparations(int currentLane) const {
+    Vehicle* prevVehicle = getPrevVehicle();
+    Vehicle* nextVehicle = getNextVehicle();
+
+    prevVehicle->setNextVehicle(nextVehicle);
+    nextVehicle->setPrevVehicle(prevVehicle);
+}
 
 void Vehicle::emitInfluence() const {
 
@@ -364,6 +441,26 @@ bool Vehicle::isFront() const {
     return this == getCurrentStreet()->getFrontOccupant(getNextIntersection()->laneIndexWhenEntering(getCurrentStreet()));;
 }
 
+bool Vehicle::shouldDespawn() const {
+    if (getNextIntersection() == getEndIntersection() and getProgress() >= Simulation::getStreetLength()*0.5) {
+        if (getCurrentStreet() == getPath().back()) {
+            return true;
+        } else {
+            printDespawnErrorMessage();
+        }
+    }
+    return false;
+}
+
+void Vehicle::printDespawnErrorMessage() const {
+    std::cerr << "The vehicle should be de-spawning, but somehow they are approaching their end intersection '"
+              << getEndIntersection()->getName() << "' using the street "
+              << getCurrentStreet()->getOtherIntersection(getNextIntersection())->getName() << "->"
+              << getNextIntersection()->getName() << " (" << Util::isTwoWayToString(getCurrentStreet()->isTwoWay())
+              << ")\ninstead of using the street described in their path "
+              << getPath().back()->getOtherIntersection(getNextIntersection())->getName() << "->"
+              << getNextIntersection()->getName() << " (" << Util::isTwoWayToString(getPath().back()->isTwoWay()) << std::endl;
+}
 
 
 
@@ -621,6 +718,26 @@ double Vehicle::getMaxDriveDistance() const {
 const std::string &Vehicle::getLicensePlate() const {
     return _licensePlate;
 }
+
+int Vehicle::getPathIndex() const {
+    return _pathIndex;
+}
+void Vehicle::setPathIndex(const int pathIndex) {
+    _pathIndex = pathIndex;
+}
+void Vehicle::incrementPathIndex() {
+    ++_pathIndex;
+}
+
+const std::vector<const Street *> &Vehicle::getPath() const {
+    return _path;
+}
+void Vehicle::setPath(const std::vector<const Street *> &path) {
+    _path = path;
+}
+
+
+
 
 
 

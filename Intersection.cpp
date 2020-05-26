@@ -19,6 +19,11 @@ Intersection::~Intersection() {
     _streets.clear();
     _trafficLights = nullptr;
     _ownPointer = nullptr;
+
+    _trafficLightCounter = 0;
+    _trafficScore = 0;
+    _currentPair = {};
+    _multipurposeMarker = false;
 }
 
 

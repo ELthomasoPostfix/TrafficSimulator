@@ -10,6 +10,14 @@ SpecialVehicle::SpecialVehicle(const std::string& licensePlate) : Vehicle(specia
     InstantiateInfluence(-2);
 }
 
+SpecialVehicle::~SpecialVehicle() {
+    for (const Influence* outInfluence : _outgoingInfluences) {
+        delete outInfluence;
+    }
+    _outgoingInfluences.clear();
+}
+
+
 void SpecialVehicle::InstantiateInfluence(const double argument) {
     Influence* siren = new Influence(STOP);
     siren->setArgument(argument);
@@ -49,12 +57,6 @@ void SpecialVehicle::undoSiren() const {
 
 void SpecialVehicle::addOutgoingInfluence(const Influence* outgoingInfluence) {
     _outgoingInfluences.emplace_back(outgoingInfluence);
-}
-
-SpecialVehicle::~SpecialVehicle() {
-    for (const Influence* outInfluence : _outgoingInfluences) {
-        delete outInfluence;
-    }
 }
 
 const Influence* SpecialVehicle::getSiren() const {

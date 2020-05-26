@@ -28,26 +28,38 @@ public:
 
     void doMainLoop(int duration, std::string& ofName, std::string& ofName2, std::string& ofName3);
 
-
     void toDot(std::ofstream& outputFile) const;
     void toDotElim(std::ofstream& outputFile) const;
     void toPNG(const std::string& dotFileName) const;
 
     void onWrite(std::ofstream& networkOUTPUT);
 
+
+
+    void findAndSetPath(Vehicle* recipient, Intersection* startIntersection, Intersection* endIntersection);
+    std::vector<std::vector<const Street *>> findAllPaths(Intersection* startIntersection, Intersection* endIntersection);
+
+
+
     Network* getSubNetwork(Intersection* startIntersection, Intersection* endIntersection, float extraStepMoodifier);
     bool isIn(const Intersection* intersection, const std::vector<Intersection*>& intersections);
 
     // this function should only be used in the context of state elimination
     // it converts all streets of a state eliminated network,
-    // which all start at the start state and end at the end state,
-    // and then returns a list of paths
-    std::pair<std::vector<std::vector<const Intersection*>>,std::vector<std::vector<const Street*>>> elimStreetsToPaths();
+    // which all start at the start state and end at the end state, and then returns a list of paths
+    // in the form of a list of lists of streets. one list of streets is a single path
+    std::vector<std::vector<const Street*>> elimStreetsToPaths(Intersection* startIntersection);
+
+    void testPathCorrectnessManuel(const std::vector<std::vector<const Intersection *>> &intersectionPath,
+                                   const std::vector<std::vector<const Street *>> &streetPath, Intersection* startIntersection);
+
 
     void removeAllMultipurposeMarkers() const;
 
     void tryRandomVehicleSpawn();
     Vehicle* createVehicle();
+    void selectPath(const std::vector<std::vector<const Street*>>& paths, const Intersection* startIntersection,
+                    Vehicle* spawnedVehicle);
 
     Intersection* getRandomIntersection() const;
 
@@ -57,6 +69,12 @@ private:
     void writeChain(std::ofstream& vehicleChainStream, std::vector<const Vehicle*>& frontVehicles,
                     std::vector<bool>& chainWasWritten, const Street* currentStreet, unsigned int startIndex) const;
     void writeChainString(std::ofstream& vehicleChainStream, const Vehicle*& currChainVehicle) const;
+
+
+    // vehicle spawning
+
+    void assignSubStartAndEnd(Intersection *&subStart, Intersection *&subEnd, Network *subNetwork,
+                              Intersection* startIntersection, Intersection* endIntersection) const;
 public:
 
     // TODO add algorithms here

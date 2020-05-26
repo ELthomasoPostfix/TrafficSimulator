@@ -11,8 +11,8 @@ int main() {
 
     // TODO @@@@ disabling type compatibility
     // type compatibility between vehicles and streets now plays NO role whatsoever
-    //      Simulation::setTypeCompatibilityState(false);
-    //      std::cerr << "Turning off type compatibility from main function." << std::endl;
+    Simulation::setTypeCompatibilityState(false);
+    std::cerr << "Turning off type compatibility from main function." << std::endl;
     // TODO @@@@
 
     std::string fileNm = "STELlarger";
@@ -32,30 +32,7 @@ int main() {
     city2->doMainLoop(300, vehiclesOUTPUT, trafficLightsOUTPUT, vehicleChainOUTPUT);
 
 
-    // TODO @@@@ SubNetwork
-
-    Network* city3 = makeSubNetwork(STELstream, city2, 3);
-
-    // TODO @@@@
-
-
-    Simulation::printSimVariables();
-
-    STELstream.open(fileNm + ".dot");
-    city2->toDot(STELstream);
-
-    city2->toPNG(fileNm + ".dot");
-    STELstream.close();
-
-    // TODO @@@@ State Elimination
-
-    doStateElim(STELstream, city3, networkOUTPUT, fileNm);
-
-    std::pair<std::vector<std::vector<const Intersection*>>,std::vector<std::vector<const Street*>>>
-            paths = city3->elimStreetsToPaths();
-
-    // TODO @@@@
-
+    city2->getSimulation()->setSpawnTimer(5);
 
     return 0;
 }
@@ -79,7 +56,7 @@ Network* makeSubNetwork(std::ofstream& STELstream, Network* originalNetwork, con
 
 void doStateElim(std::ofstream& STELstream, Network* originalNetwork, const std::string& networkOUTPUT,
         const std::string& fileNm) {
-    std::vector<Intersection*> network = originalNetwork->getNetwork();
+    const std::vector<Intersection*>& network = originalNetwork->getNetwork();
 
     StateElimination stateElimination;
     stateElimination.eliminate(originalNetwork, network[0], network[network.size()-1]);

@@ -155,8 +155,6 @@ void jsonParser::jsonToStreets(nlohmann::json& json, Network* cityNetwork) {
                                            cityNetwork->findIntersection(street["nextintersection"]),
                                            type);
             newStreet->setIsTwoWay(street["twowaystreet"]);
-            newStreet->fillEmptyLanes();    // add the correct amount of empty lanes to the Street
-            newStreet->fillEmptyEntrantLanes();
             // add a limit influence if needed
             const int limit = street["limit"];
             if (limit > 0) {
@@ -164,6 +162,9 @@ void jsonParser::jsonToStreets(nlohmann::json& json, Network* cityNetwork) {
                 newLimit->setArgument(limit);
                 newStreet->addInfluence(newLimit);
             }
+
+            newStreet->fillEmptyLanes();
+            newStreet->fillEmptyEntrantLanes();
 
             // assign the street to the two states it's attached to
             newStreet->getNextIntersection()->addStreet(newStreet);

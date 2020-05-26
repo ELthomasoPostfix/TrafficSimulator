@@ -9,8 +9,13 @@
 Street::Street(Intersection* prev, Intersection* next, streetType type) : _prevIntersection(prev), _nextIntersection(next),
                                                                           _type(type) {
     _hasSpeedLimit = false;
+    _hasStopSignal = false;
+    _isTwoWay = false;
     _multipurposeMarker = false;
     _ownPointer = this;
+
+    fillEmptyLanes();    // add the correct amount of empty lanes to the Street
+    fillEmptyEntrantLanes();
 }
 
 
@@ -201,7 +206,10 @@ bool Street::removeEntrant(int indexWhenLeaving, const Vehicle *entrant) {
 
 
 Vehicle *Street::getFrontOccupant(const int index) const {
-    return _frontOccupant[index];
+    if (index == 0 or index == 1) {
+        return _frontOccupant[index];
+    }
+    return nullptr;
 }
 void Street::setFrontOccupant(Vehicle *frontOccupant, int lane) {
     // index: when becoming the front occupant, obviously enter the street
@@ -242,7 +250,10 @@ void Street::setFrontNull(int lane) {
 }
 
 Vehicle *Street::getBackOccupant(int index) const {
-    return _backOccupant[index];
+    if (index == 0 or index == 1) {
+        return _backOccupant[index];
+    }
+    return nullptr;
 }
 void Street::setBackOccupant(Vehicle *newBackOccupant, int lane) {
     Vehicle* currBackOcc = getBackOccupant(lane);

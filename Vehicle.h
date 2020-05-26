@@ -42,7 +42,8 @@ class Vehicle {
     bool _underway;
     double _progress;  // only when a vehicle is a set amount of distance (Simulation::getStreetLength - Simulation::getDecisionBuffer complete) through the street, can they decide on a new route
 
-    std::pair<std::vector<Intersection*>, std::vector<Street*>> _path;
+    int _pathIndex;
+    std::vector<const Street*> _path;
 
     Intersection* _prevIntersection;
     Intersection* _nextIntersection;
@@ -66,12 +67,17 @@ public:
 
     Street* chooseRandomStreet();
 
-    void drive(std::ofstream& ofstream);
+    bool drive(std::ofstream& ofstream);
     void alterPath();
     void leaveEntrantsList() const;
     void addSTOPMessage(std::ofstream& ofstream, double effectiveSTOPLocation) const;
     void adjustProgress(std::ofstream& ofstream);
     void addProgressMessage(std::ofstream& ofstream, double progress) const;
+
+    void prepareDespawn();
+    void frontDespawnPreparations(int currentLane) const;
+    void backDespawnPreparations(int currentLane) const;
+    void middleDespawnPreparations(int currentLane) const;
 
     // influences will always be emitted to the immediate surroundings, but should only be used by a special vehicle
     virtual void emitInfluence() const;
@@ -97,6 +103,8 @@ public:
 
     bool isFront() const;
 
+    bool shouldDespawn() const;
+    void printDespawnErrorMessage() const;
 
     // getters and setters
 
@@ -160,6 +168,13 @@ public:
     double getMaxDriveDistance() const;
 
     const std::string &getLicensePlate() const;
+
+    int getPathIndex() const;
+    void setPathIndex(int pathIndex);
+    void incrementPathIndex();
+
+    const std::vector<const Street *> &getPath() const;
+    void setPath(const std::vector<const Street *> &path);
 };
 
 

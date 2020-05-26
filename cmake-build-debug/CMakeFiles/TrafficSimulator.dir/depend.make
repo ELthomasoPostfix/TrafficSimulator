@@ -25,12 +25,14 @@ CMakeFiles/TrafficSimulator.dir/Intersection.cpp.o: ../TransportVehicle.h
 CMakeFiles/TrafficSimulator.dir/Intersection.cpp.o: ../Util.h
 CMakeFiles/TrafficSimulator.dir/Intersection.cpp.o: ../Vehicle.h
 
+CMakeFiles/TrafficSimulator.dir/Network.cpp.o: ../ElimStreet.h
 CMakeFiles/TrafficSimulator.dir/Network.cpp.o: ../Influence.h
 CMakeFiles/TrafficSimulator.dir/Network.cpp.o: ../Intersection.h
 CMakeFiles/TrafficSimulator.dir/Network.cpp.o: ../Network.cpp
 CMakeFiles/TrafficSimulator.dir/Network.cpp.o: ../Network.h
 CMakeFiles/TrafficSimulator.dir/Network.cpp.o: ../Simulation.h
 CMakeFiles/TrafficSimulator.dir/Network.cpp.o: ../SpecialVehicle.h
+CMakeFiles/TrafficSimulator.dir/Network.cpp.o: ../StateElimination.h
 CMakeFiles/TrafficSimulator.dir/Network.cpp.o: ../Street.h
 CMakeFiles/TrafficSimulator.dir/Network.cpp.o: ../TransportVehicle.h
 CMakeFiles/TrafficSimulator.dir/Network.cpp.o: ../Util.h
