@@ -27,3 +27,11 @@ std::string Util::isTwoWayToString(bool twoWay) {
         return "oneWay";
     }
 }
+
+std::string Util::boolToEnabledString(bool state) {
+    if (state) {
+        return "enabled";
+    } else {
+        return "disabled";
+    }
+}

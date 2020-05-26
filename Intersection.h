@@ -13,6 +13,8 @@ class Intersection {
     std::string _name;
     int _trafficScore;
 
+    Intersection* _ownPointer;
+
     const Influence* _trafficLights;
     std::vector<std::pair<Street*, Street*>> _trafficLightPairs;
     std::pair<Street*, Street*> _currentPair;
@@ -23,6 +25,8 @@ class Intersection {
     bool _multipurposeMarker;
 public:
     Intersection(std::string  name);
+
+    ~Intersection();
 
     // TODO could add a return to measure how often (time units) the street contains cars
     void emitInfluences(std::ofstream& trafficLightStream);
@@ -51,6 +55,10 @@ public:
     void unStopCurrentFrontOccupants() const;
     void unstopSingleFrontOccupant(int enteringLaneIndex, Vehicle* frontOccupant) const;
 
+    // if an intersection has only one traffic light pair, make it alternate between being off and on
+    void invertFrontSTOPStates();
+    void turnTLgreen();
+    void turnTLred(const std::pair<Street*,Street*>& currentPair);
     // must be used on the intersection that you are leaving with the street you want to leave through
     int laneIndexWhenLeaving(const Street* street) const;
     // must be used on the intersection that you are entering with the street you are entering through
@@ -62,7 +70,9 @@ public:
     void addCycleMessageFront(std::ofstream& trafficLightStream) const;
     void addCycleMessageBack(std::ofstream& trafficLightStream) const;
     void addTLCincrementMessage(std::ofstream& trafficLightStream) const;
-
+    void addSingleTLCincrementMessage(std::ofstream& trafficLightStream) const;
+    void addSingleTLCycleMessageFront(std::ofstream &trafficLightStream) const;
+    void addSingleTLCycleMessageBack(std::ofstream &trafficLightStream) const;
 
     // getters and setters
 
@@ -100,6 +110,9 @@ public:
     void setTrafficLights(const Influence* trafficLights);
     const Influence* getTrafficLightInfluence() const;
     bool getHasTrafficLights() const;
+    void removeTrafficLights();
+
+    Intersection *getOwnPointer() const;
 
     int getTrafficLightCounter() const;
     void setTrafficLightCounter(int trafficLightCounter);
@@ -116,6 +129,9 @@ public:
 
     bool isMultipurposeMarker() const;
     void setMultipurposeMarker(bool multipurposeMark);
+    void removeAllMArkings();
+
+
 };
 
 

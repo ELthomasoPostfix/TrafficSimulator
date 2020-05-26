@@ -5,7 +5,8 @@
       "mincardistance": 1,
       "maxtrafficlightcount": 5,
       "decisionbufferlength": 10,
-      "streetlength": 100
+      "streetlength": 100,
+      "vehiclespawnrate": 5
     }
   },
   "alphabet": [

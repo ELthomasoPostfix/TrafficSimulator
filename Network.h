@@ -24,6 +24,8 @@ public:
 
     Network();
 
+    ~Network();
+
     void doMainLoop(int duration, std::string& ofName, std::string& ofName2, std::string& ofName3);
 
 
@@ -34,8 +36,21 @@ public:
     void onWrite(std::ofstream& networkOUTPUT);
 
     Network* getSubNetwork(Intersection* startIntersection, Intersection* endIntersection, float extraStepMoodifier);
-
     bool isIn(const Intersection* intersection, const std::vector<Intersection*>& intersections);
+
+    // this function should only be used in the context of state elimination
+    // it converts all streets of a state eliminated network,
+    // which all start at the start state and end at the end state,
+    // and then returns a list of paths
+    std::pair<std::vector<std::vector<const Intersection*>>,std::vector<std::vector<const Street*>>> elimStreetsToPaths();
+
+    void removeAllMultipurposeMarkers() const;
+
+    void tryRandomVehicleSpawn();
+    Vehicle* createVehicle();
+
+    Intersection* getRandomIntersection() const;
+
 private:
     void writeAllVehicleChains(std::ofstream& vehicleChainStream) const;
     void findFrontVehicles(std::vector<const Vehicle*>& frontVehicles, std::vector<bool>& chainWasWritten) const;
@@ -55,6 +70,7 @@ public:
     bool addIntersection(Intersection* newIntersection);
     bool addStreetlessIntersection(Intersection* newStreetlessIntersection);
     Intersection* findIntersection(const std::string& name) const;
+    void removeIntersection(const Intersection* toRemoveIntersec);
 
     Simulation *getSimulation() const;
 
@@ -64,6 +80,7 @@ public:
 
     const std::vector<Vehicle *> &getVehicles() const;
     void addVehicle(Vehicle * vehicle);
+    void removeVehicle(const Vehicle* toRemoveVehicle);
 
     const std::vector<Intersection *> &getInfluencingIntersections() const;
     void addInfluencingIntersection(Intersection * influencingIntersection);

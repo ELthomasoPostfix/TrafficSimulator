@@ -8,6 +8,5 @@ TransportVehicle::TransportVehicle(const std::string licensePlate) : Vehicle(tra
 
 }
 
-void TransportVehicle::emitInfluence() {
-
+void TransportVehicle::emitInfluence() const {
 }

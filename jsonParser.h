@@ -35,7 +35,7 @@ public:
     bool addToStreet(Vehicle* newVehicle, Intersection* otherIntersection, Street* spawnStreet, double progress, int spawnLane);
     void printLaneError(Vehicle* newVehicle, Street* spawnStreet, Intersection* otherIntersection);
 
-    Vehicle* createVehicle(const std::string & vehicleClass, const Simulation& sim);
+    Vehicle* createVehicle(const std::string & vehicleClass, Simulation& sim);
 
     bool typeIsAllowed(const streetType& streetType, const Network* cityNetwork);
 };

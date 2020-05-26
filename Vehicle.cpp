@@ -12,18 +12,21 @@ Vehicle::Vehicle(vehicleClass vClass, const std::string licensePlate) : _class(v
     _isStopped = false;
 }
 
+
+Vehicle::~Vehicle() {
+}
+
+
+
 Street* Vehicle::chooseRandomStreet() {
     const std::vector<Street *> &leavingStreets = getNextIntersection()->getAllLeavingStreets();
     if (vehicleCanLeaveIntersection(leavingStreets)) {
         Street *randomNextStreet;
         int rand;
-        int counter = 0; // TODO @@@@@@@@@ delete ############
+        // choose a random street
         do {
             rand = random() % leavingStreets.size();
             randomNextStreet = leavingStreets[rand];
-            std::cout << "chose randomly (" << counter << ") (" << randomNextStreet->typeToName() << ")"
-                      << std::endl; // TODO @@@@@@@@@ delete ############
-            counter++; // TODO @@@@@@@@@ delete ############
         } while (!Simulation::vehicleTypeCanEnterStreetType(getClass(), randomNextStreet->getType()));
         setNextStreet(randomNextStreet);
         return randomNextStreet;
@@ -31,7 +34,8 @@ Street* Vehicle::chooseRandomStreet() {
     } else {
         std::cerr << "There is no viable street to leave the intersection " << getNextIntersection()->getName()
                   << " through. The vehicle " << getLicensePlate() << " (" << getClass() << ") from "
-                  << getPrevIntersection()->getName() << " to " << getPrevIntersection()->getName()
+                  << getPrevIntersection()->getName() << " to " << getNextIntersection()->getName()
+                  << " (" << getCurrentStreet()->typeToName() << ", " << Util::isTwoWayToString(getCurrentStreet()->isTwoWay()) << ") "
                   << " is stuck and needs to change vehicle Class." << std::endl << "An might occur as the result returned"
                   << " by this 'chooseRandomStreet()' function is nullptr." << std::endl;
         return nullptr;
@@ -194,9 +198,13 @@ void Vehicle::addProgressMessage(std::ofstream &ofstream, const double progress)
 
 
 
-void Vehicle::emitInfluence() {
+void Vehicle::emitInfluence() const {
 
 }
+void Vehicle::undoSiren() const {
+
+}
+
 
 void Vehicle::addOutgoingInfluence(const Influence* outgoingInfluence) {
 
@@ -231,15 +239,28 @@ void Vehicle::enterStreet(std::ofstream& ofstream) {
         streetBeginningOccupied = true;
     }
     if (!streetBeginningOccupied) {
+        setUnderway(true);
         // remove this vehicle from the previous street's lanes
         const int laneWhenEntering = currentIntersection->laneIndexWhenEntering(currentStreet);
         currentStreet->removeFromLane(this, laneWhenEntering);
 
         streetToEnter->requestInfluences(this);
 
+        // remove the siren STOP signal/influence from other vehicles
+        if (getClass() == special) {
+            undoSiren();
+        }
+
+
         // adjust other current vehicle properties
         setCurrentStreet(streetToEnter);
         setNextStreet(nullptr);
+
+        // if special vehicle and siren is active, when entering a new street,
+        // emit the STOP signal to the new current street
+        if (getClass() == special) {
+            emitInfluence();
+        }
 
         setPrevIntersection(currentIntersection);
         setNextIntersection(streetToEnter->getOtherIntersection(currentIntersection));
@@ -253,7 +274,7 @@ void Vehicle::enterStreet(std::ofstream& ofstream) {
             currentStreet->setFrontOccupant(prevVehicle, laneIndexWhenEntered);
             prevVehicle->setNextVehicle(nullptr);
 
-        } else {    // TODO changed this
+        } else {
             currentStreet->setFrontNull(laneIndexWhenEntered);
             currentStreet->setBackNull(laneIndexWhenEntered);
         }
@@ -262,6 +283,7 @@ void Vehicle::enterStreet(std::ofstream& ofstream) {
                  << " to " << getNextIntersection()->getName() << " (" << streetToEnter->typeToName() << ", "
                  << streetToEnter->getTwoWayString() << ")" << "  (" << getProgress()/Simulation::getStreetLength()*100 << "%)\n";
     } else {
+        setUnderway(false);
         ofstream << " tried to enter a street (" << streetToEnter->typeToName() << ", " << streetToEnter->getTwoWayString()
                  << ") from " << getPrevIntersection()->getName() << " to " << getNextIntersection()->getName()
                  << "\n but the entrance to the street was occupied (" << getProgress()/Simulation::getStreetLength()*100 << "%)\n";
@@ -280,6 +302,12 @@ void Vehicle::receiveInfluence(const Influence* incomingInfluence) {
 }
 
 void Vehicle::accident() {
+    const int accident = random()%8000;
+    if (accident >= 501 and accident <= 520) {
+        std::cout << "accident happened (" << accident << ")" << std::endl;
+        // TODO spawn a special vehicle that goes to the scene?
+        //  or on drive of any special vehicle, send them to the scene??
+    }
 }
 
 void Vehicle::onWrite(std::ofstream &ofstream) const {
@@ -358,6 +386,29 @@ std::string Vehicle::classToName() const {
             return "special";
     }
 }
+vehicleClass Vehicle::nameToClass(const std::string& name) {
+    if (name == "personal") {
+        return personal;
+    } else if (name == "special") {
+        return special;
+    } else if (name == "transport") {
+        return transport;
+    }
+    // if no class recognised, return personal by default
+    return personal;
+}
+vehicleClass Vehicle::intToClass(const int vClass) {
+    switch (vClass) {
+        case 0:
+            return personal;
+        case 1:
+            return special;
+        case 2:
+            return transport;
+        default:
+            return personal;
+    }
+}
 
 const std::vector<const Influence *> &Vehicle::getIncomingInfluences() const {
     return _incomingInfluences;
@@ -413,10 +464,10 @@ bool Vehicle::addIncomingInfluence(const Influence * incomingInfluence) {
     }
     return false;
 }
-void Vehicle::removeIncomingInfluence(const Influence * toDeleteInfluence) {
+void Vehicle::removeIncomingInfluence(const Influence * toRemoveInfluence) {
     std::vector<const Influence*> newVector;
     for (const Influence* influence : getIncomingInfluences()) {
-        if (influence != toDeleteInfluence) {
+        if (influence != toRemoveInfluence) {
             newVector.emplace_back(influence);
         } else {
             if (influence->getType() == STOP) {
@@ -433,6 +484,7 @@ void Vehicle::clearIncomingInfluences() {
     setIsLimited(false);
     setIsStopped(false);
 }
+
 
 const std::vector<const Influence *> &Vehicle::getEntrantInfluences() const {
     return _entrantInfluences;
@@ -569,7 +621,6 @@ double Vehicle::getMaxDriveDistance() const {
 const std::string &Vehicle::getLicensePlate() const {
     return _licensePlate;
 }
-
 
 
 

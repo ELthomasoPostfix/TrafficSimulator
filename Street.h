@@ -24,6 +24,7 @@ class Street {
     bool _isTwoWay;
 
     streetType _type;
+    Street* _ownPointer;
 
     // can contain speed limits or accidents or even a police car siren
     std::vector<const Influence*> _influences;
@@ -103,6 +104,7 @@ public:
     const std::vector<const Influence *> &getInfluences() const;
     bool addInfluence(const Influence* newInfluence);
     bool removeInfluence(influenceType influenceType);
+    bool removeInfluence(const Influence* toRemoveInfl);
 
     bool hasSpeedLimit() const;
     void setHasSpeedLimit(bool hasSpeedLimit);
@@ -123,6 +125,8 @@ public:
 
     bool isMultipurposeMarker() const;
     void setMultipurposeMarker(bool multipurposeMarker);
+
+    Street *getOwnPointer() const;
 };
 
 

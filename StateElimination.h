@@ -20,7 +20,7 @@ private:
                             const Intersection* currIntersection);
 
     void isolateUnnecessaryIntersections(std::vector<Street*>& leavingStreets, std::vector<Street*>& enteringStreets,
-                       Intersection* intersection);
+                       Intersection* intersection, Network* cityNetwork);
 
     void doElimination(Intersection* intersection, std::vector<Street*>& enteringStreets, std::vector<Street*>& leavingStreets,
                        std::vector<const Street*>& loopStreets);

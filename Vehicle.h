@@ -21,7 +21,7 @@ class Street;
 // (3) the special class vehicles will be able to initiate special situations on a more regular basis than normal or transport
 // vehicles. Special vehicles include: ambulances, police cars, fire trucks, etc ...
 
-enum vehicleClass {personal, transport, special};
+enum vehicleClass {personal=0, transport=1, special=2};
 
 class Vehicle {
     // way to identify vehicle
@@ -40,7 +40,7 @@ class Vehicle {
     Intersection* _endIntersection;
     Street* _currentStreet;
     bool _underway;
-    double _progress;  // TODO only when a vehicle is a set amount of distance (90% complete) through the street, can they decide on a new route
+    double _progress;  // only when a vehicle is a set amount of distance (Simulation::getStreetLength - Simulation::getDecisionBuffer complete) through the street, can they decide on a new route
 
     std::pair<std::vector<Intersection*>, std::vector<Street*>> _path;
 
@@ -52,15 +52,17 @@ class Vehicle {
     // when a vehicle enters a street, they will essentially enter a queue to get out at the other side
     // (1) this queue will allow easy simulation of a traffic jam, as the progress across the street and whether or not
     // a vehicle is STOP-ped can directly be retrieved from the next pointer
-    // TODO (2) it will allow the implementation of a distance rule between cars if we so wish. ????
-    // (3) it will allow a new car to easily enter the queue when it enters the street, simulating real traffic
-    // TODO (4) if street lights stay green for e.g. 20 time units, and cars take 5 time units to enter a new street,
-    // TODO  then the queue can realistically shrink by letting the front car enter a new street.
-    // TODO  all cars can decide which route to take inside a street and before a traffic light
+    // (2) it allows will allow the implementation of a distance rule between cars
+    // (3) it allows a new car to easily enter the queue when it enters the street, simulating real traffic
+    // (4) if street lights stay green for e.g. 20 time units, and cars take 1 time units to enter a new street,
+    // then the queue can realistically shrink by letting the front car enter a new street.
+    // all cars can decide which route to take inside a street and before a traffic light
     Vehicle* _nextVehicle;
     Vehicle* _prevVehicle;
 public:
     Vehicle(vehicleClass vClass, std::string licensePlate);
+
+    virtual ~Vehicle();
 
     Street* chooseRandomStreet();
 
@@ -72,7 +74,8 @@ public:
     void addProgressMessage(std::ofstream& ofstream, double progress) const;
 
     // influences will always be emitted to the immediate surroundings, but should only be used by a special vehicle
-    virtual void emitInfluence();
+    virtual void emitInfluence() const;
+    virtual void undoSiren() const;
 
     // special vehicle needs to be able to add an outgoing STOP influence
     virtual void addOutgoingInfluence(const Influence* outgoingInfluence);
@@ -100,13 +103,15 @@ public:
     vehicleClass getClass() const;
     void setClass(vehicleClass vClass);
     std::string classToName() const;
+    static vehicleClass nameToClass(const std::string& name);
+    static vehicleClass intToClass(int vClass);
 
     const std::vector<const Influence *> &getIncomingInfluences() const;
     const Influence* getIncomingInfluence(const influenceType& influenceType, double argument) const;
     double getArgument(influenceType influenceType) const;
     double getLowestRelevantArgument(influenceType influenceType) const;
     bool addIncomingInfluence(const Influence * incomingInfluence);
-    void removeIncomingInfluence(const Influence* toDeleteInfluence);
+    void removeIncomingInfluence(const Influence* toRemoveInfluence);
     void clearIncomingInfluences();
 
     const std::vector<const Influence *> &getEntrantInfluences() const;

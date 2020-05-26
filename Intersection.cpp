@@ -11,7 +11,17 @@ Intersection::Intersection(std::string  name): _name(std::move(name)) {
     _trafficScore = 0;
     _trafficLightCounter = 0;
     _multipurposeMarker = false;
+    _ownPointer = this;
 }
+
+
+Intersection::~Intersection() {
+    _streets.clear();
+    _trafficLights = nullptr;
+    _ownPointer = nullptr;
+}
+
+
 
 void Intersection::emitInfluences(std::ofstream& trafficLightStream) {
     if (getHasTrafficLights()) {
@@ -23,20 +33,34 @@ void Intersection::emitTrafficLightSignal(std::ofstream& trafficLightStream) {
     int tlc = getTrafficLightCounter();
     // cycle the traffic lights to the next pair (green pair -> red  | next red pair -> green)
     if (tlc == Simulation::getTrafficLightMaxCount()) {
-        addCycleMessageFront(trafficLightStream);
-        // set the two "green streets" to "red" (emit a STOP signal to the front cars of those streets)
-        stopCurrentFrontOccupants();
-        // set currentTrafficLightPair to the next pair
-        cycleTrafficLightsPair();
-        // set the two "red streets" to "green" (remove a STOP signal from the front cars of those streets)
-        unStopCurrentFrontOccupants();
+        if (getTrafficLightPairs().size() > 1) {
+            addCycleMessageFront(trafficLightStream);
+            // set the two "green streets" to "red" (emit a STOP signal to the front cars of those streets)
+            stopCurrentFrontOccupants();
+            // set currentTrafficLightPair to the next pair
+            cycleTrafficLightsPair();
+            // set the two "red streets" to "green" (remove a STOP signal from the front cars of those streets)
+            unStopCurrentFrontOccupants();
 
-        setTrafficLightCounter(0);
+            setTrafficLightCounter(0);
 
-        addCycleMessageBack(trafficLightStream);
+            addCycleMessageBack(trafficLightStream);
+        } else if (getTrafficLightPairs().size() == 1) {
+            addSingleTLCycleMessageFront(trafficLightStream);
+
+            invertFrontSTOPStates();
+
+            setTrafficLightCounter(0);
+
+            addSingleTLCycleMessageBack(trafficLightStream);
+        }
     } else {
         setTrafficLightCounter(getTrafficLightCounter()+1);
-        addTLCincrementMessage(trafficLightStream);
+        if (getTrafficLightPairs().size() > 1) {
+            addTLCincrementMessage(trafficLightStream);
+        } else {
+            addSingleTLCincrementMessage(trafficLightStream);
+        }
     }
 }
 
@@ -202,6 +226,50 @@ void Intersection::unstopSingleFrontOccupant(int enteringLaneIndex, Vehicle *fro
     }
 }
 
+void Intersection::invertFrontSTOPStates() {
+    const std::pair<Street*,Street*>& currentTLpair = getCurrentPair();
+    // the current pair is "empty"/"nullptr", the traffic lights are red
+    if (currentTLpair.first != nullptr and currentTLpair.second != nullptr) {
+        turnTLred(currentTLpair);
+    // the currentPair is not "empty"/"nullptr", the traffic lights are green
+    } else {
+        turnTLgreen();
+    }
+}
+void Intersection::turnTLgreen() {
+    const std::vector<std::pair<Street*,Street*>>& TLPairs = getTrafficLightPairs();
+    if (!TLPairs.empty()) {
+        const std::pair<Street *, Street *> &greenPair = TLPairs.front();
+        // make the traffic lights GREEN now
+        setCurrentPair(greenPair);
+        // remove traffic light signal from now stopped front vehicles
+        Vehicle* front1 = getIncomingFrontVehicle(greenPair.first);
+        if (front1 != nullptr) {
+            front1->removeIncomingInfluence(getTrafficLightInfluence());
+        }
+        Vehicle* front2 = getIncomingFrontVehicle(greenPair.second);
+        if (front2 != nullptr) {
+            front2->removeIncomingInfluence(getTrafficLightInfluence());
+        }
+    }
+}
+void Intersection::turnTLred(const std::pair<Street*,Street*>& currentPair) {
+    // remove the traffic light influence
+    Vehicle* front1 = getIncomingFrontVehicle(currentPair.first);
+    if (front1 != nullptr) {
+        front1->receiveInfluence(getTrafficLightInfluence());
+    }
+    Vehicle* front2 = getIncomingFrontVehicle(currentPair.second);
+    if (front2 != nullptr) {
+        front2->receiveInfluence(getTrafficLightInfluence());
+    }
+    // set the current pair to green
+    std::pair<Street*,Street*> redPair(nullptr, nullptr);
+    setCurrentPair(redPair);
+}
+
+
+
 
 
 Intersection *Intersection::getOtherIntersection(const Street *street) const {
@@ -345,6 +413,69 @@ void Intersection::addTLCincrementMessage(std::ofstream &trafficLightStream) con
                        << ", " << getCurrentPair().second->getTwoWayString()
                        << ")} increased their counter to (" << getTrafficLightCounter() << ")\n";
 }
+void Intersection::addSingleTLCincrementMessage(std::ofstream &trafficLightStream) const {
+    trafficLightStream << "Traffic light at intersection " << getName() << " with current pair:\n";
+    const std::pair<Street*,Street*>& currentPair = getCurrentPair();
+    if (currentPair.first != nullptr) {
+        trafficLightStream  << getCurrentPair().first->getOtherIntersection(this)->getName() << "->"
+                << getName() << " (" << getCurrentPair().first->typeToName() << ", "
+                << getCurrentPair().first->getTwoWayString() << "), ";
+    } else {
+        trafficLightStream << "{nullptr, ";
+    }
+    if (currentPair.second != nullptr) {
+        trafficLightStream << getCurrentPair().second->getOtherIntersection(this)->getName()
+                << "->" << getName() << " (" << getCurrentPair().second->typeToName()
+                << ", " << getCurrentPair().second->getTwoWayString()
+                << ")}";
+    } else {
+        trafficLightStream << "nullptr}";
+    }
+    trafficLightStream << " increased their counter to (" << getTrafficLightCounter() << ")\n";
+}
+void Intersection::addSingleTLCycleMessageFront(std::ofstream &trafficLightStream) const {
+    trafficLightStream << "Traffic light at intersection " << getName() << " with current pair:\n{";
+    const std::pair<Street*,Street*>& currentPair = getCurrentPair();
+    if (currentPair.first != nullptr) {
+        trafficLightStream  << getCurrentPair().first->getOtherIntersection(this)->getName() << "->"
+                << getName() << " (" << getCurrentPair().first->typeToName() << ", "
+                << getCurrentPair().first->getTwoWayString() << "), ";
+    } else {
+        trafficLightStream << "nullptr, ";
+    }
+    if (currentPair.second != nullptr) {
+        trafficLightStream << getCurrentPair().second->getOtherIntersection(this)->getName()
+                << "->" << getName() << " (" << getCurrentPair().second->typeToName()
+                << ", " << getCurrentPair().second->getTwoWayString()
+                << ")}";
+    } else {
+        trafficLightStream << "nullptr}";
+    }
+    trafficLightStream << " has cycled to new current pair:\n";
+}
+void Intersection::addSingleTLCycleMessageBack(std::ofstream &trafficLightStream) const {
+    const std::pair<Street*,Street*>& currentPair = getCurrentPair();
+    if (currentPair.first != nullptr) {
+        trafficLightStream  << "{" << getCurrentPair().first->getOtherIntersection(this)->getName() << "->"
+                            << getName() << " (" << getCurrentPair().first->typeToName() << ", "
+                            << getCurrentPair().first->getTwoWayString() << "), ";
+    } else {
+        trafficLightStream << "{nullptr, ";
+    }
+    if (currentPair.second != nullptr) {
+        trafficLightStream << getCurrentPair().second->getOtherIntersection(this)->getName()
+                           << "->" << getName() << " (" << getCurrentPair().second->typeToName()
+                           << ", " << getCurrentPair().second->getTwoWayString()
+                           << ")}\n";
+    } else {
+        trafficLightStream << "nullptr}\n";
+    }
+    if (currentPair.first == nullptr and currentPair.second == nullptr) {
+        trafficLightStream << "===> The sole traffic light pair for this intersection has turned green.\n";
+    } else {
+        trafficLightStream << "===> The sole traffic light pair for this intersection has turned red.\n";
+    }
+}
 
 
 
@@ -424,6 +555,11 @@ const Influence *Intersection::getTrafficLightInfluence() const {
 bool Intersection::getHasTrafficLights() const {
     return _trafficLights != nullptr;
 }
+void Intersection::removeTrafficLights() {
+    _trafficLights = nullptr;
+    _trafficLightPairs.clear();
+}
+
 
 int Intersection::getTrafficLightCounter() const {
     return _trafficLightCounter;
@@ -444,9 +580,10 @@ void Intersection::addTrafficLightPair(std::pair<Street *, Street *> newPair) {
     // each street, part of a traffic light pair, is exclusively part of a single pair.
     // No Street can be part of multiple traffic light pairs
     for (const std::pair<Street*, Street*>& pair : _trafficLightPairs) {
-        // newPair is a completely unique pair, else return
+        // the pair is not unique, it shares a street with another pair, don't add new pair
         if (haveIntersection(pair, newPair)) return;
     }
+    // newPair is a completely unique pair
     _trafficLightPairs.emplace_back(newPair);
 }
 std::vector<Street *> Intersection::getUnpairedStreets() const {
@@ -491,7 +628,7 @@ void Intersection::cycleTrafficLightsPair() {
 
     // find the current pair in all the trafficLightPairs and set current pair to the next pair
     for (unsigned int index = 0; index < allPairs.size(); ++index) {
-        // the current pair has not been found yet, arrived at the back() of the pairsList after searching it entirely
+        // the current pair has not been found yet, arrived at the back() of the pairsList after searching through it entirely
         if (allPairs.back() == allPairs[index]) {
             // the current pair is the back pair, the next pair is the front
             if (allPairs.back() == currentPair) {
@@ -514,5 +651,14 @@ bool Intersection::isMultipurposeMarker() const {
 void Intersection::setMultipurposeMarker(bool multipurposeMark) {
     _multipurposeMarker = multipurposeMark;
 }
+void Intersection::removeAllMArkings() {
+    for (Street* street : getStreets()) {
+        street->setMultipurposeMarker(false);
+    }
+    setMultipurposeMarker(false);
+}
 
+Intersection *Intersection::getOwnPointer() const {
+    return _ownPointer;
+}
 

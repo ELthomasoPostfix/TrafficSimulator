@@ -86,13 +86,29 @@ void Simulation::setDecisionBufferLength(int length) {
 }
 
 const bool Simulation::vehicleTypeCanEnterStreetType(const vehicleClass &vehicleClass, const streetType &streetType) {
-     if (streetType == A or streetType == B) {
-        return true;
-    } else if (streetType == T and (vehicleClass == transport)) {
+    // if type compatibility between vehicles and streets plays a role, allow proper
+    // examination of types
+    if (Simulation::getTypeCompatibilityState()) {
+        if (streetType == A or streetType == B) {
+            return true;
+        } else if (streetType == T and (vehicleClass == transport)) {
+            return true;
+        }
+        return false;
+    // vehicle and street compatibility play no role
+    } else {
         return true;
     }
-    return false;
 }
+
+
+void Simulation::setTypeCompatibilityState(bool state) {
+    typeCompatibility = state;
+}
+const bool Simulation::getTypeCompatibilityState() {
+    return typeCompatibility;
+}
+
 
 const int Simulation::getStreetLength() {
     return streetLength;
@@ -101,13 +117,24 @@ void Simulation::setStreetLength(int length) {
     streetLength = length;
 }
 
+const int Simulation::getVehicleSpawnRate() {
+    return vehicleSpawnRate;
+}
+void Simulation::setVehicleSpawnRate(int spawnRate) {
+    vehicleSpawnRate = spawnRate;
+}
+
+
+
 void Simulation::printSimVariables() {
     std::cout << "\n------------ Sim Variables ------------" << std::endl
-              << "minCarDistance:        " << minCarDistance << std::endl
-              << "trafficLightMaxCount:  " << trafficLightMaxCount << std::endl
-              << "effectiveSTOPdistance: " << effectiveSTOPdistance << std::endl
-              << "decisionBufferLength:  " << decisionBufferLength << std::endl
-              << "streetLength:          " << streetLength << std::endl
+              << "minCarDistance:        " << Simulation::getMinCarDistance() <<  std::endl
+              << "trafficLightMaxCount:  " << Simulation::getTrafficLightMaxCount() << std::endl
+              << "effectiveSTOPdistance: " << Simulation::getEffectiveSTOPdistance() << std::endl
+              << "decisionBufferLength:  " << Simulation::getDecisionBufferLength() << std::endl
+              << "streetLength:          " << Simulation::getStreetLength() << std::endl
+              << "type compatibility:    " << Util::boolToEnabledString(Simulation::getTypeCompatibilityState()) << std::endl
+              << "vehicleSpawnRate:      " << Simulation::getVehicleSpawnRate() << std::endl
               << "---------------------------------------\n";
 }
 
@@ -120,7 +147,39 @@ void Simulation::incrementTotalSpawnedVehicles() {
     _totalSpawnedVehicles++;
 }
 
+int Simulation::getSpawnTimer() const {
+    return _spawnTimer;
+}
+void Simulation::setSpawnTimer(int spawnTimer) {
+    if (spawnTimer >= 0) {
+        _spawnTimer = spawnTimer;
+    }
+}
+void Simulation::incrementSpawnTimer() {
+    ++_spawnTimer;
+}
 
+std::string Simulation::getNewLicensePlate() {
+    std::stringstream ss;
+    ss << getTotalSpawnedVehicles();
+    ss << rand() % 9 + 1;
+    ss << rand() % (getTotalSpawnedVehicles() + 1);
+    incrementTotalSpawnedVehicles();
+    return ss.str();
+}
+
+Vehicle *Simulation::createVehicleObj(const vehicleClass& vClass) {
+    std::string licensePlate = getNewLicensePlate();
+    if (vClass == personal) {
+        return new Vehicle(personal, licensePlate);
+    } else if (vClass == transport) {
+        return new TransportVehicle(licensePlate);
+    } else if (vClass == special) {
+        return new SpecialVehicle(licensePlate);
+    } else {
+        return nullptr;
+    }
+}
 
 
 

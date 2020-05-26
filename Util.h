@@ -18,6 +18,8 @@
         static std::string boolToArrowString(bool isTwoWay, bool LR);
 
         static std::string isTwoWayToString(bool twoWay);
+
+        static std::string boolToEnabledString(bool state);
     };
 
 

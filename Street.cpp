@@ -10,11 +10,17 @@ Street::Street(Intersection* prev, Intersection* next, streetType type) : _prevI
                                                                           _type(type) {
     _hasSpeedLimit = false;
     _multipurposeMarker = false;
+    _ownPointer = this;
 }
 
 
 Street::~Street() {
-
+    for (const std::vector<Vehicle*>& lane : getLanes()) {
+        for (Vehicle* vehicle : lane) {
+            delete vehicle;
+        }
+    }
+    _ownPointer = nullptr;
 }
 
 
@@ -296,6 +302,17 @@ bool Street::removeInfluence(influenceType influenceType) {
     _influences = newVector;
     return true;
 }
+bool Street::removeInfluence(const Influence *toRemoveInfl) {
+    std::vector<const Influence*>::iterator inflIt;
+    for (inflIt = _influences.begin(); inflIt != _influences.end(); ++inflIt) {
+        if (*inflIt == toRemoveInfl) {
+            _influences.erase(inflIt);
+            break;
+        }
+    }
+    return false;
+}
+
 
 
 bool Street::hasSpeedLimit() const {
@@ -341,6 +358,10 @@ bool Street::isMultipurposeMarker() const {
 }
 void Street::setMultipurposeMarker(bool multipurposeMarker) {
     _multipurposeMarker = multipurposeMarker;
+}
+
+Street *Street::getOwnPointer() const {
+    return _ownPointer;
 }
 
 

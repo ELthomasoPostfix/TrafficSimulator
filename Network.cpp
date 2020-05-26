@@ -8,6 +8,16 @@ Network::Network() {
     _simulation = new Simulation();
 }
 
+Network::~Network() {
+    delete _simulation;
+    for (Intersection* intersection : _network) {
+        delete intersection;
+    }
+    for (Vehicle* vehicle : _vehicles) {
+        delete vehicle;
+    }
+}
+
 
 void Network::doMainLoop(const int duration, std::string& ofName, std::string& ofName2, std::string& ofName3) {
     Simulation* sim = _simulation;
@@ -25,8 +35,13 @@ void Network::doMainLoop(const int duration, std::string& ofName, std::string& o
         // let intersections with traffic lights cycle through the traffic light pairs (of Street*s) and send out
         // signals when cycling from one pair to the next.
         // vehicles will request traffic light influence upon calling the setFrontOccupant() function of a street
-        for (Intersection* influencingIntersection : getInfluencingIntersections()) {
+        const std::vector<Intersection*>& inflIntersecs = getInfluencingIntersections();
+        for (Intersection* influencingIntersection : inflIntersecs) {
             influencingIntersection->emitInfluences(trafficLightStream);
+            // add fluff text to increase readability
+            if (influencingIntersection != inflIntersecs.back()) {
+                trafficLightStream << "###\n";
+            }
         }
 
         for (Intersection* intersection : getNetwork()) {
@@ -38,6 +53,7 @@ void Network::doMainLoop(const int duration, std::string& ofName, std::string& o
         for (Vehicle* vehicle : getVehicles()) {
             vehicle->drive(driveStream);
             std::cout << " drove (" << dur << ")" << std::endl;
+            vehicle->accident();
         }
     }
     vehicleChainStream << "\n---- " << duration-1 << " ----" << std::endl;
@@ -127,6 +143,52 @@ void Network::onWrite(std::ofstream &networkOUTPUT) {
         vehicle->onWrite(networkOUTPUT);
         networkOUTPUT << "---------\n";
     }
+}
+
+
+void Network::tryRandomVehicleSpawn() {
+    Simulation* sim = getSimulation();
+    if (sim->getSpawnTimer() == Simulation::getVehicleSpawnRate()) {
+        addVehicle(createVehicle());
+        sim->setSpawnTimer(0);
+    } else {
+        sim->incrementSpawnTimer();
+    }
+}
+Vehicle* Network::createVehicle() {
+    const int randomClass = random()%2 + 1;
+    vehicleClass vehicleClass = Vehicle::intToClass(randomClass);
+    Vehicle* spawnedVehicle = getSimulation()->createVehicleObj(vehicleClass);
+
+    Intersection* startIntersection = getRandomIntersection();
+    Intersection* endIntersection = getRandomIntersection();
+    const std::vector<Intersection*>& network = getNetwork();
+
+    // if there is only one intersection, don't do the loop to get other intersections
+    // if there is more than one intersection, make sure that you get two different intersections for a start and end
+    if (network.size() != 1) {
+        while (startIntersection == endIntersection) {
+            endIntersection = getRandomIntersection();
+
+        }
+    }
+
+    spawnedVehicle->setCurrentStreet(spawnedVehicle->chooseRandomStreet());
+
+    spawnedVehicle->setStartIntersection(startIntersection);
+    spawnedVehicle->setEndIntersection(endIntersection);
+
+    // TODO (1) set start and end states
+    //      (2) pathfinding
+    //      (3) set progress?
+    //      (4) set start street?
+
+    return spawnedVehicle;
+}
+
+Intersection *Network::getRandomIntersection() const {
+    const int randomNum = random()%getNetwork().size();
+    return getNetwork()[randomNum];
 }
 
 
@@ -290,6 +352,115 @@ bool Network::isIn(const Intersection *intersection, const std::vector<Intersect
 }
 
 
+std::pair<std::vector<std::vector<const Intersection*>>,std::vector<std::vector<const Street*>>> Network::elimStreetsToPaths() {
+    Intersection* startIntersection = getNetwork().front();
+    Intersection* prevIntersection = startIntersection;
+
+    std::vector<std::vector<const Intersection*>> intersectionPath;
+    std::vector<std::vector<const Street*>> streetPath;
+    const std::vector<Street*>& streets = startIntersection->getAllLeavingStreets();
+    // for each final street in the eliminated/minimised network
+    for (Street* elimStreet : streets) {
+        // if the street is an elimStreet class street, then process all the intersections contained within
+        if (elimStreet->isEStreet()) {
+
+            const std::vector<const Street*>& elimStreets = *elimStreet->getStreets();
+            // for each street street contained within the elimStreet
+            // (== each "character" of the "RE" on a final transition)
+            for (const Street* street : elimStreets) {
+                // front street, make a new list, which represents a single path after elimination
+                if (street == elimStreets.front()) {
+                    std::vector<const Intersection*> singlePathIntersec = {prevIntersection->getOwnPointer()};
+                    intersectionPath.emplace_back(singlePathIntersec);
+
+                    std::vector<const Street*> singlePathStreet = {street->getOwnPointer()};
+                    streetPath.emplace_back(singlePathStreet);
+                    // next intersection
+                    prevIntersection = prevIntersection->getOtherIntersection(street);
+                // a path list already exists, simply add to it
+                } else {
+                    intersectionPath.back().emplace_back(prevIntersection->getOwnPointer());
+
+                    streetPath.back().emplace_back(street->getOwnPointer());
+                    // next intersection
+                    prevIntersection = prevIntersection->getOtherIntersection(street);
+                    if (street == elimStreets.back()) {
+                        intersectionPath.back().emplace_back(prevIntersection->getOwnPointer());
+                    }
+                }
+            }
+            prevIntersection = startIntersection;
+        } else {
+            const std::vector<const Intersection*> singlePathIntersec = {elimStreet->getPrevIntersection(), elimStreet->getNextIntersection()};
+            intersectionPath.emplace_back(singlePathIntersec);
+            const std::vector<const Street*> singlePathStreet = {elimStreet->getOwnPointer()};
+            streetPath.emplace_back(singlePathStreet);
+        }
+    }
+
+    // TODO  \/ delete
+    std::vector<std::string> intersStrVec;
+    std::string singlePath;
+
+    // make a path string based on the list of intersections
+    int counter = 0;
+    for (std::vector<const Intersection*>& path : intersectionPath) {
+        for (const Intersection* intersection : path) {
+            singlePath += intersection->getName();
+            if (counter < path.size()-1) {
+                singlePath += "->";
+            }
+            ++counter;
+        }
+        counter = 0;
+        intersStrVec.emplace_back(singlePath);
+        singlePath = "";
+    }
+    // make a path string based on the list of streets
+    std::vector<std::string> streetStrVec;
+    counter = 0;
+
+    for (std::vector<const Street*>& path : streetPath) {
+        const Intersection* prevIntersec = path.front()->getPrevIntersection();
+        for (const Street* street : path) {
+            singlePath += prevIntersec->getName();
+
+            prevIntersec = prevIntersec->getOtherIntersection(street);
+            if (counter < path.size()-1) {
+                singlePath += "->";
+            } else {
+                singlePath += "->" + prevIntersec->getName();
+            }
+            ++counter;
+        }
+        counter = 0;
+        streetStrVec.emplace_back(singlePath);
+        singlePath = "";
+    }
+    // check whether both path strings are the same each corresponding path
+    for (unsigned int index = 0; index < intersStrVec.size(); ++index) {
+            std::cout << "path" << index <<  ": ";
+        if (intersStrVec[index] == streetStrVec[index]) {
+            std::cout << "pass" << std::endl;
+        } else {
+            std::cout << "fail" << std::endl;
+        }
+    }
+
+    // TODO  /\ delete
+
+    return {intersectionPath, streetPath};
+}
+
+
+
+void Network::removeAllMultipurposeMarkers() const {
+    for (Intersection* intersection : getNetwork()) {
+        intersection->removeAllMArkings();
+    }
+}
+
+
 
 void Network::writeAllVehicleChains(std::ofstream &vehicleChainStream) const {
     // front vehicles of their own current street
@@ -383,6 +554,16 @@ Intersection *Network::findIntersection(const std::string &name) const {
     }
     return nullptr;
 }
+void Network::removeIntersection(const Intersection *toRemoveIntersec) {
+    std::vector<Intersection*>::iterator intersecIt;
+    for (intersecIt = _network.begin(); intersecIt != _network.end(); ++intersecIt) {
+        if (*intersecIt == toRemoveIntersec) {
+            _network.erase(intersecIt);
+            break;
+        }
+    }
+}
+
 
 Simulation *Network::getSimulation() const {
     return _simulation;
@@ -410,6 +591,16 @@ void Network::addVehicle(Vehicle * vehicle) {
     _vehicles.emplace_back(vehicle);
     _simulation->incrementTotalSpawnedVehicles();
 }
+void Network::removeVehicle(const Vehicle *toRemoveVehicle) {
+    std::vector<Vehicle*>::iterator vehicleIt;
+    for (vehicleIt = _vehicles.begin(); vehicleIt != _vehicles.end(); ++vehicleIt) {
+        if (*vehicleIt == toRemoveVehicle) {
+            _vehicles.erase(vehicleIt);
+            break;
+        }
+    }
+}
+
 
 const std::vector<Intersection *> &Network::getInfluencingIntersections() const {
     return _influencingIntersections;
@@ -417,3 +608,7 @@ const std::vector<Intersection *> &Network::getInfluencingIntersections() const 
 void Network::addInfluencingIntersection(Intersection *influencingIntersection) {
     _influencingIntersections.emplace_back(influencingIntersection);
 }
+
+
+
+

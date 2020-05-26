@@ -14,7 +14,7 @@ class TransportVehicle : public Vehicle {
 public:
     TransportVehicle(std::string licensePlate);
 
-    void emitInfluence() override;
+    void emitInfluence() const override;
 };
 
 

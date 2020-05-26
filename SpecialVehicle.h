@@ -19,13 +19,16 @@ class SpecialVehicle : public Vehicle {
 public:
     SpecialVehicle(const std::string& licensePlate);
 
-    void InstantiateInfluence();
+    ~SpecialVehicle() override;
 
-    void emitInfluence() override;
+    void InstantiateInfluence(double argument);
+
+    void emitInfluence() const override;
+    void undoSiren() const override;
 
     void addOutgoingInfluence(const Influence* outgoingInfluence) override;
 
-
+    const Influence* getSiren() const;
 };
 
 

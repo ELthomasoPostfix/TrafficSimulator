@@ -8,14 +8,12 @@ void StateElimination::eliminate(Network *cityNetwork, Intersection* startInters
 
     // loop over every Intersection in the minimal Network
     for (Intersection* intersection : cityNetwork->getNetwork()) {
-        //      Intersection* intersection = cityNetwork->getNetwork()[1];  // TODO    ### delete this
         // the start- and end intersections may not be eliminated
         if (intersection != startIntersection and intersection != endIntersection) {
             std::vector<Street *> leavingStreets;
             std::vector<Street *> enteringStreets;
             std::vector<const Street *> loopStreets;
             // identify the leaving and entering states
-            // TODO:  are twoWay streets treated as two different streets? ==> both in leaving and entering
             separateStreetList(leavingStreets, enteringStreets, loopStreets, intersection->getStreets(), intersection);
 
             // there are both previous and next intersections, eliminate
@@ -25,11 +23,10 @@ void StateElimination::eliminate(Network *cityNetwork, Intersection* startInters
             // OR  there are no entering streets, so there is no previous intersection
             // OR  both
             } else {
-                isolateUnnecessaryIntersections(leavingStreets, enteringStreets, intersection);
+                isolateUnnecessaryIntersections(leavingStreets, enteringStreets, intersection, cityNetwork);
             }
         }
     }
-    // delete any final ElimStates that doe not go from startIntersection to endIntersection
 }
 
 
@@ -59,20 +56,26 @@ void StateElimination::separateStreetList(std::vector<Street*>& leavingStreets, 
 }
 
 void StateElimination::isolateUnnecessaryIntersections(std::vector<Street *> &leavingStreets, std::vector<Street *> &enteringStreets,
-                                     Intersection* intersection) {
+                                     Intersection* intersection, Network* cityNetwork) {
     // the state cannot reach any other states in this network, including the end state,
     // so remove references to it's streets in other intersections
     if (leavingStreets.empty()) {
         for (Street* enteringStreet : enteringStreets) {
+            // detach from network
             enteringStreet->getOtherIntersection(intersection)->removeStreet(enteringStreet);
+            delete enteringStreet;
         }
     } if (enteringStreets.empty()) {
         // the state cannot be reached in this network, so remove references to it's streets in other
         // intersections
         for (Street* leavingStreet : leavingStreets) {
             leavingStreet->getOtherIntersection(intersection)->removeStreet(leavingStreet);
+            delete leavingStreet;
         }
     }
+    intersection->clearStreets();
+    cityNetwork->removeIntersection(intersection);
+    delete intersection;
 }
 
 void StateElimination::doElimination(Intersection *intersection, std::vector<Street *> &enteringStreets,

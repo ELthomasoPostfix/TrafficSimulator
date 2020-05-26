@@ -5,7 +5,8 @@
       "mincardistance": 1,
       "maxtrafficlightcount": 5,
       "decisionbufferlength": 10,
-      "streetlength": 100
+      "streetlength": 100,
+      "vehiclespawnrate": 5
     }
   },
   "alphabet": [
@@ -34,7 +35,7 @@
           "otherIntersection1": "1",
           "type1": "T",
           "otherIntersection2": "3",
-          "type2": "B"
+          "type2": "A"
         }
       ]
     },

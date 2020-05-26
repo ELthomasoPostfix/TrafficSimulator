@@ -17,6 +17,12 @@ int effectiveSTOPdistance = minCarDistance;
 
 int streetLength = 100;
 
+// whether or not vehicles being a certain type affects them entering a certain street type
+// by default, it playes a role/is on
+bool typeCompatibility = true;
+
+int vehicleSpawnRate = 5;
+
 
 
 Network* jsonParser::processJSON(const std::string& fileName) {
@@ -58,6 +64,7 @@ Network *jsonParser::jsonToSimulationParameters(nlohmann::json &json) {
         Simulation::setTrafficLightMaxCount(simVars["maxtrafficlightcount"]);
         Simulation::setDecisionBufferLength(simVars["decisionbufferlength"]);
         Simulation::setStreetLength(simVars["streetlength"]);
+        Simulation::setVehicleSpawnRate(simVars["vehiclespawnrate"]);
     }
     return new Network();
 }
@@ -85,37 +92,51 @@ void jsonParser::assignTrafficLightPairs(nlohmann::json &json, Network *cityNetw
         const std::string& name = intersection["name"]; // the checked intersection
         Intersection* intersectionPtr = cityNetwork->findIntersection(name); // its pointer
 
-        for (auto& trafficLightPair : intersection["trafficLightPairs"]) {
-            std::pair<Street*, Street*> TLPair;
-            for (Street* street : intersectionPtr->getStreets()) {
-                // if the street specified by the traffic light pair actually exists and is linked to intersection
-                if (street->getPrevIntersection() == intersectionPtr or street->getNextIntersection() == intersectionPtr) {
-                    const std::string& otherName1 = trafficLightPair["otherIntersection1"]; // street1 of the pair
-                    const std::string& otherName2 = trafficLightPair["otherIntersection2"]; // street2 of the pair
-                    const std::string type1 = trafficLightPair["type1"];
-                    const std::string type2 = trafficLightPair["type2"];
+        auto& trafficLightPairs = intersection["trafficLightPairs"];
+        if (!trafficLightPairs.empty()) {
+            for (auto &trafficLightPair : trafficLightPairs) {
+                std::pair<Street *, Street *> TLPair;
+                for (Street *street : intersectionPtr->getStreets()) {
+                    // if the street specified by the traffic light pair actually exists and is linked to intersection
+                    if (street->getPrevIntersection() == intersectionPtr or
+                        street->getNextIntersection() == intersectionPtr) {
+                        const std::string &otherName1 = trafficLightPair["otherIntersection1"]; // street1 of the pair
+                        const std::string &otherName2 = trafficLightPair["otherIntersection2"]; // street2 of the pair
+                        const std::string type1 = trafficLightPair["type1"];
+                        const std::string type2 = trafficLightPair["type2"];
 
-                    Intersection* otherIntersec = street->getOtherIntersection(intersectionPtr);
-                    // the second intersection that Street1 refers to also exists
-                    // and is also part of the network
-                    if (otherIntersec == cityNetwork->findIntersection(otherName1) and
-                        street->getType() == Street::nameToType(*type1.c_str())) {
-                        TLPair.first = street;
-                    // the second intersection that Street2 refers to also exists
-                    // and is also part of the network
-                    } else if (otherIntersec == cityNetwork->findIntersection(otherName2) and
-                               street->getType() == Street::nameToType(*type2.c_str())) {
-                        TLPair.second = street;
+                        Intersection *otherIntersec = street->getOtherIntersection(intersectionPtr);
+                        // the second intersection that Street1 refers to also exists
+                        // and is also part of the network
+                        if (otherIntersec == cityNetwork->findIntersection(otherName1) and
+                            street->getType() == Street::nameToType(*type1.c_str())) {
+                            TLPair.first = street;
+                            // the second intersection that Street2 refers to also exists
+                            // and is also part of the network
+                        } else if (otherIntersec == cityNetwork->findIntersection(otherName2) and
+                                   street->getType() == Street::nameToType(*type2.c_str())) {
+                            TLPair.second = street;
+                        }
+                    }
+                }
+                if (TLPair.first != nullptr and TLPair.second != nullptr) {
+                    intersectionPtr->addTrafficLightPair(TLPair);
+                    const std::pair<Street *, Street *> &currentPair = intersectionPtr->getCurrentPair();
+                    if (currentPair.first == NULL and currentPair.second == NULL) {
+                        intersectionPtr->setCurrentPair(TLPair);
                     }
                 }
             }
-            if (TLPair.first != nullptr and TLPair.second != nullptr) {
-                intersectionPtr->addTrafficLightPair(TLPair);
-                const std::pair<Street*,Street*>& currentPair = intersectionPtr->getCurrentPair();
-                if (currentPair.first == NULL and currentPair.second == NULL) {
-                    intersectionPtr->setCurrentPair(TLPair);
-                }
-            }
+        // the json representation of the intersection is supposed to have traffic lights,
+        // but has no pairs, so remove the traffic lights
+        } else if (intersectionPtr->getHasTrafficLights()) {
+            intersectionPtr->removeTrafficLights();
+        }
+        // at the end of adding traffic light pairs, for each actual intersection, check if they have traffic lights.
+        // if they do, check if they actually have any traffic light pairs
+        // if they don't, remove traffic lights
+        if (intersectionPtr->getHasTrafficLights() and intersectionPtr->getTrafficLightPairs().empty()) {
+            intersectionPtr->removeTrafficLights();
         }
     }
 }
@@ -307,21 +328,9 @@ void jsonParser::printLaneError(Vehicle *newVehicle, Street *spawnStreet, Inters
 
 
 
-Vehicle *jsonParser::createVehicle(const std::string &vehicleClass, const Simulation& sim) {
+Vehicle *jsonParser::createVehicle(const std::string &vehicleClass, Simulation& sim) {
     // create the license plate
-    std::stringstream ss;
-    ss << sim.getTotalSpawnedVehicles() << rand() % 9 + 1 << rand() % 9 + 1;
-    std::string licensePlate = ss.str();
-
-    if (vehicleClass == "personal") {
-        return new Vehicle(personal, licensePlate);
-    } else if (vehicleClass == "transport") {
-        return new TransportVehicle(licensePlate);
-    } else if (vehicleClass == "special") {
-        return new SpecialVehicle(licensePlate);
-    } else {
-        return nullptr;
-    }
+    return sim.createVehicleObj(Vehicle::nameToClass(vehicleClass));
 }
 
 bool jsonParser::typeIsAllowed(const streetType& streetType, const Network* cityNetwork) {

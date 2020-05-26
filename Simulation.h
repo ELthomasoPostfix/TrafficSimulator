@@ -17,6 +17,10 @@ extern int decisionBufferLength;
 extern int effectiveSTOPdistance;
 
 extern int streetLength;
+// whether or not vehicles being a certain type affects them entering a certain street type
+extern bool typeCompatibility;
+
+extern int vehicleSpawnRate;
 
 
 class Simulation {
@@ -28,7 +32,7 @@ class Simulation {
 
     // TODO add some statistics functions here
 
-
+    int _spawnTimer = 0;
 
     int _totalSpawnedVehicles = 0;
 
@@ -64,13 +68,26 @@ public:
 
     static const bool vehicleTypeCanEnterStreetType(const vehicleClass& vehicleClass, const streetType& streetType);
 
+    static void setTypeCompatibilityState(bool state);
+    static const bool getTypeCompatibilityState();
+
     static const int getStreetLength();
     static void setStreetLength(int length);
+
+    static const int getVehicleSpawnRate();
+    static void setVehicleSpawnRate(int spawnRate);
 
     static void printSimVariables();
 
     int getTotalSpawnedVehicles() const;
     void incrementTotalSpawnedVehicles();
+
+    int getSpawnTimer() const;
+    void setSpawnTimer(int spawnTimer);
+    void incrementSpawnTimer();
+
+    std::string getNewLicensePlate();
+    Vehicle* createVehicleObj(const vehicleClass& vehicleClass);
 };
 
 
