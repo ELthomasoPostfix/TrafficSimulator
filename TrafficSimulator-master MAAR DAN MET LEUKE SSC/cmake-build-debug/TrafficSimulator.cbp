@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="TrafficSimulator"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/jeff/TrafficSimulator-master/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/home/jeff/TrafficSimulator-master/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/home/jeff/TrafficSimulator-master/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="TrafficSimulator">
+				<Option output="/home/jeff/TrafficSimulator-master/cmake-build-debug/TrafficSimulator" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/jeff/TrafficSimulator-master/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 TrafficSimulator"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="TrafficSimulator/fast">
+				<Option output="/home/jeff/TrafficSimulator-master/cmake-build-debug/TrafficSimulator" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/jeff/TrafficSimulator-master/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 TrafficSimulator/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/jeff/TrafficSimulator-master/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/jeff/TrafficSimulator-master/ElimStreet.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/ElimStreet.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/Influence.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/Influence.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/Intersection.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/Intersection.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/Network.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/Network.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/Simulation.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/Simulation.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/SpecialVehicle.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/SpecialVehicle.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/StateElimination.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/StateElimination.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/Street.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/Street.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/TransportVehicle.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/TransportVehicle.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/Util.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/Util.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/Vehicle.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/Vehicle.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/jsonParser.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/jsonParser.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/main.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/ssc_untouched/SSC.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/ssc_untouched/SSC.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/jeff/TrafficSimulator-master/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
