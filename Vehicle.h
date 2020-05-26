@@ -175,6 +175,8 @@ public:
 
     const std::vector<const Street *> &getPath() const;
     void setPath(const std::vector<const Street *> &path);
+
+    virtual bool getSirenOn() const;
 };
 
 

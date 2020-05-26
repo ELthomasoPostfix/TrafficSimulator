@@ -736,6 +736,11 @@ void Vehicle::setPath(const std::vector<const Street *> &path) {
     _path = path;
 }
 
+bool Vehicle::getSirenOn() const {
+    // normal vehicles do not have sirens, only special vehicles do
+    return false;
+}
+
 
 
 

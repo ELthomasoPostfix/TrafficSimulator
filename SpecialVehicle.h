@@ -16,6 +16,8 @@ class SpecialVehicle : public Vehicle {
     // if a normal vehicle has a traffic accident, then even they won't be able to emit Influences
     std::vector<const Influence*> _outgoingInfluences;
 
+    bool _sirenOn;
+
 public:
     SpecialVehicle(const std::string& licensePlate);
 
@@ -29,6 +31,8 @@ public:
     void addOutgoingInfluence(const Influence* outgoingInfluence) override;
 
     const Influence* getSiren() const;
+
+    bool getSirenOn() const override;
 };
 
 

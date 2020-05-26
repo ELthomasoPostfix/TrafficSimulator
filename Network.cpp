@@ -271,8 +271,8 @@ Vehicle* Network::createVehicle() {
     const int progress = random() % Simulation::getMinCarDistance() + 10;
     spawnedVehicle->setProgress(progress);
     // set speed
-    //   const int speed = random() % 80 + 1;
-    //   spawnedVehicle->setSpeed(speed);
+    const int speed = random() % 80 + 1;
+    spawnedVehicle->setSpeed(speed);
 
     // actually enter the street (prepare variables)
     Street* currStreet = spawnedVehicle->getCurrentStreet();

@@ -68,4 +68,8 @@ const Influence* SpecialVehicle::getSiren() const {
     return nullptr;
 }
 
+bool SpecialVehicle::getSirenOn() const {
+    return _sirenOn;
+}
+
 
