@@ -4,7 +4,7 @@
 
 #ifndef NEW_T_A_SSC_H
 #define NEW_T_A_SSC_H
-#include "../Network.h"
+#include "Network.h"
 
 class SSC {
 public:

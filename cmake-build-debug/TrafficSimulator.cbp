@@ -108,6 +108,12 @@
 		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Network.h">
 			<Option target="TrafficSimulator"/>
 		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/SSC.cpp">
+			<Option target="TrafficSimulator"/>
+		</Unit>
+		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/SSC.h">
+			<Option target="TrafficSimulator"/>
+		</Unit>
 		<Unit filename="/home/elthomaso/CLionProjects/TrafficSimulator_StateElim/Simulation.cpp">
 			<Option target="TrafficSimulator"/>
 		</Unit>

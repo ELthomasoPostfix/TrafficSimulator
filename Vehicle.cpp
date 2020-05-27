@@ -327,6 +327,11 @@ void Vehicle::enterStreet(std::ofstream& ofstream) {
 
     } else {
         streetBeginningOccupied = true;
+        // entering the street will be aborted, so decrease the path index, which was increased just before
+        // when selecting the streetToEnter
+        if (!getPath().empty()) {   // only if a vehicle has a path, will the pathIndex be important
+            setPathIndex(getPathIndex()-1);
+        }
     }
     if (!streetBeginningOccupied) {
         setUnderway(true);
@@ -379,9 +384,16 @@ void Vehicle::enterStreet(std::ofstream& ofstream) {
             currentStreet->setBackNull(laneIndexWhenEntered);
         }
         setProgress(0);
-        ofstream << " has entered a street\n and is now underway from " << getPrevIntersection()->getName()
-                 << " to " << getNextIntersection()->getName() << " (" << streetToEnter->typeToName() << ", "
-                 << streetToEnter->getTwoWayString() << ")" << "  (" << getProgress()/Simulation::getStreetLength()*100 << "%)\n";
+        if (streetToEnter != nullptr) {
+            ofstream << " has entered a street\n and is now underway from " << getPrevIntersection()->getName()
+                     << " to " << getNextIntersection()->getName() << " (" << streetToEnter->typeToName() << ", "
+                     << streetToEnter->getTwoWayString() << ")" << "  ("
+                     << getProgress() / Simulation::getStreetLength() * 100 << "%)\n";
+        } else {
+            ofstream << " has entered a street\n and is now underway from " << getPrevIntersection()->getName()
+                     << " to " << getNextIntersection()->getName() << " (unknown, unknown)  ("
+                     << getProgress() / Simulation::getStreetLength() * 100 << "%)\n";
+        }
     } else {
         setUnderway(false);
         ofstream << " tried to enter a street (" << streetToEnter->typeToName() << ", " << streetToEnter->getTwoWayString()

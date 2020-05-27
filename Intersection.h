@@ -23,6 +23,9 @@ class Intersection {
     std::vector<Street*> _streets;
 
     bool _multipurposeMarker;
+
+    // Useful for the SSC, a list containing all the previous intersection of this current one.
+    std::vector<Intersection*> _previous_intersections;
 public:
     Intersection(std::string  name);
 
@@ -131,7 +134,8 @@ public:
     void setMultipurposeMarker(bool multipurposeMark);
     void removeAllMArkings();
 
-
+    void setPrevIntersections (const std::vector<Intersection*>&);
+    std::vector<Intersection*> getPrevIntersections ();
 };
 
 

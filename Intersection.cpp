@@ -667,3 +667,9 @@ Intersection *Intersection::getOwnPointer() const {
     return _ownPointer;
 }
 
+void Intersection::setPrevIntersections(const std::vector<Intersection*>& input) {
+    _previous_intersections = input;
+}
+std::vector<Intersection *> Intersection::getPrevIntersections() {
+    return _previous_intersections;
+}

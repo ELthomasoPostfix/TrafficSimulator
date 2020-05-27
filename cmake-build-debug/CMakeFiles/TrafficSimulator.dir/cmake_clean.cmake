@@ -3,6 +3,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/TrafficSimulator.dir/Influence.cpp.o"
   "CMakeFiles/TrafficSimulator.dir/Intersection.cpp.o"
   "CMakeFiles/TrafficSimulator.dir/Network.cpp.o"
+  "CMakeFiles/TrafficSimulator.dir/SSC.cpp.o"
   "CMakeFiles/TrafficSimulator.dir/Simulation.cpp.o"
   "CMakeFiles/TrafficSimulator.dir/SpecialVehicle.cpp.o"
   "CMakeFiles/TrafficSimulator.dir/StateElimination.cpp.o"

@@ -231,6 +231,33 @@ Network.cpp.s:
 	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/Network.cpp.s
 .PHONY : Network.cpp.s
 
+SSC.o: SSC.cpp.o
+
+.PHONY : SSC.o
+
+# target to build an object file
+SSC.cpp.o:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/SSC.cpp.o
+.PHONY : SSC.cpp.o
+
+SSC.i: SSC.cpp.i
+
+.PHONY : SSC.i
+
+# target to preprocess a source file
+SSC.cpp.i:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/SSC.cpp.i
+.PHONY : SSC.cpp.i
+
+SSC.s: SSC.cpp.s
+
+.PHONY : SSC.s
+
+# target to generate assembly for a file
+SSC.cpp.s:
+	$(MAKE) -f CMakeFiles/TrafficSimulator.dir/build.make CMakeFiles/TrafficSimulator.dir/SSC.cpp.s
+.PHONY : SSC.cpp.s
+
 Simulation.o: Simulation.cpp.o
 
 .PHONY : Simulation.o
@@ -495,6 +522,9 @@ help:
 	@echo "... Network.o"
 	@echo "... Network.i"
 	@echo "... Network.s"
+	@echo "... SSC.o"
+	@echo "... SSC.i"
+	@echo "... SSC.s"
 	@echo "... Simulation.o"
 	@echo "... Simulation.i"
 	@echo "... Simulation.s"

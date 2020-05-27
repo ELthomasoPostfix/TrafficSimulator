@@ -1,6 +1,7 @@
 
 #include "jsonParser.h"
 #include "StateElimination.h"
+#include "SSC.h"
 
 Network* makeSubNetwork(std::ofstream& STELstream, Network* originalNetwork, float extraStepModifier);
 
@@ -21,7 +22,6 @@ int main() {
 
 
 
-
     jsonParser parser;
     Network* city2 = parser.processJSON("../test_files/" + fileNm + ".json");
     std::string vehiclesOUTPUT = "jsonDriveTestVehicles.txt";
@@ -31,8 +31,14 @@ int main() {
 
     city2->doMainLoop(300, vehiclesOUTPUT, trafficLightsOUTPUT, vehicleChainOUTPUT);
 
-
     city2->getSimulation()->setSpawnTimer(5);
+
+    Network* city3 = SSC::set_up_ssc(city2);
+
+    std::ofstream SSCStream;
+    SSCStream.open("SSC.dot");
+    city3->toDot(SSCStream);
+    SSCStream.close();
 
     return 0;
 }
