@@ -70,14 +70,14 @@ bool Vehicle::drive(std::ofstream& ofstream) {
         // they are in the last street of their path and
         // they have a progress of >= 50
         if (shouldDespawn()) {
-            prepareDespawn();
+            prepareDespawn(ofstream);
             return false;
         // vehicle is not under influence of a STOP signal or it is not in range of the STOP signal
         // if the argument is -2, then the argument affects the whole street/lane
         } else if (mayDrive(effectiveSTOPLocation, argument)) {
             const double decisionStartPoint = effectiveSTOPLocation - Simulation::getDecisionBufferLength();
             // TODO   and getPath().empty   ????  OR  check if path change necessary:   next street is wwwaaaayy shittier than other streets or some such
-            if (getProgress() >= decisionStartPoint) {
+            if (getProgress() >= decisionStartPoint and getPath().empty()) {
                 // TODO vehicle may decide to adjust its path from here on out
                 alterPath();
             }
@@ -223,11 +223,18 @@ void Vehicle::addProgressMessage(std::ofstream &ofstream, const double progress)
 }
 
 
-void Vehicle::prepareDespawn() {
+void Vehicle::prepareDespawn(std::ofstream& vehicleDriveStream) {
     const int currentLane = getPrevIntersection()->laneIndexWhenLeaving(getCurrentStreet());
     if (currentLane != -1) {
         clearIncomingInfluences();
         clearEntrantInfluences();
+
+        vehicleDriveStream << "@@@ Vehicle " << getLicensePlate() << " from start " << getStartIntersection()->getName()
+                           << " to end " << getEndIntersection()->getName() << " has reached a stopping point on the street "
+                           << getCurrentStreet()->getOtherIntersection(getEndIntersection())->getName() << "->"
+                           << getEndIntersection()->getName() << ", "
+                           << "part of the preset path,\n at " << getProgress() << " progress to the end point."
+                           << " The vehicle will now be removed from the simulation.\n";
 
         Vehicle* frontVehicle = getCurrentStreet()->getFrontOccupant(currentLane);
         Vehicle* backVehicle = getCurrentStreet()->getBackOccupant(currentLane);
@@ -256,9 +263,10 @@ void Vehicle::frontDespawnPreparations(const int currentLane) const {
         // no set backOccupant, if it is already the back, then there is no need, and even if it isn't yet the back
         // its of previous is not touched in this operation
         getCurrentStreet()->setFrontOccupant(prevVehicle, currentLane);
-    // no front occupant, set front vehicle to nullptr
+    // set street pointers to nullptr
     } else {
         getCurrentStreet()->setFrontNull(currentLane);
+        getCurrentStreet()->setBackNull(currentLane);
     }
 }
 void Vehicle::backDespawnPreparations(int currentLane) const {
@@ -292,7 +300,12 @@ void Vehicle::enterStreet(std::ofstream& ofstream) {
     clearIncomingInfluences();
     Street* currentStreet = getCurrentStreet();
     Intersection* currentIntersection = getNextIntersection();
-    Street *streetToEnter = getNextStreet();
+    Street *streetToEnter;
+    if (getPath().empty()) {
+        streetToEnter = getNextStreet();
+    } else {
+        streetToEnter = (Street*) getFollowingPathStreet();
+    }
     Vehicle* prevVehicle = getPrevVehicle();
     bool streetBeginningOccupied = false;
 
@@ -324,19 +337,29 @@ void Vehicle::enterStreet(std::ofstream& ofstream) {
         streetToEnter->requestInfluences(this);
 
         // remove the siren STOP signal/influence from other vehicles
-        if (getClass() == special) {
+        // always do so if there is still an effect of the signal left in the network
+        if (getClass() == special and getSirenSent()) {
             undoSiren();
+            setSirenSent(false);
         }
 
 
         // adjust other current vehicle properties
         setCurrentStreet(streetToEnter);
-        setNextStreet(nullptr);
+        if (getPath().empty()) {
+            setNextStreet(nullptr);
+        } else {
+            // get the following street on the set path and increment the _pathIndex variable.
+            // if the current Street is the last street, don't increment and return nullptr
+            setNextStreet(streetToEnter);
+        }
 
         // if special vehicle and siren is active, when entering a new street,
-        // emit the STOP signal to the new current street
-        if (getClass() == special) {
+        // emit the STOP signal to the new current street.
+        // Always do so if the siren is on
+        if (getClass() == special and getSirenOn()) {
             emitInfluence();
+            setSirenSent(true);
         }
 
         setPrevIntersection(currentIntersection);
@@ -735,11 +758,28 @@ const std::vector<const Street *> &Vehicle::getPath() const {
 void Vehicle::setPath(const std::vector<const Street *> &path) {
     _path = path;
 }
+const Street *Vehicle::getFollowingPathStreet() {
+    const int nextPathIndex = getPathIndex();
+    if (nextPathIndex < getPath().size()) {
+        setPathIndex(nextPathIndex+1);
+        return getPath()[nextPathIndex];
+    } else {
+        return nullptr;
+    }
+}
+
 
 bool Vehicle::getSirenOn() const {
     // normal vehicles do not have sirens, only special vehicles do
     return false;
 }
+void Vehicle::setSirenOn(bool sirenState) {}
+bool Vehicle::getSirenSent() const {
+    // a normal vehicle doesn't have a siren
+    return false;
+}
+void Vehicle::setSirenSent(const bool sirenSentState) {}
+
 
 
 

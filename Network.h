@@ -56,7 +56,7 @@ public:
 
     void removeAllMultipurposeMarkers() const;
 
-    void tryRandomVehicleSpawn();
+    void tryRandomVehicleSpawn(std::ofstream& vehicleDriveStream);
     Vehicle* createVehicle();
     void selectPath(const std::vector<std::vector<const Street*>>& paths, const Intersection* startIntersection,
                     Vehicle* spawnedVehicle);

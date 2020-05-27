@@ -8,6 +8,8 @@
 
 SpecialVehicle::SpecialVehicle(const std::string& licensePlate) : Vehicle(special, licensePlate) {
     InstantiateInfluence(-2);
+    _sirenOn = false;
+    _sirenSent = false;
 }
 
 SpecialVehicle::~SpecialVehicle() {
@@ -34,11 +36,11 @@ void SpecialVehicle::emitInfluence() const {
         // send out the STOP signal to the entire lane in the street
         for (Vehicle *laneOccupant : currentLane) {
             if (laneOccupant != this) {
-                laneOccupant->receiveInfluence(_outgoingInfluences[0]);
+                laneOccupant->receiveInfluence(getSiren());
             }
         }
         // add the outgoing influence to the street for any new entering vehicles
-        getCurrentStreet()->addInfluence(_outgoingInfluences[0]);
+        getCurrentStreet()->addInfluence(getSiren());
     }
 }
 void SpecialVehicle::undoSiren() const {
@@ -70,6 +72,17 @@ const Influence* SpecialVehicle::getSiren() const {
 
 bool SpecialVehicle::getSirenOn() const {
     return _sirenOn;
+}
+void SpecialVehicle::setSirenOn(bool sirenState) {
+    // TODO undo siren ????
+    _sirenOn = sirenState;
+}
+bool SpecialVehicle::getSirenSent() const {
+    return _sirenSent;
+}
+
+void SpecialVehicle::setSirenSent(const bool sirenSentState) {
+    _sirenSent = sirenSentState;
 }
 
 

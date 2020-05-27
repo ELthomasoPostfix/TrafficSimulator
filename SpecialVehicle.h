@@ -17,6 +17,7 @@ class SpecialVehicle : public Vehicle {
     std::vector<const Influence*> _outgoingInfluences;
 
     bool _sirenOn;
+    bool _sirenSent;
 
 public:
     SpecialVehicle(const std::string& licensePlate);
@@ -33,6 +34,9 @@ public:
     const Influence* getSiren() const;
 
     bool getSirenOn() const override;
+    void setSirenOn(bool sirenState) override;
+    bool getSirenSent() const override;
+    void setSirenSent(bool sirenSentState) override;
 };
 
 

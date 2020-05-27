@@ -476,9 +476,9 @@ void Intersection::addSingleTLCycleMessageBack(std::ofstream &trafficLightStream
         trafficLightStream << "nullptr}\n";
     }
     if (currentPair.first == nullptr and currentPair.second == nullptr) {
-        trafficLightStream << "===> The sole traffic light pair for this intersection has turned green.\n";
-    } else {
         trafficLightStream << "===> The sole traffic light pair for this intersection has turned red.\n";
+    } else {
+        trafficLightStream << "===> The sole traffic light pair for this intersection has turned green.\n";
     }
 }
 

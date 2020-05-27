@@ -35,8 +35,14 @@
     },
     {
       "name": "4",
-      "trafficlights": false,
+      "trafficlights": true,
       "trafficLightPairs": [
+        {
+          "otherIntersection1": "2",
+          "type1": "A",
+          "otherIntersection2": "1",
+          "type2": "A"
+        }
       ]
     },
     {

@@ -53,7 +53,7 @@ void Network::doMainLoop(const int duration, std::string& ofName, std::string& o
 
         writeAllVehicleChains(vehicleChainStream);
 
-        tryRandomVehicleSpawn();
+        tryRandomVehicleSpawn(driveStream);
 
         // let all vehicles drive and if they can, send out signals
         for (auto vehicle = getVehicles().begin(); vehicle != getVehicles().end(); vehicle++) {
@@ -171,6 +171,7 @@ void Network::findAndSetPath(Vehicle *recipient, Intersection *startIntersection
 
     // set the vehicle's member variables according to the chosen path
     recipient->setCurrentStreet(const_cast<Street *>(recipient->getPath().front()));
+    recipient->incrementPathIndex();
     if (recipient->getPath().size() > 1) {
         recipient->setNextStreet(const_cast<Street *>(recipient->getPath()[1]));
     } else {
@@ -228,10 +229,17 @@ std::vector<std::vector<const Street *>> Network::findAllPaths(Intersection *sta
 
 
 
-void Network::tryRandomVehicleSpawn() {
+void Network::tryRandomVehicleSpawn(std::ofstream& vehicleDriveStream) {
     Simulation* sim = getSimulation();
     if (sim->getSpawnTimer() == Simulation::getVehicleSpawnRate()) {
-        addVehicle(createVehicle());
+        Vehicle* spawnedVehicle = createVehicle();
+        addVehicle(spawnedVehicle);
+        vehicleDriveStream << "@@@ Vehicle " << spawnedVehicle->getLicensePlate() << " with start "
+            << spawnedVehicle->getStartIntersection()->getName() << " and end " << spawnedVehicle->getEndIntersection()->getName()
+            << " has been created in the street " << spawnedVehicle->getStartIntersection()->getName() << "->"
+            << spawnedVehicle->getCurrentStreet()->getOtherIntersection(spawnedVehicle->getStartIntersection())->getName()
+            << " (" << spawnedVehicle->getCurrentStreet()->typeToName() << ", "
+            << Util::isTwoWayToString(spawnedVehicle->getCurrentStreet()->isTwoWay()) << ")" << std::endl;
         sim->setSpawnTimer(0);
     } else {
         sim->incrementSpawnTimer();
@@ -543,7 +551,7 @@ std::vector<std::vector<const Street*>> Network::elimStreetsToPaths(Intersection
             }
             prevIntersection = startIntersection;
         } else {
-            const std::vector<const Intersection*> singlePathIntersec = {elimStreet->getPrevIntersection(), elimStreet->getNextIntersection()};
+            const std::vector<const Intersection*> singlePathIntersec = {elimStreet->getPrevIntersection()->getOwnPointer(), elimStreet->getNextIntersection()->getOwnPointer()};
             intersectionPath.emplace_back(singlePathIntersec);
             const std::vector<const Street*> singlePathStreet = {elimStreet->getOwnPointer()};
             streetPath.emplace_back(singlePathStreet);

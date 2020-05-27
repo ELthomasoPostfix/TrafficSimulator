@@ -216,12 +216,25 @@ void Street::setFrontOccupant(Vehicle *frontOccupant, int lane) {
     // one way street: always enter via lane 0
     // two way street: if entering from prev Intersection, lane 0; if entering from next intersection, lane 1
     if (lane == 0) {   // enter into lane 0, will always be from prev intersection
-        if (getNextIntersection()->getHasTrafficLights()) {
-            getNextIntersection()->requestSignal(frontOccupant);
+        // if the next has traffic lights AND ...
+        if (getNextIntersection()->getHasTrafficLights()) { // TODO changed thiiiiis
+            const std::pair<Street*,Street*>& currentPair = getNextIntersection()->getCurrentPair();
+            // ... the current street is not part of the current pair, request signal
+            if ((currentPair.first != nullptr and currentPair.first->getOtherIntersection(getNextIntersection()) != getPrevIntersection()) and
+                (currentPair.second != nullptr and currentPair.second->getOtherIntersection(getNextIntersection()) != getPrevIntersection())) {
+
+                getNextIntersection()->requestSignal(frontOccupant);
+            }
         }
     } else if (lane == 1) {    // entering into lane 1, will always be from next intersection
-        if (getPrevIntersection()->getHasTrafficLights()) {
-            getPrevIntersection()->requestSignal(frontOccupant);
+        if (getPrevIntersection()->getHasTrafficLights()) { // TODO and thiiiis
+            const std::pair<Street*,Street*>& currentPair = getPrevIntersection()->getCurrentPair();
+            // ... the current street is not part of the current pair, request signal
+            if ((currentPair.first != nullptr and currentPair.first->getOtherIntersection(getPrevIntersection()) != getNextIntersection()) and
+                (currentPair.second != nullptr and currentPair.second->getOtherIntersection(getPrevIntersection()) != getNextIntersection())) {
+
+                getPrevIntersection()->requestSignal(frontOccupant);
+            }
         }
     }
     if (lane != -1) {      // index == -1  means an invalid attempt at entering a street
@@ -237,12 +250,13 @@ void Street::setFrontOccupant(Vehicle *frontOccupant, int lane) {
         if (_backOccupant[lane] == nullptr) {
             _backOccupant[lane] = frontOccupant;
         }
-    }
-    // if situation    this->other->trafficLight    and the other vehicle enters a new street, this vehicle
-    // needs to become the new frontOccupant, but doesn't need to be added tp the lane again
-    // OR   the lane is empty
-    if ((!_lanes[lane].empty() and _lanes[lane][0] != frontOccupant) or _lanes[lane].empty()) {
-        _lanes[lane].emplace_back(frontOccupant);
+
+        // if situation    this->other->trafficLight    and the other vehicle enters a new street, this vehicle
+        // needs to become the new frontOccupant, but doesn't need to be added tp the lane again
+        // OR   the lane is empty
+        if ((!_lanes[lane].empty() and _lanes[lane][0] != frontOccupant) or _lanes[lane].empty()) {
+            _lanes[lane].emplace_back(frontOccupant);
+        }
     }
 }
 void Street::setFrontNull(int lane) {

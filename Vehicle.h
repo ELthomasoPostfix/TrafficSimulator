@@ -74,7 +74,7 @@ public:
     void adjustProgress(std::ofstream& ofstream);
     void addProgressMessage(std::ofstream& ofstream, double progress) const;
 
-    void prepareDespawn();
+    void prepareDespawn(std::ofstream& vehicleDriveStream);
     void frontDespawnPreparations(int currentLane) const;
     void backDespawnPreparations(int currentLane) const;
     void middleDespawnPreparations(int currentLane) const;
@@ -175,8 +175,12 @@ public:
 
     const std::vector<const Street *> &getPath() const;
     void setPath(const std::vector<const Street *> &path);
+    const Street* getFollowingPathStreet();
 
     virtual bool getSirenOn() const;
+    virtual void setSirenOn(bool sirenState);
+    virtual bool getSirenSent() const;
+    virtual void setSirenSent(bool sirenSentState);
 };
 
 
